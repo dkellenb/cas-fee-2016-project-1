@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Notes</title>
+</head>
+<body>
+<div>
+    <div id="toolBar">
+        <span class="toolBarLeft"><a href="edit.html">Create New Note</a></span>
+        <span class="toolBarRight"></span>
+    </div>
+    <div id="filterBar">
+        <span class="filterBarLeft"></span>
+        <span class="filterBarRight"></span>
+    </div>
+    <div id="notesTable">
+        <!--eine notesEntry kann beliebig wiederholt werden (0-N)-->
+        <div class="notesEntry">
+            <form>
+                <div class="notesEntryColumnLeft">
+                    <span class="notesEntryDate">Mittwoch</span>
+                    <span class="notesEntryFinished"><input id="notesEntry1" type="checkbox"><label for="notesEntry1">Finished</label></span>
+                </div>
+                <div class="notesEntryColumnCenter">
+                    <span class="notesEntryTitle">CAS-FEE Projekt bearbeiten <abbr>**</abbr></span>
+                    <span class="notesEntryContent">Hier ist ein Text welcher einen möglichen Inhalt einer Notiz.</span>
+                </div>
+                <div class="notesEntryColumnRight">
+                    <input value="Edit" type="submit"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
