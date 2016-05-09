@@ -1,10 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Notes Edit</title>
 </head>
 <body>
-
+<div id="wrapper">
+    <form>
+        <span class="editRow"><label for="title" class="editLabel">Title</label><input id="title" type="text"/></span>
+        <span class="editRow"><label for="description" class="editLabel">Beschreibung</label><textarea id="description" rows="6" cols="50"></textarea></span>
+        <span class="editRow"><!--Einbauen: http://experiments.wemakesites.net/css3-rating-stars-with-selection.html--></span>
+        <span class="editRow"><label for="dateTo" class="editLabel">Erledigt Bis</label><input id="dateTo" type="date"/></span>
+        <span class="editRow"><input type="submit" value="Speichern"/></span>
+        <span class="editRow"><a href="index.html" class="cancelButton">Abbrechen</a></span>
+    </form>
+</div>
 </body>
 </html>
