@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'Symbola';
+    src:url('Symbola.ttf.woff') format('woff'),
+    url('Symbola.ttf.svg#Symbola') format('svg'),
+    url('Symbola.ttf.eot'),
+    url('Symbola.ttf.eot?#iefix') format('embedded-opentype');
+    font-weight: normal;
+    font-style: normal;
+}
