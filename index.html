@@ -1,38 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="css/style.css"/>
-    <title>Notes</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/Symbola.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <title>Notes</title>
 </head>
 <body>
 <div id="wrapper">
-    <div id="toolBar">
-        <span class="toolBarLeft"><a href="edit.html">Create New Note</a></span>
-        <span class="toolBarRight"></span>
+  <div id="toolBar" class="block">
+    <div class="pushLeft"><a href="edit.html" class="button">Create New Note</a></div>
+    <div class="pushRight"><label for="styleSelection"></label><select id="styleSelection">
+      <option>Style 1</option>
+      <option>Style 2</option>
+    </select></div>
+  </div>
+  <div id="filterBar" class="block">
+    <div class="sortCriterias pushLeft">
+      <label for="sortByFinishDate" class="button">By finish Date</label>
+      <input type="radio" name="sortBy" value="finishedDate" id="sortByFinishDate"/>
+      <label for="sortByCreatedDate" class="button">By create Date</label>
+      <input type="radio" name="sortBy" value="createdDate" id="sortByCreatedDate"/>
+      <label for="sortByImportance" class="button">By Importance</label>
+      <input type="radio" name="sortBy" value="importance" id="sortByImportance"/>
     </div>
-    <div id="filterBar">
-        <span class="filterBarLeft"></span>
-        <span class="filterBarRight"></span>
+    <div class="pushRight">
+      <a href="#" id="showFinishedToggle" class="button">Show finished</a>
     </div>
-    <div id="notesTable">
-        <!--eine notesEntry kann beliebig wiederholt werden (0-N)-->
-        <div class="notesEntry">
-            <form>
-                <div class="notesEntryColumnLeft">
-                    <span class="notesEntryDate">Mittwoch</span>
-                    <span class="notesEntryFinished"><input id="notesEntry1" type="checkbox"><label for="notesEntry1">Finished</label></span>
-                </div>
-                <div class="notesEntryColumnCenter">
-                    <span class="notesEntryTitle">CAS-FEE Projekt bearbeiten <!--Einbauen: http://experiments.wemakesites.net/css3-rating-stars-with-selection.html--></span>
-                    <span class="notesEntryContent">Hier ist ein Text welcher einen möglichen Inhalt einer Notiz.</span>
-                </div>
-                <div class="notesEntryColumnRight">
-                    <input value="Edit" type="submit"/>
-                </div>
-            </form>
+  </div>
+  <div id="notesTable">
+    <!-- eine notesEntry kann beliebig wiederholt werden (0-N)-->
+    <div class="notesEntry block">
+      <form>
+        <div class="notesEntryColumnLeft pushLeft">
+          <div class="notesEntryDate">Mittwoch</div>
+          <div class="editArea importanceSelection">
+            <input type="radio" id="importance-1-5" value="5"/><label for="importance-1-5"></label>
+            <input type="radio" id="importance-1-4" value="4" checked="checked"/><label for="importance-1-4"></label>
+            <input type="radio" id="importance-1-3" value="3"/><label for="importance-1-3"></label>
+            <input type="radio" id="importance-1-2" value="2"/><label for="importance-1-2"></label>
+            <input type="radio" id="importance-1-1" value="1"/><label for="importance-1-1"></label>
+          </div>
         </div>
+        <div class="notesEntryColumnRight pushRight">
+          <div class="notesEntryFinished">
+            <input id="notesEntry-1" type="checkbox">
+            <label for="notesEntry-1">Finished</label></div>
+            <a href="#" class="button">Edit</a>
+        </div>
+        <div class="notesEntryColumnCenter">
+          <div class="notesEntryTitle">CAS-FEE Projekt bearbeiten</div>
+          <div class="notesEntryContent visibilitySwitcher">
+            <input type="checkbox" id="content-visibility-1" />
+            <label for="content-visibility-1">
+              Hier ist ein Text welcher einen möglichen Inhalt einer Notiz. Dieser kann relative sehr gross sein. Die
+              Idee ist dass durch einen Klick (derzeit Hover) der Inhalt sichtbar oder unsichtbar wird. Natürlich kann
+              dieser Text sehr sehr lange werden und muss entsprechend in der kleinen Ansicht mit Ellipsis dargestellt
+              werden.
+            </label>
+          </div>
+        </div>
+      </form>
+      <div class="notesEntry block">
+        <form>
+          <div class="notesEntryColumnLeft pushLeft">
+            <div class="notesEntryDate">Heute</div>
+            <div class="editArea importanceSelection">
+              <input type="radio" name="importance" id="importance-2-5" value="5"/><label for="importance-2-5"></label>
+              <input type="radio" name="importance" id="importance-2-4" value="4"/><label for="importance-2-4"></label>
+              <input type="radio" name="importance" id="importance-2-3" value="3"/><label for="importance-2-3"></label>
+              <input type="radio" name="importance" id="importance-2-2" value="2" checked="checked"/><label for="importance-2-2"></label>
+              <input type="radio" name="importance" id="importance-2-1" value="1"/><label for="importance-2-1"></label>
+            </div>
+          </div>
+          <div class="notesEntryColumnRight pushRight">
+            <div class="notesEntryFinished">
+              <input id="notesEntry-2" type="checkbox">
+              <label for="notesEntry-2">Finished</label></div>
+            <a href="#" class="button">Edit</a>
+          </div>
+          <div class="notesEntryColumnCenter">
+            <div class="notesEntryTitle">Einkaufen</div>
+            <div class="notesEntryContent visibilitySwitcher">
+              <input type="checkbox" id="content-visibility-2" />
+              <label for="content-visibility-2">
+                - Butter<br/>
+                - Bier<br />
+                - Eier<br />
+                - Brot
+              </label>
+            </div>
+          </div>
+        </form>
     </div>
+  </div>
 </div>
 </body>
 </html>

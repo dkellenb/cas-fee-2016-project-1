@@ -1,20 +1,49 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="css/style.css"/>
-    <title>Notes Edit</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/Symbola.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <title>Notes Edit</title>
 </head>
 <body>
 <div id="wrapper">
-    <form>
-        <span class="editRow"><label for="title" class="editLabel">Title</label><input id="title" type="text"/></span>
-        <span class="editRow"><label for="description" class="editLabel">Beschreibung</label><textarea id="description" rows="6" cols="50"></textarea></span>
-        <span class="editRow"><!--Einbauen: http://experiments.wemakesites.net/css3-rating-stars-with-selection.html--></span>
-        <span class="editRow"><label for="dateTo" class="editLabel">Erledigt Bis</label><input id="dateTo" type="date"/></span>
-        <span class="editRow"><input type="submit" value="Speichern"/></span>
-        <span class="editRow"><a href="index.html" class="cancelButton">Abbrechen</a></span>
-    </form>
+  <form>
+    <div class="editRow">
+      <label for="title" class="editLabel">Title</label>
+      <div class="editArea">
+        <input id="title" type="text" class="inputField inputFieldFull" />
+      </div>
+    </div>
+    <div class="editRow">
+      <label for="description" class="editLabel">Description</label>
+      <textarea id="description" rows="6" cols="50" class="inputField inputFieldFull"></textarea>
+    </div>
+    <div class="editRow">
+      <label class="editLabel">Importance</label>
+      <div class="editArea importanceSelection">
+        <input type="radio" name="importance" id="importance-5" value="5" /><label for="importance-5"></label>
+        <input type="radio" name="importance" id="importance-4" value="4" /><label for="importance-4"></label>
+        <input type="radio" name="importance" id="importance-3" value="3" checked="checked" /><label for="importance-3"></label>
+        <input type="radio" name="importance" id="importance-2" value="2" /><label for="importance-2"></label>
+        <input type="radio" name="importance" id="importance-1" value="1" /><label for="importance-1"></label>
+      </div>
+    </div>
+    <div class="editRow">
+      <label for="dateTo" class="editLabel">Due until</label>
+      <div class="editArea">
+        <input id="dateTo" type="date"  class="inputField inputFieldFull"/>
+      </div>
+    </div>
+    <div class="editRow">
+      <label class="editLabel">&nbsp;</label>
+      <div class="editArea">
+        <input type="submit" class="button" value="Save" accesskey="s" />
+        <a href="index.html" class="button" accesskey="c">Cancel</a>
+      </div>
+    </div>
+  </form>
 </div>
 </body>
 </html>

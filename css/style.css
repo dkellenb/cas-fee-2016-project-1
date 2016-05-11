@@ -1,9 +1,134 @@
-/*Browser reset*/
+/* Browser reset. */
 *{
     padding:0;
     margin: 0;
 }
 
-.editRow{
+/* General formatting. */
+body, div, p, span, input, textarea {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12pt;
+}
+.srOnly { /* screen reader only. */
+    display: none;
+}
+.pushLeft {
+    float: left;
+}
+.pushRight {
+    float: right;
+}
+
+#wrapper {
+    margin: 20px;
+}
+.block {
+    margin-bottom: 10px;
+}
+.block:after {
+    clear: both;
+    content: " ";
+    display: table;
+}
+
+
+/** entry column. */
+.notesEntryColumnLeft {
+    padding-right: 20px;
+}
+.notesEntryColumnRight {
+    padding-left: 20px;
+}
+
+/** filter bar. */
+.sortCriterias input[type=radio] {
+    display: none;
+}
+
+/** visibilty switcher. */
+.visibilitySwitcher input[type=checkbox] {
+    display: none;
+}
+.visibilitySwitcher label {
     display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    height: 20px;
+}
+.visibilitySwitcher input:checked ~ label {
+    text-overflow: initial;
+    height: auto;
+    white-space: normal;
+    overflow: auto;
+}
+
+/** edit form. */
+.editRow {
+    padding: 2px 0 2px 0;
+}
+.editRow:after {
+    clear: both;
+    content: " ";
+    display: table;
+}
+.editLabel {
+    display: inline-block;
+    width: 200px;
+    float: left;
+}
+.editArea {
+    float: left;
+}
+.inputFieldFull {
+    width: 400px;
+}
+.inputField {
+    border: 1px solid #999;
+}
+.button {
+    border: 1px solid #aaa;
+    padding: 2px;
+    background: #eee;
+    text-decoration: none;
+    color: #000;
+    cursor: pointer;
+}
+.inputField:focus, .button:focus {
+    border-color: #3679ba;
+}
+.inputField:hover, .button:hover {
+    border-color: #7EB3CB;
+}
+
+/** importance selection. */
+.importanceSelection {
+    unicode-bidi: bidi-override;
+    direction: rtl;
+    display: flex;
+}
+.importanceSelection input[type=radio] {
+    display: none;
+}
+.importanceSelection label {
+    font-family: 'Symbola', sans-serif;
+    color: #ccc;
+}
+.importanceSelection label:before
+{
+    content: "\26A1";
+    display: inline-block;
+    line-height: 18px;
+    text-align: center;
+    font-size: 18px;
+    cursor: pointer;
+    height: 18px;
+    width: 18px;
+}
+.importanceSelection label:hover,
+.importanceSelection label:hover ~ label {
+    color: #189800 !important;
+}
+.importanceSelection input:checked ~ label {
+    color: #f5b301;
 }
