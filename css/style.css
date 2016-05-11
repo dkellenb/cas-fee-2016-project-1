@@ -125,10 +125,10 @@ body, div, p, span, input, textarea {
     height: 18px;
     width: 18px;
 }
-.importanceSelection label:hover,
-.importanceSelection label:hover ~ label {
-    color: #189800 !important;
-}
 .importanceSelection input:checked ~ label {
     color: #f5b301;
+}
+.importanceSelection label:hover,
+.importanceSelection label:hover ~ label {
+    color: #189800;
 }
