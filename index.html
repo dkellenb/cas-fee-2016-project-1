@@ -9,38 +9,38 @@
     <title>Notes</title>
 </head>
 <body>
-  <div class="toolBar block">
-    <h1 class="pushLeft">TODO List</h1>
-    <div class="pushLeft"><a href="edit.html" class="button">Create New Note</a></div>
-    <div class="pushRight"><label for="styleSelection"></label><select id="styleSelection">
+  <div class="tool-bar block">
+    <h1 class="push-left">TODO List</h1>
+    <div class="push-left"><a href="edit.html" class="button">Create New Note</a></div>
+    <div class="push-right"><label for="styleSelection"></label><select id="styleSelection">
         <option>Style 1</option>
         <option>Style 2</option>
     </select></div>
   </div>
   <div id="wrapper">
-    <div id="filterBar" class="block">
-        <div class="sortCriterias pushLeft">
+    <div id="filter-bar" class="block">
+        <div class="sort-criterias push-left">
             <label for="sortByFinishDate" class="button">By finish Date</label> <input type="radio" name="sortBy" value="finishedDate" id="sortByFinishDate"/>
             <label for="sortByCreatedDate" class="button">By create Date</label> <input type="radio" name="sortBy" value="createdDate" id="sortByCreatedDate"/>
             <label for="sortByImportance" class="button">By Importance</label> <input type="radio" name="sortBy" value="importance" id="sortByImportance"/>
         </div>
-        <div class="pushRight">
+        <div class="push-right">
             <a href="#" id="showFinishedToggle" class="button">Show finished</a>
         </div>
     </div>
-    <div id="notesTable">
-        <!-- eine notesEntry kann beliebig wiederholt werden (0-N)-->
-        <div class="notesEntry block">
-            <div class="notesEntryCell notesEntryDate">Mittwoch</div>
-            <div class="notesEntryCell notesEntryImportance editArea importanceSelection">
+    <div id="notes-table">
+        <!-- eine notes-entry kann beliebig wiederholt werden (0-N)-->
+        <div class="notes-entry block">
+            <div class="notes-entry-cell notes-entry-date">Mittwoch</div>
+            <div class="notes-entry-cell notes-entry-importance edit-area importance-selection">
                 <input type="radio" id="importance-1-5" value="5"/><label for="importance-1-5"></label>
                 <input type="radio" id="importance-1-4" value="4" checked="checked"/><label for="importance-1-4"></label>
                 <input type="radio" id="importance-1-3" value="3"/><label for="importance-1-3"></label>
                 <input type="radio" id="importance-1-2" value="2"/><label for="importance-1-2"></label>
                 <input type="radio" id="importance-1-1" value="1"/><label for="importance-1-1"></label>
             </div>
-            <div class="notesEntryCell notesEntryTitle">CAS-FEE Projekt bearbeiten</div>
-            <div class="notesEntryCell notesEntryContent visibilitySwitcher">
+            <div class="notes-entry-cell notes-entry-title">CAS-FEE Projekt bearbeiten</div>
+            <div class="notes-entry-cell notes-entry-content visibility-switcher">
                 <input type="checkbox" id="content-visibility-1"/>
                 <label for="content-visibility-1">
                     Hier ist ein Text welcher einen möglichen Inhalt einer Notiz darstellt. Dieser kann relative sehr
@@ -49,11 +49,11 @@
                     mit Ellipsis dargestellt werden.
                 </label>
             </div>
-            <div class="notesEntryCell notesEntryFinished">
-                <input id="notesEntry-1" type="checkbox">
-                <label for="notesEntry-1">Finished</label>
+            <div class="notes-entry-cell notes-entry-finished">
+                <input id="notes-entry-1" type="checkbox">
+                <label for="notes-entry-1">Finished</label>
             </div>
-            <div class="notesEntryCell notesEntryAction">
+            <div class="notes-entry-cell notes-entry-action">
                 <a href="#" class="button">Edit</a>
             </div>
         </div>

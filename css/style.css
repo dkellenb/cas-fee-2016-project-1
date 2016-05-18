@@ -9,26 +9,26 @@ body, div, p, span, input, textarea {
     font-family: 'Work Sans', sans-serif;
     font-size: 1em;
 }
-.srOnly { /* screen reader only. */
+.sr-only { /* screen reader only. */
     display: none;
 }
-.pushLeft {
+.push-left {
     float: left;
     margin-right: 0.25em;
 }
-.pushRight {
+.push-right {
     float: right;
     margin-left: 0.25em;
 }
 
 /** Toolbar. */
-.toolBar {
+.tool-bar {
     background: #ba6700;
     color: #fff;
     line-height: 2.5em;
     padding: 1em;
 }
-.toolBar h1 {
+.tool-bar h1 {
     font-weight: bold;
     font-size: 2em;
 }
@@ -47,7 +47,7 @@ body, div, p, span, input, textarea {
 
 
 /** Notes. */
-.notesEntry {
+.notes-entry {
     display: flex;
     flex-flow: row wrap;
     border: 1px solid #f5d889;
@@ -55,51 +55,51 @@ body, div, p, span, input, textarea {
     background-color: #f5edc9;
     padding: 0.5em;
 }
-.notesEntryCell {
+.notes-entry-cell {
     flex: 1 100%;
     padding: 0.25em;
 }
-.notesEntryTitle {
+.notes-entry-title {
     font-weight: bold;
 }
 @media all and (min-width: 600px) {
-    .notesEntryDate, .notesEntryImportance, .notesEntryFinished, .notesEntryAction {
+    .notes-entry-date, .notes-entry-importance, .notes-entry-finished, .notes-entry-action {
         flex: 1 0 auto;
         flex-basis: 45%;
     }
-    .notesEntryTitle, .notesEntryContent {
+    .notes-entry-title, .notes-entry-content {
         flex: 1 0 auto;
         flex-basis: 95%;
     }
 }
 @media all and (min-width: 800px) {
-    .notesEntryDate, .notesEntryImportance, .notesEntryFinished, .notesEntryAction {
+    .notes-entry-date, .notes-entry-importance, .notes-entry-finished, .notes-entry-action {
         flex: 1 0 auto;
         flex-basis: 10%;
     }
-    .notesEntryTitle, .notesEntryContent {
+    .notes-entry-title, .notes-entry-content {
         flex: 1 0 auto;
         flex-basis: 70%;
         max-width: 70%;
     }
-    .notesEntryDate { order: 1 }
-    .notesEntryTitle { order: 2 }
-    .notesEntryImportance { order: 3 }
-    .notesEntryFinished { order: 4 }
-    .notesEntryContent { order: 5 }
-    .notesEntryAction { order: 6 }
+    .notes-entry-date { order: 1 }
+    .notes-entry-title { order: 2 }
+    .notes-entry-importance { order: 3 }
+    .notes-entry-finished { order: 4 }
+    .notes-entry-content { order: 5 }
+    .notes-entry-action { order: 6 }
 }
 
 /** filter bar. */
-.sortCriterias input[type=radio] {
+.sort-criterias input[type=radio] {
     display: none;
 }
 
 /** visibilty switcher. */
-.visibilitySwitcher input[type=checkbox] {
+.visibility-switcher input[type=checkbox] {
     display: none;
 }
-.visibilitySwitcher label {
+.visibility-switcher label {
     display: block;
     overflow: hidden;
     /* wrap: no-wrap; -> breaks flex layout */
@@ -107,7 +107,7 @@ body, div, p, span, input, textarea {
     height: 20px;
     transition: height 0.25s;
 }
-.visibilitySwitcher input:checked ~ label {
+.visibility-switcher input:checked ~ label {
     text-overflow: initial;
     height: 150px;
     transition: height 0.25s;
@@ -116,26 +116,26 @@ body, div, p, span, input, textarea {
 }
 
 /** edit form. */
-.editRow {
+.edit-row {
     padding: 2px 0 2px 0;
 }
-.editRow:after {
+.edit-row:after {
     clear: both;
     content: " ";
     display: table;
 }
-.editLabel {
+.edit-label {
     display: inline-block;
     width: 200px;
     float: left;
 }
-.editArea {
+.edit-area {
     float: left;
 }
-.inputFieldFull {
+.input-field-full {
     width: 400px;
 }
-.inputField {
+.input-field {
     border: 1px solid #999;
 }
 .button {
@@ -146,27 +146,27 @@ body, div, p, span, input, textarea {
     color: #000;
     cursor: pointer;
 }
-.inputField:focus, .button:focus {
+.input-field:focus, .button:focus {
     border-color: #3679ba;
 }
-.inputField:hover, .button:hover {
+.input-field:hover, .button:hover {
     border-color: #7EB3CB;
 }
 
 /** importance selection. */
-.importanceSelection {
+.importance-selection {
     unicode-bidi: bidi-override;
     direction: rtl;
     display: flex;
 }
-.importanceSelection input[type=radio] {
+.importance-selection input[type=radio] {
     display: none;
 }
-.importanceSelection label {
+.importance-selection label {
     font-family: 'Symbola', sans-serif;
     color: #ccc;
 }
-.importanceSelection label:before
+.importance-selection label:before
 {
     content: "\26A1";
     display: inline-block;
@@ -177,11 +177,11 @@ body, div, p, span, input, textarea {
     height: 18px;
     width: 18px;
 }
-.importanceSelection input:checked ~ label {
+.importance-selection input:checked ~ label {
     color: #f5b301;
 }
-div.importanceSelection label:hover,
-.importanceSelection label:hover,
-.importanceSelection label:hover ~ label {
+div.importance-selection label:hover,
+.importance-selection label:hover,
+.importance-selection label:hover ~ label {
     color: #ec2c34;
 }
