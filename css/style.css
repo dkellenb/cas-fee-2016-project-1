@@ -31,13 +31,41 @@ body, div, p, span, input, textarea {
     display: table;
 }
 
-
-/** entry column. */
-.notesEntryColumnLeft {
-    padding-right: 20px;
+/** Notes. */
+.notesEntry {
+    display: flex;
+    flex-flow: row wrap;
 }
-.notesEntryColumnRight {
-    padding-left: 20px;
+.notesEntryCell {
+    flex: 1 100%;
+    padding: 0.25em;
+}
+@media all and (min-width: 600px) {
+    .notesEntryDate, .notesEntryImportance, .notesEntryFinished, .notesEntryAction {
+        flex: 1 0 auto;
+        flex-basis: 45%;
+    }
+    .notesEntryTitle, .notesEntryContent {
+        flex: 1 0 auto;
+        flex-basis: 95%;
+    }
+}
+@media all and (min-width: 800px) {
+    .notesEntryDate, .notesEntryImportance, .notesEntryFinished, .notesEntryAction {
+        flex: 1 0 auto;
+        flex-basis: 15%;
+    }
+    .notesEntryTitle, .notesEntryContent {
+        flex: 1 0 auto;
+        flex-basis: 60%;
+        max-width: 60%;
+    }
+    .notesEntryDate { order: 1 }
+    .notesEntryTitle { order: 2 }
+    .notesEntryImportance { order: 3 }
+    .notesEntryFinished { order: 4 }
+    .notesEntryContent { order: 5 }
+    .notesEntryAction { order: 6 }
 }
 
 /** filter bar. */
@@ -52,7 +80,7 @@ body, div, p, span, input, textarea {
 .visibilitySwitcher label {
     display: block;
     overflow: hidden;
-    white-space: nowrap;
+    /* wrap: no-wrap; -> breaks flex layout */
     text-overflow: ellipsis;
     height: 20px;
 }
