@@ -58,7 +58,8 @@ body, div, p, span, input, textarea {
 .notes-entry-cell {
     flex: 1 100%;
     padding: 0.25em;
-}
+    box-sizing: border-box;
+ }
 .notes-entry-title {
     font-weight: bold;
 }
@@ -72,15 +73,15 @@ body, div, p, span, input, textarea {
         flex-basis: 95%;
     }
 }
-@media all and (min-width: 800px) {
+@media all and (min-width: 1024px) {
     .notes-entry-date, .notes-entry-importance, .notes-entry-finished, .notes-entry-action {
-        flex: 1 0 auto;
-        flex-basis: 10%;
+        flex: 1 1 auto;
+        flex-basis: 12.5%;
     }
     .notes-entry-title, .notes-entry-content {
-        flex: 1 0 auto;
-        flex-basis: 70%;
-        max-width: 70%;
+        flex: 1 1 auto;
+        flex-basis: 75%;
+        max-width: 75%;
     }
     .notes-entry-date { order: 1 }
     .notes-entry-title { order: 2 }
