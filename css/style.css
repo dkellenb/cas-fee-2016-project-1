@@ -6,21 +6,35 @@
 
 /* General formatting. */
 body, div, p, span, input, textarea {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 12pt;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 1em;
 }
 .srOnly { /* screen reader only. */
     display: none;
 }
 .pushLeft {
     float: left;
+    margin-right: 0.25em;
 }
 .pushRight {
     float: right;
+    margin-left: 0.25em;
+}
+
+/** Toolbar. */
+.toolBar {
+    background: #ba6700;
+    color: #fff;
+    line-height: 2.5em;
+    padding: 1em;
+}
+.toolBar h1 {
+    font-weight: bold;
+    font-size: 2em;
 }
 
 #wrapper {
-    margin: 20px;
+    margin: 1em;
 }
 .block {
     margin-bottom: 10px;
@@ -31,14 +45,22 @@ body, div, p, span, input, textarea {
     display: table;
 }
 
+
 /** Notes. */
 .notesEntry {
     display: flex;
     flex-flow: row wrap;
+    border: 1px solid #f5d889;
+    border-radius: 0.5em;
+    background-color: #f5edc9;
+    padding: 0.5em;
 }
 .notesEntryCell {
     flex: 1 100%;
     padding: 0.25em;
+}
+.notesEntryTitle {
+    font-weight: bold;
 }
 @media all and (min-width: 600px) {
     .notesEntryDate, .notesEntryImportance, .notesEntryFinished, .notesEntryAction {
@@ -53,12 +75,12 @@ body, div, p, span, input, textarea {
 @media all and (min-width: 800px) {
     .notesEntryDate, .notesEntryImportance, .notesEntryFinished, .notesEntryAction {
         flex: 1 0 auto;
-        flex-basis: 15%;
+        flex-basis: 10%;
     }
     .notesEntryTitle, .notesEntryContent {
         flex: 1 0 auto;
-        flex-basis: 60%;
-        max-width: 60%;
+        flex-basis: 70%;
+        max-width: 70%;
     }
     .notesEntryDate { order: 1 }
     .notesEntryTitle { order: 2 }
@@ -83,10 +105,12 @@ body, div, p, span, input, textarea {
     /* wrap: no-wrap; -> breaks flex layout */
     text-overflow: ellipsis;
     height: 20px;
+    transition: height 0.25s;
 }
 .visibilitySwitcher input:checked ~ label {
     text-overflow: initial;
-    height: auto;
+    height: 150px;
+    transition: height 0.25s;
     white-space: normal;
     overflow: auto;
 }
@@ -156,7 +180,8 @@ body, div, p, span, input, textarea {
 .importanceSelection input:checked ~ label {
     color: #f5b301;
 }
+div.importanceSelection label:hover,
 .importanceSelection label:hover,
 .importanceSelection label:hover ~ label {
-    color: #189800;
+    color: #ec2c34;
 }

@@ -3,19 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Work+Sans&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/Symbola.css"/>
     <link rel="stylesheet" href="css/style.css"/>
     <title>Notes</title>
 </head>
 <body>
-<div id="wrapper">
-    <div id="toolBar" class="block">
-        <div class="pushLeft"><a href="edit.html" class="button">Create New Note</a></div>
-        <div class="pushRight"><label for="styleSelection"></label><select id="styleSelection">
-            <option>Style 1</option>
-            <option>Style 2</option>
-        </select></div>
-    </div>
+  <div class="toolBar block">
+    <h1 class="pushLeft">TODO List</h1>
+    <div class="pushLeft"><a href="edit.html" class="button">Create New Note</a></div>
+    <div class="pushRight"><label for="styleSelection"></label><select id="styleSelection">
+        <option>Style 1</option>
+        <option>Style 2</option>
+    </select></div>
+  </div>
+  <div id="wrapper">
     <div id="filterBar" class="block">
         <div class="sortCriterias pushLeft">
             <label for="sortByFinishDate" class="button">By finish Date</label> <input type="radio" name="sortBy" value="finishedDate" id="sortByFinishDate"/>
@@ -41,10 +43,10 @@
             <div class="notesEntryCell notesEntryContent visibilitySwitcher">
                 <input type="checkbox" id="content-visibility-1"/>
                 <label for="content-visibility-1">
-                    Hier ist ein Text welcher einen möglichen Inhalt einer Notiz. Dieser kann relative sehr gross sein.
-                    Die Idee ist dass durch einen Klick (derzeit Hover) der Inhalt sichtbar oder unsichtbar wird.
-                    Natürlich kann dieser Text sehr sehr lange werden und muss entsprechend in der kleinen Ansicht mit
-                    Ellipsis dargestellt werden.
+                    Hier ist ein Text welcher einen möglichen Inhalt einer Notiz darstellt. Dieser kann relative sehr
+                    gross sein. Die Idee ist dass durch einen Klick (derzeit Hover) der Inhalt sichtbar oder unsichtbar
+                    wird. Natürlich kann dieser Text sehr sehr lange werden und muss entsprechend in der kleinen Ansicht
+                    mit Ellipsis dargestellt werden.
                 </label>
             </div>
             <div class="notesEntryCell notesEntryFinished">
