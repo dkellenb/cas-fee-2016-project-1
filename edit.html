@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="css/Symbola.css"/>
+    <link rel="stylesheet" href="css/style.css"/>
+    <title>Notes Edit</title>
+</head>
+<body>
+<div id="wrapper">
+    <form>
+        <div class="edit-row">
+            <label for="title" class="edit-label">Title</label>
+            <div class="edit-area">
+                <input id="title" type="text" class="input-field input-field-full" />
+            </div>
+        </div>
+        <div class="edit-row">
+            <label for="description" class="edit-label">Description</label>
+            <textarea id="description" rows="6" cols="50" class="input-field input-field-full"></textarea>
+        </div>
+        <div class="edit-row">
+            <label class="edit-label">Importance</label>
+            <div class="edit-area importance-selection">
+                <input type="radio" name="importance" id="importance-5" value="5" /><label for="importance-5"></label>
+                <input type="radio" name="importance" id="importance-4" value="4" /><label for="importance-4"></label>
+                <input type="radio" name="importance" id="importance-3" value="3" checked="checked" /><label for="importance-3"></label>
+                <input type="radio" name="importance" id="importance-2" value="2" /><label for="importance-2"></label>
+                <input type="radio" name="importance" id="importance-1" value="1" /><label for="importance-1"></label>
+            </div>
+        </div>
+        <div class="edit-row">
+            <label for="dateTo" class="edit-label">Due until</label>
+            <div class="edit-area">
+                <input id="dateTo" type="date"  class="input-field input-field-full"/>
+            </div>
+        </div>
+        <div class="edit-row">
+            <label class="edit-label">&nbsp;</label>
+            <div class="edit-area">
+                <input type="submit" class="button" value="Save" accesskey="s" />
+                <a href="index.html" class="button" accesskey="c">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>
