@@ -65,7 +65,7 @@ Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
         // When the user clicks anywhere outside of the modal, close it
         // TODO: register handler with jquery
         window.onclick = function(event) {
-            if (event.target == modal.get()) {
+            if (event.target == modal.get(0)) {
                 modal.hide();
             }
         };
