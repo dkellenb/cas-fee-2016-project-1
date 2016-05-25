@@ -45,10 +45,12 @@ Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
                 due: moment().add(3, 'days')
             }
         ];
-        var notesTemplate = $('#notes-template').html();
-        var compiledNotesTemplate = Handlebars.compile(notesTemplate);
+
+       // var notesTemplate =Handlebars.getTemplate('notes-template');
+       // var compiledNotesTemplate =  compiledTemplate({notes:notes});
+
         var renderData = function () {
-            var generatedHtml = compiledNotesTemplate(notes);
+            var generatedHtml = Handlebars.getTemplate('notes-template')(notes);
             $('#notes-table').html(generatedHtml);
         };
         renderData();
@@ -70,4 +72,22 @@ Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
             }
         };
     });
+
+    Handlebars.getTemplate = function(name) {
+        if (Handlebars.templates === undefined || Handlebars.templates[name] === undefined) {
+            $.ajax({
+                url : 'hbs/' + name + '.hbs',
+                success : function(data) {
+                    if (Handlebars.templates === undefined) {
+                        Handlebars.templates = {};
+                    }
+                    Handlebars.templates[name] = Handlebars.compile(data);
+                },
+                async : false
+            });
+        }
+        return Handlebars.templates[name];
+    };
+
 })(jQuery);
+

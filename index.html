@@ -11,34 +11,7 @@
     <script type="text/javascript" src="js/moment-with-locales.js"></script>
     <script type="text/javascript" src="js/app.js"></script>
     <title>Notes</title>
-    <script id="notes-template" type="text/x-handlebars-template">
-        {{#each this}}
-        <div class="notes-entry block">
-            <div class="notes-entry-cell notes-entry-date">{{due}}</div>
-            <div class="notes-entry-cell notes-entry-importance edit-area importance-selection">
-                <input type="radio" id="importance-{{id}}-5" value="5" {{#ifCond importance '==' 5 }}checked="checked"{{/ifCond}}/><label for="importance-{{id}}-5"></label>
-                <input type="radio" id="importance-{{id}}-4" value="4" {{#ifCond importance '==' 4 }}checked="checked"{{/ifCond}}/><label for="importance-{{id}}-4"></label>
-                <input type="radio" id="importance-{{id}}-3" value="3" {{#ifCond importance '==' 3 }}checked="checked"{{/ifCond}}/><label for="importance-{{id}}-3"></label>
-                <input type="radio" id="importance-{{id}}-2" value="2" {{#ifCond importance '==' 2 }}checked="checked"{{/ifCond}}/><label for="importance-{{id}}-2"></label>
-                <input type="radio" id="importance-{{id}}-1" value="1" {{#ifCond importance '==' 1 }}checked="checked"{{/ifCond}}/><label for="importance-{{id}}-1"></label>
-            </div>
-            <div class="notes-entry-cell notes-entry-title">{{title}}</div>
-            <div class="notes-entry-cell notes-entry-content visibility-switcher">
-                <input type="checkbox" id="content-visibility-{{id}}"/>
-                <label for="content-visibility-{{id}}">
-                    {{content}}
-                </label>
-            </div>
-            <div class="notes-entry-cell notes-entry-finished">
-                <input id="notes-entry-{{id}}" type="checkbox" {{#ifCond finished '==' true}}checked="checked"{{/ifCond}} />
-                <label for="notes-entry-{{id}}">Finished</label>
-            </div>
-            <div class="notes-entry-cell notes-entry-action">
-                <a href="#" class="button">Edit</a>
-            </div>
-        </div>
-        {{/each}}
-    </script>
+    <!--<script id="notes-template" type="text/x-handlebars-template" src="hbs/notes-template.hbs"></script>-->
 </head>
 <body>
 <nav class="nav">
@@ -58,8 +31,10 @@
     <div id="wrapper">
         <div id="filter-bar" class="block">
             <div class="sort-criterias push-left">
-                <label for="sortByFinishDate" class="button">By finish Date</label> <input type="radio" name="sortBy" value="finishedDate" id="sortByFinishDate"/>
-                <label for="sortByCreatedDate" class="button">By create Date</label> <input type="radio" name="sortBy" value="createdDate" id="sortByCreatedDate"/>
+                <label for="sortByFinishDate" class="button">By finish Date</label> <input type="radio" name="sortBy" value="finishedDate"
+                                                                                           id="sortByFinishDate"/>
+                <label for="sortByCreatedDate" class="button">By create Date</label> <input type="radio" name="sortBy" value="createdDate"
+                                                                                            id="sortByCreatedDate"/>
                 <label for="sortByImportance" class="button">By Importance</label> <input type="radio" name="sortBy" value="importance" id="sortByImportance"/>
             </div>
             <div class="push-right">
@@ -81,7 +56,7 @@
                 <div class="edit-row">
                     <label for="title" class="edit-label">Title</label>
                     <div class="edit-area">
-                        <input id="title" type="text" class="input-field input-field-full" />
+                        <input id="title" type="text" class="input-field input-field-full"/>
                     </div>
                 </div>
                 <div class="edit-row">
@@ -91,23 +66,23 @@
                 <div class="edit-row">
                     <label class="edit-label">Importance</label>
                     <div class="edit-area importance-selection">
-                        <input type="radio" name="importance" id="importance-5" value="5" /><label for="importance-5"></label>
-                        <input type="radio" name="importance" id="importance-4" value="4" /><label for="importance-4"></label>
-                        <input type="radio" name="importance" id="importance-3" value="3" checked="checked" /><label for="importance-3"></label>
-                        <input type="radio" name="importance" id="importance-2" value="2" /><label for="importance-2"></label>
-                        <input type="radio" name="importance" id="importance-1" value="1" /><label for="importance-1"></label>
+                        <input type="radio" name="importance" id="importance-5" value="5"/><label for="importance-5"></label>
+                        <input type="radio" name="importance" id="importance-4" value="4"/><label for="importance-4"></label>
+                        <input type="radio" name="importance" id="importance-3" value="3" checked="checked"/><label for="importance-3"></label>
+                        <input type="radio" name="importance" id="importance-2" value="2"/><label for="importance-2"></label>
+                        <input type="radio" name="importance" id="importance-1" value="1"/><label for="importance-1"></label>
                     </div>
                 </div>
                 <div class="edit-row">
                     <label for="dateTo" class="edit-label">Due until</label>
                     <div class="edit-area">
-                        <input id="dateTo" type="date"  class="input-field input-field-full"/>
+                        <input id="dateTo" type="date" class="input-field input-field-full"/>
                     </div>
                 </div>
                 <div class="edit-row">
                     <label class="edit-label">&nbsp;</label>
                     <div class="edit-area">
-                        <input type="submit" class="button" value="Save" accesskey="s" />
+                        <input type="submit" class="button" value="Save" accesskey="s"/>
                         <a href="index.html" class="button" accesskey="c">Cancel</a>
                     </div>
                 </div>
