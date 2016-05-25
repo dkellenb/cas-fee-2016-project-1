@@ -46,9 +46,6 @@ Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
             }
         ];
 
-       // var notesTemplate =Handlebars.getTemplate('notes-template');
-       // var compiledNotesTemplate =  compiledTemplate({notes:notes});
-
         var renderData = function () {
             var generatedHtml = Handlebars.getTemplate('notes-template')(notes);
             $('#notes-table').html(generatedHtml);
