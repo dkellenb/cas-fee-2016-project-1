@@ -49,9 +49,25 @@ Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
         var compiledNotesTemplate = Handlebars.compile(notesTemplate);
         var renderData = function () {
             var generatedHtml = compiledNotesTemplate(notes);
-            console.log(generatedHtml);
             $('#notes-table').html(generatedHtml);
         };
         renderData();
+
+        var modal = $('#note-modal');
+
+        $('#create-note').on('click', function () {
+            modal.show();
+        });
+        $('#modal-close').on('click', function() {
+            modal.hide();
+        });
+
+        // When the user clicks anywhere outside of the modal, close it
+        // TODO: register handler with jquery
+        window.onclick = function(event) {
+            if (event.target == modal.get()) {
+                modal.hide();
+            }
+        };
     });
 })(jQuery);

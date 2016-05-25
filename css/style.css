@@ -1,12 +1,18 @@
+/**
+ * TODO: general: apply styleguide style order
+ * TODO: general: split up coloring / structure
+ */
+
 /* Browser reset. */
-*{
+* {
     padding:0;
     margin: 0;
+    box-sizing: border-box;
 }
 
 /* General formatting. */
-body, div, p, span, input, textarea {
-    font-family: 'Work Sans', sans-serif;
+body, div, p, span, input, textarea, select {
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 1em;
 }
 .sr-only { /* screen reader only. */
@@ -21,16 +27,32 @@ body, div, p, span, input, textarea {
     margin-left: 0.25em;
 }
 
-/** Toolbar. */
-.tool-bar {
+/** Navigation. */
+.nav {
+    height: 4em;
+    padding: 1em;
     background: #ba6700;
     color: #fff;
-    line-height: 2.5em;
-    padding: 1em;
 }
-.tool-bar h1 {
-    font-weight: bold;
+.nav .title {
+    float: left;
     font-size: 2em;
+    font-weight: bold;
+}
+.nav .actions {
+    float: right;
+}
+.nav .actions > div, .nav .actions > a {
+    float: left;
+}
+.nav .actions > div:before, .nav .actions > a:before {
+    content: " ";
+    margin-left: 0.25em;
+}
+
+.footer {
+    margin-top: 2em;
+    text-align: center;
 }
 
 #wrapper {
@@ -45,6 +67,21 @@ body, div, p, span, input, textarea {
     display: table;
 }
 
+/** Button. */
+.button {
+    border: 0.1em solid #aaa;
+    margin: 0.1em;
+    border-radius: 0.25em;
+    padding: 0.25em;
+    background: #e5ddda;
+    text-decoration: none;
+    color: #000;
+    cursor: pointer;
+}
+.button:hover {
+    margin: 0;
+    border: 0.2em solid #ba6700;
+}
 
 /** Notes. */
 .notes-entry {
@@ -139,14 +176,6 @@ body, div, p, span, input, textarea {
 .input-field {
     border: 1px solid #999;
 }
-.button {
-    border: 1px solid #aaa;
-    padding: 2px;
-    background: #eee;
-    text-decoration: none;
-    color: #000;
-    cursor: pointer;
-}
 .input-field:focus, .button:focus {
     border-color: #3679ba;
 }
@@ -185,4 +214,59 @@ div.importance-selection label:hover,
 .importance-selection label:hover,
 .importance-selection label:hover ~ label {
     color: #ec2c34;
+}
+
+/**
+ * Modal dialog.
+ */
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 10em; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
+}
+/* The modal content box. */
+.modal-block {
+    background-color: #fff;
+    margin: auto;
+    border: 1px solid #888;
+    max-width: 80%;
+}
+.modal-block .title {
+    width: 100%;
+    padding: 0.5em;
+    font-weight: bold;
+    background-color: #ba6700;
+    color: #fff;
+}
+.modal-block .close {
+    float: right;
+    color: #999;
+    font-size: 1em;
+    font-weight: bold;
+    border: 1px solid #999;
+    background: #fff;
+    border-radius: 0.25em;
+    width: 1.25em;
+    height: 1.25em;
+    text-align: center;
+}
+.modal-block .close:hover,
+.modal-block .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+    border-color: #000;
+}
+.modal-block .content {
+    padding: 1em;
 }
