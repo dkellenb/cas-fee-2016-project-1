@@ -70,11 +70,24 @@ Handlebars.registerHelper("formatDate", function(datetime, format) {
         var renderData = function () {
             var generatedHtml = Handlebars.getTemplate('notes-template')(notes);
             $('#notes-table').html(generatedHtml);
-            
-            
+        };
+
+        var registerEvents=function () {
+            $('.edit-button').on("click",function(event) {
+                toggleNodeEditable(event.target.getAttribute("data-note-id"));
+
+            });
+        };
+
+
+        var toggleNodeEditable = function (id) {
+            alert('Hello world again!!! '+id);
         };
 
         renderData();
+        registerEvents();
+
+
     });
 
     Handlebars.getTemplate = function(name) {
