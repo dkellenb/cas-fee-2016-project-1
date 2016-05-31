@@ -1,6 +1,6 @@
 {{#each this}}
     <div class="notes-entry block">
-        <div class="notes-entry-cell notes-entry-date">{{due}}</div>
+        <div class="notes-entry-cell notes-entry-date">{{formatDate due "short"}}</div>
         <div class="notes-entry-cell notes-entry-importance edit-area importance-selection">
             <input type="radio" id="importance-{{id}}-5" value="5" {{#ifCond importance '===' 5 }}checked="checked"{{/ifCond}}/><label for="importance-{{id}}-5"></label>
             <input type="radio" id="importance-{{id}}-4" value="4" {{#ifCond importance '===' 4 }}checked="checked"{{/ifCond}}/><label for="importance-{{id}}-4"></label>
