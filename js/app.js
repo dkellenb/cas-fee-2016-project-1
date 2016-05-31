@@ -70,7 +70,10 @@ Handlebars.registerHelper("formatDate", function(datetime, format) {
         var renderData = function () {
             var generatedHtml = Handlebars.getTemplate('notes-template')(notes);
             $('#notes-table').html(generatedHtml);
+            
+            
         };
+
         renderData();
     });
 
