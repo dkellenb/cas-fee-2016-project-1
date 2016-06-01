@@ -6,10 +6,9 @@
 (function (Handlebars) {
     var DateFormats = {
         short: "DD.MM.YYYY",
-        long: "dddd DD.MM.YYYY HH:mm",
-        input: "YYYY-MM-DD"
+        long: "dddd DD.MM.YYYY HH:mm"
     };
-    Handlebars.registerHelper("formatDate", function(datetime, format) {
+    Handlebars.registerHelper("formatDate", function (datetime, format) {
         if (moment) {
             // can use other formats like 'lll' too
             format = DateFormats[format] || format;
@@ -44,17 +43,17 @@
         }
     });
 
-    Handlebars.getTemplate = function(name) {
+    Handlebars.getTemplate = function (name) {
         if (Handlebars.templates === undefined || Handlebars.templates[name] === undefined) {
             $.ajax({
-                url : 'hbs/' + name + '.hbs',
-                success : function(data) {
+                url: 'hbs/' + name + '.hbs',
+                success: function (data) {
                     if (Handlebars.templates === undefined) {
                         Handlebars.templates = {};
                     }
                     Handlebars.templates[name] = Handlebars.compile(data);
                 },
-                async : false
+                async: false
             });
         }
         return Handlebars.templates[name];
@@ -63,28 +62,107 @@
 })(Handlebars);
 
 /**
+ * JQuery extension.
+ */
+(function ($) {
+    $.urlParam = function (name) {
+        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        if (results == null) {
+            return null;
+        }
+        else {
+            return results[1] || 0;
+        }
+    }
+})($);
+
+/**
  * Notes application.
  */
 (function ($) {
     $(function () {
-        var notes = [
-            {
-                title: "CAS-FEE Projekt bearbeiten",
-                content: "Hier ist ein Text welcher einen möglichen Inhalt einer Notiz darstellt. Dieser kann relative sehr gross sein. Die Idee ist dass durch einen Klick (derzeit Hover) der Inhalt sichtbar oder unsichtbar wird. Natürlich kann dieser Text sehr sehr lange werden und muss entsprechend in der kleinen Ansicht mit Ellipsis dargestellt werden.",
-                finished: false,
-                importance: 2,
-                due: moment().add(1, 'days'),
-                isEditable: false
-            },
-            {
-                title: "Einkaufen",
-                content: "- Butter\n- Bier\n- Eier\n- Brot",
-                finished: true,
-                importance: 4,
-                due: moment().add(3, 'days'),
-                isEditable: false
-            }
-        ];
+
+        /**
+         * Notes repository which is capable of selecting, inserting, updating and deleting notes.
+         */
+        var notesRepository = function () {
+
+            var notes = loadNotes();
+
+            /**
+             * loads all persisted notes from localStorage.
+             * @returns {{idSequenze: number}}
+             */
+            var loadNotes = function () {
+                var serializedNotes = localStorage.getItem('notes');
+                console.log("Load notes: " + serializedNotes);
+                return serializedNotes === undefined || serializedNotes === null ? {idSequenze: 1} : JSON.parse(serializedNotes);
+            };
+
+            /**
+             * Gets a note with the given id.
+             *
+             * @param id the id of the note
+             * @returns {*|{}} null or the object
+             */
+            var getNote = function (id) {
+                var note = notes[id];
+                if (note == undefined) {
+                    return null;
+                }
+                return note;
+            };
+
+            /**
+             * Save all notes.
+             *
+             * @returns {Array} the persisted notes
+             */
+            var saveNotes = function () {
+                var serializedNotes = notes === undefined || notes === null ? "[]" : JSON.stringify(notes);
+                localStorage.setItem('notes', serializedNotes);
+                return notes;
+            };
+
+            /**
+             * add a new node (id null || undefined) update a existing node;
+             *
+             * @param note the note to persist
+             * @returns the persisted note
+             */
+            var putNode = function (note) {
+                var id = note.id;
+                if (id == null || id == undefined) {
+                    notes.idSequenze++;
+                    id = notes.idSequenze;
+                    node.id = id;
+                }
+                notes[id] = node;
+                saveNotes();
+                return note;
+            };
+
+            /**
+             * Deletes a given note.
+             *
+             * @param id if the note to be deleted
+             * @return {Array} the updated notes
+             */
+            var deleteNote = function (id) {
+                nodes[id] = undefined;
+                saveNotes();
+            };
+
+            // Return public interface.
+            return {
+                getNote: getNote,
+                saveNotes: saveNotes,
+                addNode: putNode,
+                deleteNote: deleteNote
+            };
+        }();
+
+        var notes = notesRepository.getNotes();
 
         /**
          * Render the Data from the notes Array with Handelbarstemplates.
@@ -127,6 +205,7 @@
             console.log(formData);
             toggleNoteEditable(noteIndex);
         };
+
         renderData();
     });
 })(jQuery);
