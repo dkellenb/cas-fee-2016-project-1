@@ -193,15 +193,15 @@
          * Function for register all Events.
          */
         var registerEvents = function () {
-            $('.edit-button').on('click', function (event) {
+            $('.edit-button').unbind('click').on('click', function (event) {
                 toggleNoteEditable(event.target.getAttribute('data-note-id'));
             });
 
-            $('.save-button').on('click', function (event) {
+            $('.save-button').unbind('click').on('click', function (event) {
                 saveNote(event.target.getAttribute('data-note-id'));
             });
 
-            $('#create-note').on('click', function () {
+            $('#create-note').unbind('click').on('click', function () {
                 newNote();
             });
         };
@@ -225,6 +225,12 @@
         var saveNote = function (noteIndex) {
             var formData = new FormData(document.querySelector('#edit-form-note-' + noteIndex));
             console.log(formData);
+            var note = notesRepository.getNote(noteIndex);
+
+            note.content = $('#description-'+noteIndex).val();
+            note.title = $('#title-'+noteIndex).val();
+            note.due =  $('#due-date-'+noteIndex).val()
+
             toggleNoteEditable(noteIndex);
         };
 
