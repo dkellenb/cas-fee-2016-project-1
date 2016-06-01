@@ -1,51 +1,53 @@
 'use strict';
 
 /**
- * Notes application
+ * Handlebars configuration and extensions.
  */
-Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
+(function (Handlebars) {
+    var DateFormats = {
+        short: "DD.MM.YYYY",
+        long: "dddd DD.MM.YYYY HH:mm"
+    };
+    Handlebars.registerHelper("formatDate", function(datetime, format) {
+        if (moment) {
+            // can use other formats like 'lll' too
+            format = DateFormats[format] || format;
+            return moment(datetime).format(format);
+        }
+        else {
+            return datetime;
+        }
+    });
 
-    switch (operator) {
-        case '==':
-            return (v1 == v2) ? options.fn(this) : options.inverse(this);
-        case '===':
-            return (v1 === v2) ? options.fn(this) : options.inverse(this);
-        case '<':
-            return (v1 < v2) ? options.fn(this) : options.inverse(this);
-        case '<=':
-            return (v1 <= v2) ? options.fn(this) : options.inverse(this);
-        case '>':
-            return (v1 > v2) ? options.fn(this) : options.inverse(this);
-        case '>=':
-            return (v1 >= v2) ? options.fn(this) : options.inverse(this);
-        case '&&':
-            return (v1 && v2) ? options.fn(this) : options.inverse(this);
-        case '||':
-            return (v1 || v2) ? options.fn(this) : options.inverse(this);
-        default:
-            return options.inverse(this);
-    }
-});
+    Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
 
+        switch (operator) {
+            case '==':
+                return (v1 == v2) ? options.fn(this) : options.inverse(this);
+            case '===':
+                return (v1 === v2) ? options.fn(this) : options.inverse(this);
+            case '<':
+                return (v1 < v2) ? options.fn(this) : options.inverse(this);
+            case '<=':
+                return (v1 <= v2) ? options.fn(this) : options.inverse(this);
+            case '>':
+                return (v1 > v2) ? options.fn(this) : options.inverse(this);
+            case '>=':
+                return (v1 >= v2) ? options.fn(this) : options.inverse(this);
+            case '&&':
+                return (v1 && v2) ? options.fn(this) : options.inverse(this);
+            case '||':
+                return (v1 || v2) ? options.fn(this) : options.inverse(this);
+            default:
+                return options.inverse(this);
+        }
+    });
 
-var DateFormats = {
-    short: "DD.MM.YYYY",
-    long: "dddd DD.MM.YYYY HH:mm"
-};
+})(Handlebars);
 
-Handlebars.registerHelper("formatDate", function(datetime, format) {
-    if (moment) {
-        // can use other formats like 'lll' too
-        format = DateFormats[format] || format;
-        return moment(datetime).format(format);
-    }
-    else {
-        return datetime;
-    }
-});
-
-
-
+/**
+ * Notes application.
+ */
 (function ($) {
     $(function () {
         var notes = [
@@ -79,15 +81,12 @@ Handlebars.registerHelper("formatDate", function(datetime, format) {
             });
         };
 
-
         var toggleNodeEditable = function (id) {
             alert('Hello world again!!! '+id);
         };
 
         renderData();
         registerEvents();
-
-
     });
 
     Handlebars.getTemplate = function(name) {

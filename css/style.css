@@ -11,7 +11,7 @@
 }
 
 /* General formatting. */
-body, div, p, span, input, textarea, select {
+body, div, p, span, input, textarea, select, button {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 1em;
 }
