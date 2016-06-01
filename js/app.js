@@ -87,16 +87,16 @@
          */
         var notesRepository = function () {
 
-            var notes = loadNotes();
+            var notes;
 
             /**
              * loads all persisted notes from localStorage.
-             * @returns {{idSequenze: number}}
+             * @returns {{idSequence: number}}
              */
             var loadNotes = function () {
                 var serializedNotes = localStorage.getItem('notes');
                 console.log("Load notes: " + serializedNotes);
-                return serializedNotes === undefined || serializedNotes === null ? {idSequenze: 1} : JSON.parse(serializedNotes);
+                return serializedNotes === undefined || serializedNotes === null ? {idSequence: 0} : JSON.parse(serializedNotes);
             };
 
             /**
@@ -125,19 +125,19 @@
             };
 
             /**
-             * add a new node (id null || undefined) update a existing node;
+             * add a new note (id null || undefined) update a existing note;
              *
              * @param note the note to persist
              * @returns the persisted note
              */
-            var putNode = function (note) {
+            var putNote = function (note) {
                 var id = note.id;
                 if (id == null || id == undefined) {
-                    notes.idSequenze++;
-                    id = notes.idSequenze;
-                    node.id = id;
+                    notes.idSequence++;
+                    id = notes.idSequence;
+                    note.id = id;
                 }
-                notes[id] = node;
+                notes[id] = note;
                 saveNotes();
                 return note;
             };
@@ -149,26 +149,42 @@
              * @return {Array} the updated notes
              */
             var deleteNote = function (id) {
-                nodes[id] = undefined;
+                notes[id] = undefined;
                 saveNotes();
             };
 
+            var getNotes = function (sortedBy) {
+                var ids = Object.keys(notes);
+                var indexOfSequence = ids.indexOf('idSequence');
+                if (indexOfSequence > -1) {
+                    ids.splice(indexOfSequence, 1);
+                }
+                var notesArray = ids.map(function (key) {
+                    return notes[key];
+                });
+                //Todo sortedBy umsetzten;
+
+                return notesArray;
+            };
+
+
+            notes = loadNotes();
+
             // Return public interface.
             return {
+                getNotes: getNotes,
                 getNote: getNote,
                 saveNotes: saveNotes,
-                addNode: putNode,
+                putNote: putNote,
                 deleteNote: deleteNote
             };
         }();
-
-        var notes = notesRepository.getNotes();
 
         /**
          * Render the Data from the notes Array with Handelbarstemplates.
          */
         var renderData = function () {
-            var generatedHtml = Handlebars.getTemplate('notes-template')(notes);
+            var generatedHtml = Handlebars.getTemplate('notes-template')(notesRepository.getNotes('date'));
             $('#notes-table').html(generatedHtml);
             registerEvents();
         };
@@ -177,33 +193,53 @@
          * Function for register all Events.
          */
         var registerEvents = function () {
-            $('.edit-button').on("click", function (event) {
-                toggleNoteEditable(event.target.getAttribute("data-note-index"));
+            $('.edit-button').on('click', function (event) {
+                toggleNoteEditable(event.target.getAttribute('data-note-id'));
             });
 
-            $('.save-button').on("click", function (event) {
-                saveNote(event.target.getAttribute("data-note-index"));
+            $('.save-button').on('click', function (event) {
+                saveNote(event.target.getAttribute('data-note-id'));
+            });
+
+            $('#create-note').on('click', function () {
+                newNote();
             });
         };
 
         /**
          * Toggle isEditable on note at position of the noteIndex in Array notes.
-         * @param noteIndex
+         * @param noteId
          */
-        var toggleNoteEditable = function (noteIndex) {
-            notes[noteIndex].isEditable = !notes[noteIndex].isEditable;
-            console.log('Note ' + noteIndex + ' isEditable: ' + notes[noteIndex].isEditable);
+        var toggleNoteEditable = function (noteId) {
+            var note = notesRepository.getNote(noteId);
+            note.isEditable = !note.isEditable;
+            console.log('Note ' + noteId + ' isEditable: ' + note.isEditable);
+            notesRepository.saveNotes();
             renderData();
         };
 
         /**
-         * save note data to the node at the noteIndex.
+         * save note data to the note at the noteIndex.
          * @param noteIndex
          */
         var saveNote = function (noteIndex) {
             var formData = new FormData(document.querySelector('#edit-form-note-' + noteIndex));
             console.log(formData);
             toggleNoteEditable(noteIndex);
+        };
+
+        var newNote = function () {
+            var newNote = {
+                id: null,
+                title: '',
+                content: '',
+                finished: false,
+                importance: 3,
+                due: null,
+                isEditable: true
+            };
+            notesRepository.putNote(newNote);
+            renderData();
         };
 
         renderData();
