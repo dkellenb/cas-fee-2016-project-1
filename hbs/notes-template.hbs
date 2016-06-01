@@ -3,7 +3,7 @@
         <div class="notes-entry block">
             <form id="edit-form-note-{{id}}">
                 <div class="notes-entry-cell notes-entry-date">
-                    <input id="dateTo" title="Due until" type="date" class="input-field input-field-full" value="{{formatDate due "input"}}"/>
+                    <input id="due-date-{{id}}" title="Due until" type="date" class="input-field input-field-full" value="{{formatDate due "input"}}"/>
                 </div>
                 <div class="notes-entry-cell notes-entry-importance edit-area importance-selection">
                     <input type="radio" id="importance-{{id}}-5" value="5" {{#ifCond importance '===' 5 }}checked="checked"{{/ifCond}}/>
@@ -17,11 +17,11 @@
                     <input type="radio" id="importance-{{id}}-1" value="1" {{#ifCond importance '===' 1 }}checked="checked"{{/ifCond}}/>
                     <label for="importance-{{id}}-1"></label>
                 </div>
-                <div class="notes-entry-cell notes-entry-title"><input id="title" title="title" type="text" class="input-field input-field-full"
-                                                                       value="{{title}}"/>
+                <div class="notes-entry-cell notes-entry-title">
+                    <input id="title-{{id}}" title="title" type="text" class="input-field input-field-full" value="{{title}}"/>
                 </div>
                 <div class="notes-entry-cell notes-entry-content">
-                    <textarea id="description" title="description" rows="6" cols="50" class="input-field input-field-full">{{content}}</textarea>
+                    <textarea id="description-{{id}}" title="description" rows="6" cols="50" class="input-field input-field-full">{{content}}</textarea>
                 </div>
                 <div class="notes-entry-cell notes-entry-finished">
                     <input id="notes-entry-{{id}}" type="checkbox" {{#ifCond finished '==' true}}checked="checked"{{/ifCond}} />
