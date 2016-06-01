@@ -6,7 +6,7 @@
 (function (Handlebars) {
     var DateFormats = {
         short: "DD.MM.YYYY",
-        long: "dddd DD.MM.YYYY HH:mm"
+        long: "dddd DD.MM.YYYY HH:mm",
         input: "YYYY-MM-DD"
     };
     Handlebars.registerHelper("formatDate", function(datetime, format) {
