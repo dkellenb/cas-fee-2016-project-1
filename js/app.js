@@ -7,6 +7,7 @@
     var DateFormats = {
         short: "DD.MM.YYYY",
         long: "dddd DD.MM.YYYY HH:mm"
+        input: "YYYY-MM-DD"
     };
     Handlebars.registerHelper("formatDate", function(datetime, format) {
         if (moment) {
@@ -52,54 +53,78 @@
     $(function () {
         var notes = [
             {
-                id: 1,
                 title: "CAS-FEE Projekt bearbeiten",
                 content: "Hier ist ein Text welcher einen möglichen Inhalt einer Notiz darstellt. Dieser kann relative sehr gross sein. Die Idee ist dass durch einen Klick (derzeit Hover) der Inhalt sichtbar oder unsichtbar wird. Natürlich kann dieser Text sehr sehr lange werden und muss entsprechend in der kleinen Ansicht mit Ellipsis dargestellt werden.",
                 finished: false,
                 importance: 2,
-                due: moment().add(1, 'days')
+                due: moment().add(1, 'days'),
+                isEditable: false
             },
             {
-                id: 2,
                 title: "Einkaufen",
                 content: "- Butter\n- Bier\n- Eier\n- Brot",
                 finished: true,
                 importance: 4,
-                due: moment().add(3, 'days')
+                due: moment().add(3, 'days'),
+                isEditable: false
             }
         ];
 
+        /**
+         * Render the Data from the notes Array with Handelbarstemplates.
+         */
         var renderData = function () {
             var generatedHtml = Handlebars.getTemplate('notes-template')(notes);
             $('#notes-table').html(generatedHtml);
+            registerEvents();
         };
 
-        var registerEvents=function () {
-            $('.edit-button').on("click",function(event) {
-                toggleNodeEditable(event.target.getAttribute("data-note-id"));
+        /**
+         * Function for register all Events.
+         */
+        var registerEvents = function () {
+            $('.edit-button').on("click", function (event) {
+                toggleNoteEditable(event.target.getAttribute("data-note-index"));
+            });
 
+            $('.save-button').on("click", function (event) {
+                saveNote(event.target.getAttribute("data-note-index"));
             });
         };
 
-        var toggleNodeEditable = function (id) {
-            alert('Hello world again!!! '+id);
+        /**
+         * Toggle isEditable on note at position of the noteIndex in Array notes.
+         * @param noteIndex
+         */
+        var toggleNoteEditable = function (noteIndex) {
+            notes[noteIndex].isEditable = !notes[noteIndex].isEditable;
+            console.log('Note ' + noteIndex + ' isEditable: ' + notes[noteIndex].isEditable);
+            renderData();
         };
 
+        /**
+         * save note data to the node at the noteIndex.
+         * @param noteIndex
+         */
+        var saveNote = function (noteIndex) {
+            var formData = new FormData(document.querySelector('#edit-form-note-' + noteIndex));
+            console.log(formData);
+            toggleNoteEditable(noteIndex);
+        };
         renderData();
-        registerEvents();
     });
 
-    Handlebars.getTemplate = function(name) {
+    Handlebars.getTemplate = function (name) {
         if (Handlebars.templates === undefined || Handlebars.templates[name] === undefined) {
             $.ajax({
-                url : 'hbs/' + name + '.hbs',
-                success : function(data) {
+                url: 'hbs/' + name + '.hbs',
+                success: function (data) {
                     if (Handlebars.templates === undefined) {
                         Handlebars.templates = {};
                     }
                     Handlebars.templates[name] = Handlebars.compile(data);
                 },
-                async : false
+                async: false
             });
         }
         return Handlebars.templates[name];
