@@ -5,9 +5,11 @@
  */
 (function (Handlebars) {
     var DateFormats = {
-        short: "DD.MM.YYYY",
-        long: "dddd DD.MM.YYYY HH:mm"
+        short: 'DD.MM.YYYY',
+        long: 'dddd DD.MM.YYYY HH:mm',
+        input: 'YYYY-MM-DD'
     };
+
     Handlebars.registerHelper("formatDate", function (datetime, format) {
         if (moment) {
             // can use other formats like 'lll' too
@@ -17,6 +19,13 @@
         else {
             return datetime;
         }
+    });
+
+    // replace \r\n with <br> tag. (bypass default escaping by manually do the escaping)
+    Handlebars.registerHelper('lineBreakReplacer', function (content) {
+        var escapedContent = Handlebars.Utils.escapeExpression(content);
+        var lineBreakPattern = /\r\n?|\n/g;
+        return new Handlebars.SafeString(escapedContent.replace(lineBreakPattern, '<br>'));
     });
 
     Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
@@ -227,9 +236,9 @@
             console.log(formData);
             var note = notesRepository.getNote(noteIndex);
 
-            note.content = $('#description-'+noteIndex).val();
-            note.title = $('#title-'+noteIndex).val();
-            note.due =  $('#due-date-'+noteIndex).val()
+            note.content = $('#description-' + noteIndex).val();
+            note.title = $('#title-' + noteIndex).val();
+            note.due = $('#due-date-' + noteIndex).val()
 
             toggleNoteEditable(noteIndex);
         };
