@@ -68,6 +68,8 @@
         return Handlebars.templates[name];
     };
 
+    Handlebars.registerPartial('noteTemplate',Handlebars.getTemplate('note-template'))
+
 })(Handlebars);
 
 /**
