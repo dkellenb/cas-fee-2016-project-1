@@ -101,13 +101,21 @@
             var notes;
 
             /**
-             * loads all persisted notes from localStorage.
-             * @returns {{idSequence: number}}
+             * Gets all persisted notes.
+             *
+             * @returns {Array} the persisted notes
              */
-            var loadNotes = function () {
-                var serializedNotes = localStorage.getItem('notes');
-                console.log("Load notes: " + serializedNotes);
-                return serializedNotes === undefined || serializedNotes === null ? {idSequence: 0} : JSON.parse(serializedNotes);
+            var publicSearchNote = function () {
+
+                var notes = privateLoadNotes();
+                var ids = Object.keys(notes);
+                console.log(ids);
+                var notesArray = ids.map(function (key) {
+                    return notes[key];
+                });
+                //Todo sortedBy umsetzten;
+
+                return notesArray;
             };
 
             /**
@@ -116,40 +124,26 @@
              * @param id the id of the note
              * @returns {*|{}} null or the object
              */
-            var getNote = function (id) {
-                var note = notes[id];
-                if (note == undefined) {
+            var publicGetNote = function (id) {
+                var note = privateLoadNotes()[id];
+                if (note === undefined) {
                     return null;
                 }
                 return note;
             };
 
             /**
-             * Save all notes.
-             *
-             * @returns {Array} the persisted notes
-             */
-            var saveNotes = function () {
-                var serializedNotes = notes === undefined || notes === null ? "[]" : JSON.stringify(notes);
-                localStorage.setItem('notes', serializedNotes);
-                return notes;
-            };
-
-            /**
-             * add a new note (id null || undefined) update a existing note;
+             * Saves a given note. Updates an existing persisted one.
              *
              * @param note the note to persist
              * @returns the persisted note
              */
-            var putNote = function (note) {
+            var publicPersistNote = function (note) {
                 var id = note.id;
-                if (id == null || id == undefined) {
-                    notes.idSequence++;
-                    id = notes.idSequence;
-                    note.id = id;
+                if (id === null || id === undefined) {
+                    note.id = privateNextNoteId();
                 }
-                notes[id] = note;
-                saveNotes();
+                privatePutNote(note.id, note);
                 return note;
             };
 
@@ -159,107 +153,163 @@
              * @param id if the note to be deleted
              * @return {Array} the updated notes
              */
-            var deleteNote = function (id) {
-                notes[id] = undefined;
-                saveNotes();
+            var publicDeleteNote = function (id) {
+                privatePutNote(key, undefined);
             };
 
-            var getNotes = function (sortedBy) {
-                var ids = Object.keys(notes);
-                var indexOfSequence = ids.indexOf('idSequence');
-                if (indexOfSequence > -1) {
-                    ids.splice(indexOfSequence, 1);
+            /**
+             * loads all persisted notes from localStorage as a map<noteId,Note>.
+             * @returns {map<number,{}>} map<noteId,Note>
+             */
+            var privateLoadNotes = function () {
+                var serializedNotes = localStorage.getItem('notes');
+                console.log("Load notes: " + serializedNotes);
+                return serializedNotes === undefined || serializedNotes === null ? {} : JSON.parse(serializedNotes);
+            };
+
+            /**
+             * Save all notes.
+             *
+             * @param notes saves all notes.
+             * @returns {map<number,{}>} Map<NoteId,Note> the persisted notes
+             */
+            var privateSaveNotes = function (notes) {
+                var serializedNotes = notes === undefined || notes === null ? "{}" : JSON.stringify(notes);
+                localStorage.setItem('notes', serializedNotes);
+                return notes;
+            };
+
+            /**
+             * get Next Id from note sequence in localStorage
+             * @returns {number} noteId
+             */
+            var privateNextNoteId = function () {
+                var sequence = localStorage.getItem('noteIdSequence');
+                if (sequence == undefined || sequence == null) {
+                    sequence = 0;
                 }
-                var notesArray = ids.map(function (key) {
-                    return notes[key];
-                });
-                //Todo sortedBy umsetzten;
+                sequence++;
+                localStorage.setItem('noteIdSequence', sequence);
 
-                return notesArray;
+                return sequence;
             };
 
-
-            notes = loadNotes();
+            /**
+             * Put function fuer Notes Map<NoteId,Note>
+             * @param key noteId
+             * @param value Note
+             */
+            var privatePutNote = function (key, value) {
+                var notes = privateLoadNotes();
+                notes[key] = value;
+                privateSaveNotes(notes);
+            };
 
             // Return public interface.
             return {
-                getNotes: getNotes,
-                getNote: getNote,
-                saveNotes: saveNotes,
-                putNote: putNote,
-                deleteNote: deleteNote
+                searchNotes: publicSearchNote,
+                getNote: publicGetNote,
+                persistNote: publicPersistNote,
+                deleteNote: publicDeleteNote
             };
         }();
 
         /**
-         * Render the Data from the notes Array with Handelbarstemplates.
+         * The edit form controller. Dependes on:
+         * - notesRepository
          */
-        var renderData = function () {
-            var generatedHtml = Handlebars.getTemplate('notes-template')(notesRepository.getNotes('date'));
-            $('#notes-table').html(generatedHtml);
-            registerEvents();
-        };
 
-        /**
-         * Function for register all Events.
-         */
-        var registerEvents = function () {
-            $('.edit-button').unbind('click').on('click', function (event) {
-                toggleNoteEditable(event.target.getAttribute('data-note-id'));
-            });
+        var overviewController = function ($, notesRepository) {
 
-            $('.save-button').unbind('click').on('click', function (event) {
-                saveNote(event.target.getAttribute('data-note-id'));
-            });
-
-            $('#create-note').unbind('click').on('click', function () {
-                newNote();
-            });
-        };
-
-        /**
-         * Toggle isEditable on note at position of the noteIndex in Array notes.
-         * @param noteId
-         */
-        var toggleNoteEditable = function (noteId) {
-            var note = notesRepository.getNote(noteId);
-            note.isEditable = !note.isEditable;
-            console.log('Note ' + noteId + ' isEditable: ' + note.isEditable);
-            notesRepository.saveNotes();
-            renderData();
-        };
-
-        /**
-         * save note data to the note at the noteIndex.
-         * @param noteIndex
-         */
-        var saveNote = function (noteIndex) {
-            var formData = new FormData(document.querySelector('#edit-form-note-' + noteIndex));
-            console.log(formData);
-            var note = notesRepository.getNote(noteIndex);
-
-            note.content = $('#description-' + noteIndex).val();
-            note.title = $('#title-' + noteIndex).val();
-            note.due = $('#due-date-' + noteIndex).val()
-
-            toggleNoteEditable(noteIndex);
-        };
-
-        var newNote = function () {
-            var newNote = {
-                id: null,
-                title: '',
-                content: '',
-                finished: false,
-                importance: 3,
-                due: null,
-                isEditable: true
+            var publicInitialize = function () {
+                privateRenderData();
             };
-            notesRepository.putNote(newNote);
-            renderData();
-        };
 
-        renderData();
+
+            /**
+             * Render the Data from the notes Array with Handelbarstemplates.
+             */
+            var privateRenderData = function () {
+                var generatedHtml = Handlebars.getTemplate('notes-template')(notesRepository.searchNotes('date'));
+                $('#notes-table').html(generatedHtml);
+                privateRegisterEvents();
+            };
+
+            /**
+             * Function for register all Events.
+             */
+            var privateRegisterEvents = function () {
+                $('.edit-button').unbind('click').on('click', function (event) {
+                    privateEditNote(event.target.getAttribute('data-note-id'));
+                });
+
+                $('.save-button').unbind('click').on('click', function (event) {
+                    privateSaveNote(event.target.getAttribute('data-note-id'));
+                });
+
+                $('#create-note').unbind('click').on('click', function () {
+                    privateNewNote();
+                });
+            };
+
+            /**
+             * Toggle isEditable on note at position of the noteIndex in Array notes.
+             * @param noteId
+             */
+            var privateEditNote = function (noteId) {
+                notesRepository.persistNote(privateToggleNodeEditMode(notesRepository.getNote(noteId)));
+                privateRenderData();
+            };
+
+
+            /**
+             * save note data to the note at the noteIndex.
+             * @param noteId
+             */
+            var privateSaveNote = function (noteId) {
+                var formData = new FormData(document.querySelector('#edit-form-note-' + noteId));
+                console.log(formData);
+                var note = notesRepository.getNote(noteId);
+
+                note.content = $('#description-' + noteId).val();
+                note.title = $('#title-' + noteId).val();
+                note.due = $('#due-date-' + noteId).val();
+
+                notesRepository.persistNote(privateToggleNodeEditMode(note));
+                privateRenderData();
+            };
+
+            var privateNewNote = function () {
+                var newNote = {
+                    id: null,
+                    title: '',
+                    content: '',
+                    finished: false,
+                    importance: 3,
+                    due: null,
+                    isEditable: true
+                };
+                notesRepository.persistNote(newNote);
+                privateRenderData();
+            };
+
+            /**
+             * toggle isEditable boolean of note
+             * @param note
+             * @returns {*}
+             */
+            var privateToggleNodeEditMode = function (note) {
+                note.isEditable = !note.isEditable;
+                console.log('Note ' + note.id + ' isEditable: ' + note.isEditable);
+                return note;
+            };
+
+            return {
+                initialize: publicInitialize
+            }
+        }($, notesRepository);
+
+        overviewController.initialize();
     });
 })(jQuery);
 
