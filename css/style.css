@@ -1,13 +1,27 @@
 /**
  * TODO: general: apply styleguide style order
  * TODO: general: split up coloring / structure
+ *
+ * Rules:
+ * - Default design is for minimal screens (< 400px)
+ * - Two alternatives designs for bigger screens (<1024px, greater)
  */
+
+/* Browser reset. */
+*, *:before, *:after {
+    padding:0;
+    margin: 0;
+    box-sizing: border-box;
+}
 
 /**
  * Variable definitions.
  */
+
+/* Generic definitions / Global. */
 body {
     --default-space: 0.25em;
+    --default-input-full-width: 100%;
 
     /* Brown. */
     --main-color-dark-brown: rgb(135, 88, 35);
@@ -37,6 +51,8 @@ body {
     --main-color-lighter-red: rgb(245, 167, 154);
     --main-color-light-red: rgb(245, 229, 226);
 }
+
+/** Style specific definitions. */
 .brown-style {
     --main-color-dark: var(--main-color-dark-brown);
     --main-color-darker: var(--main-color-darker-brown);
@@ -66,15 +82,23 @@ body {
     --main-color-light: var(--main-color-light-red);
 }
 
-
-/* Browser reset. */
-* {
-    padding:0;
-    margin: 0;
-    box-sizing: border-box;
+/** Media type specific definitions. */
+@media all and (min-width: 400px) {
+    body {
+        --full-input-width: 100%;
+    }
+}
+@media all and (min-width: 1024px) {
+    body {
+        --full-input-width: 400px;
+    }
 }
 
-/* General formatting. */
+/**
+ * General formatting.
+ */
+
+/* Positioning. */
 body, div, p, span, input, textarea, select, button {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 1em;
@@ -91,7 +115,34 @@ body, div, p, span, input, textarea, select, button {
     margin-left: var(--default-space);
 }
 
-/** Navigation. */
+/* Button elements. */
+
+@keyframes img-button-color-change-in {
+    from { background-color: rgba(0, 0, 0, 0.40); }
+    to { background-color: rgba(0, 0, 0, 0.20); }
+}
+button.img-button, button.sort-button, button.filter-button {
+    transition: all 0.1s ease-in;
+    background-color: rgba(0, 0, 0, 0.20);
+    border: 1px solid rgba(0, 0, 0, 0.40);
+    cursor: pointer;
+    box-sizing: border-box;
+}
+button.img-button:hover, button.sort-button:hover, button.filter-button:hover {
+    border-color: #000;
+    border-width: 2px;
+    background-color: rgba(0, 0, 0, 0.40);
+}
+button.img-button {
+    font-size: 1.3em;
+    height: 1.5em;
+    width: 1.5em;
+}
+
+
+/**
+ * Navigation.
+ */
 .nav {
     padding: 0.5em;
     background: var(--main-color-darker);
@@ -114,24 +165,42 @@ body, div, p, span, input, textarea, select, button {
     float: left;
 }
 .nav .actions > div, .nav .actions > button {
-    margin-right: var(--default-space);
+    margin-left: var(--default-space);
 }
 .change-color-box {
-    font-size: 0.45em;
     line-height: 0.5em;
-    width: 4.25em;
+    width: 2.1em;
 }
 .change-color-box button {
+    display: table-cell;
+    font-size: 0.6em;
+    line-height: 0.6em;
     margin-bottom: var(--default-space);
 }
+#change-style-blue {
+    background-color: var(--main-color-default-blue);
+}
+#change-style-brown {
+    background-color: var(--main-color-default-brown)
+}
+#change-style-green {
+    background-color: var(--main-color-default-green)
+}
+#change-style-red {
+    background-color: var(--main-color-default-red)
+}
 
-
-
+/**
+ * Footer.
+ */
 .footer {
     margin-top: 2em;
     text-align: center;
 }
 
+/**
+ * Content
+ */
 #wrapper {
     margin: 0.5em;
 }
@@ -144,36 +213,38 @@ body, div, p, span, input, textarea, select, button {
     display: table;
 }
 
-/** Button. */
-@keyframes img-button-color-change-in {
-    from { background-color: rgba(0, 0, 0, 0.30); }
-    to { background-color: rgba(0, 0, 0, 0.10); }
+/**
+ * Sort and filtering.
+ */
+.sort-button, .filter-button {
+    font-size: 0.7em;
+    padding: 0.2em;
+    height: 2em;
+    width: 7em;
 }
-.img-button {
-    transition: all 0.1s ease-in;
-    background-color: rgba(0, 0, 0, 0.10);
-    border: 1px solid rgba(0, 0, 0, 0.30);
-    font-size: 1.3em;
-    height: 1.5em;
-    width: 1.5em;
-    cursor: pointer;
+.sort-inactive.sort-asc:before {
+    content: "\25B3  ";
 }
-.img-button:hover {
-    border-color: #000;
-    background-color: rgba(0, 0, 0, 0.30);
+.sort-inactive.sort-desc:before {
+    content: "\25BD  ";
 }
-#change-style-blue {
-    background-color: var(--main-color-default-blue)
+.sort-active.sort-asc:before,
+.sort-active.sort-desc:hover:before,
+.sort-inactive.sort-asc:hover:before {
+    content: "\25B2  ";
 }
-#change-style-brown {
-    background-color: var(--main-color-default-brown)
+.sort-active.sort-desc:before,
+.sort-active.sort-asc:hover:before,
+.sort-inactive.sort-desc:hover:before {
+    content: "\25BC  ";
 }
-#change-style-green {
-    background-color: var(--main-color-default-green)
+.filter-active:before {
+    content: "\2611  ";
 }
-#change-style-red {
-    background-color: var(--main-color-default-red)
+.filter-inactive:before {
+    content: "\2610  ";
 }
+
 .button {
     border: 0.1em solid #aaa;
     margin: 0.1em;
@@ -188,13 +259,24 @@ body, div, p, span, input, textarea, select, button {
     margin: 0;
     border: 0.2em solid #ba6700;
 }
+.save-button:before {
+    content: "\2713  ";
+}
+.delete-button:before {
+    content: "\2715  ";
+}
+.edit-button:before {
+    content: "\270e  ";
+}
+.edit-revert:before {
+    content: "\21B6  ";
+}
 
 /** Notes. */
 .notes-entry {
     display: flex;
     flex-flow: row wrap;
     border: 1px solid var(--main-color-lighter);
-    border-radius: 0.5em;
     background-color: var(--main-color-light);
     padding: 0.25em;
 }
@@ -206,15 +288,13 @@ body, div, p, span, input, textarea, select, button {
 .notes-entry-title {
     font-weight: bold;
 }
-@media all and (min-width: 320px) {
-    .notes-entry-date, .notes-entry-importance, .notes-entry-finished, .notes-entry-action {
-        flex: 1 0 auto;
-        flex-basis: 45%;
-    }
-    .notes-entry-title, .notes-entry-content {
-        flex: 1 0 auto;
-        flex-basis: 95%;
-    }
+.notes-entry-date, .notes-entry-importance, .notes-entry-finished, .notes-entry-action {
+    flex: 1 0 auto;
+    flex-basis: 45%;
+}
+.notes-entry-title, .notes-entry-content {
+    flex: 1 0 auto;
+    flex-basis: 95%;
 }
 @media all and (min-width: 1024px) {
     .notes-entry-date, .notes-entry-importance, .notes-entry-finished, .notes-entry-action {
@@ -277,7 +357,7 @@ body, div, p, span, input, textarea, select, button {
     float: left;
 }
 .input-field-full {
-    width: 400px;
+    width: var(--default-input-full-width);
 }
 .input-field {
     border: 1px solid #999;

@@ -1,6 +1,6 @@
 {{#if isEditable}}
+    <form id="edit-form-note-{{id}}">
     <div class="notes-entry block">
-        <form id="edit-form-note-{{id}}">
             <div class="notes-entry-cell notes-entry-date">
                 <input id="due-date-{{id}}" title="Due until" type="date" class="input-field input-field-full" value="{{formatDate due "input"}}"/>
             </div>
@@ -29,8 +29,8 @@
             <div class="notes-entry-cell notes-entry-action">
                 <button data-note-id="{{id}}" class="button save-button" type="button">Save</button>
             </div>
-        </form>
     </div>
+    </form>
 {{else}}
     <div class="notes-entry block">
         <div class="notes-entry-cell notes-entry-date">{{formatDate due "short"}}</div>
@@ -58,7 +58,7 @@
             <label for="notes-entry-{{id}}">Finished</label>
         </div>
         <div class="notes-entry-cell notes-entry-action">
-            <button data-note-id="{{id}}" class="button edit-button">&#x270e; Edit</button>
+            <button data-note-id="{{id}}" class="button edit-button">Edit</button>
         </div>
     </div>
 {{/if}}
