@@ -167,7 +167,10 @@
              * @return {Array} the updated notes
              */
             var publicDeleteNote = function (id) {
-                privatePutNote(key, undefined);
+                var allNotes = privateLoadNotes();
+                delete allNotes[id];
+                privateSaveNotes(allNotes);
+                notes = allNotes;
             };
 
             /**
@@ -259,6 +262,10 @@
                     privateSaveNote(event.target.getAttribute('data-note-id'));
                 });
 
+                $('.action-delete').unbind('click').on('click', function(event) {
+                    privateDeleteNote(event.target.getAttribute('data-note-id'));
+                });
+
                 $('.action-create').unbind('click').on('click', function () {
                     privateNewNote();
                 });
@@ -288,6 +295,15 @@
                 note.due = $('#due-date-' + noteId).val();
 
                 notesRepository.persistNote(privateToggleNodeEditMode(note));
+                privateRenderData();
+            };
+
+            /**
+             * Toggle isEditable on note at position of the noteIndex in Array notes.
+             * @param noteId
+             */
+            var privateDeleteNote = function (noteId) {
+                notesRepository.deleteNote(noteId);
                 privateRenderData();
             };
 
