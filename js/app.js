@@ -313,7 +313,7 @@
             note.title = $('#title-' + noteId).val();
             note.due = $('#due-date-' + noteId).val();
             note.importance = $("input:radio[name='importance-" + noteId + "']:checked").val();
-            note.finished = $("#notes-entry-" + noteId + "-finished").val() == 'true';
+            note.finished = $("#notes-entry-" + noteId + "-finished").is(':checked');
             console.log(note);
 
             notesRepository.saveNote(privateToggleNodeEditMode(note));

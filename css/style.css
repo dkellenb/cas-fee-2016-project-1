@@ -172,7 +172,7 @@ button.img-button {
     text-align: center;
 }
 button.img-button:before {
-    text-align: center;
+    font-size: 0.8em;
 }
 .img-button-add:before {
     content: "+";
@@ -281,6 +281,9 @@ button.img-button:before {
     padding: 0.2em;
     height: 2em;
     width: 7em;
+}
+.sort-button:before, .filter-button:before {
+    font-size: 0.7em;
 }
 .sort-inactive.sort-asc:before {
     content: "\25B3  ";
