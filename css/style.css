@@ -452,15 +452,15 @@ input.input-field {
     line-height: 18px;
     text-align: center;
     font-size: 18px;
-    cursor: pointer;
     height: 18px;
     width: 18px;
 }
 .importance-selection input:checked ~ label {
     color: #f5b301;
 }
-div.importance-selection label:hover,
-.importance-selection label:hover,
-.importance-selection label:hover ~ label {
+div.importance-selection-editable label:hover,
+.importance-selection-editable label:hover,
+.importance-selection-editable label:hover ~ label {
     color: #ec2c34;
+    cursor: pointer;
 }

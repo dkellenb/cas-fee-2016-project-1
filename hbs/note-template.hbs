@@ -4,16 +4,16 @@
             <div class="notes-entry-cell notes-entry-date">
                 <input id="due-date-{{id}}" title="Due until" type="date" class="input-field input-field-full" value="{{formatDate due "input"}}" placeholder="dd.mm.yyyy" />
             </div>
-            <div class="notes-entry-cell notes-entry-importance edit-area importance-selection">
-                <input type="radio" id="importance-{{id}}-5" value="5" {{#ifCond importance '===' 5 }}checked="checked"{{/ifCond}}/>
+            <div class="notes-entry-cell notes-entry-importance edit-area importance-selection importance-selection-editable">
+                <input type="radio" name="importance-{{id}}" id="importance-{{id}}-5" value="5" {{#ifCond importance '==' 5 }}checked="checked"{{/ifCond}}/>
                 <label for="importance-{{id}}-5"></label>
-                <input type="radio" id="importance-{{id}}-4" value="4" {{#ifCond importance '===' 4 }}checked="checked"{{/ifCond}}/>
+                <input type="radio" name="importance-{{id}}" id="importance-{{id}}-4" value="4" {{#ifCond importance '==' 4 }}checked="checked"{{/ifCond}}/>
                 <label for="importance-{{id}}-4"></label>
-                <input type="radio" id="importance-{{id}}-3" value="3" {{#ifCond importance '===' 3 }}checked="checked"{{/ifCond}}/>
+                <input type="radio" name="importance-{{id}}" id="importance-{{id}}-3" value="3" {{#ifCond importance '==' 3 }}checked="checked"{{/ifCond}}/>
                 <label for="importance-{{id}}-3"></label>
-                <input type="radio" id="importance-{{id}}-2" value="2" {{#ifCond importance '===' 2 }}checked="checked"{{/ifCond}}/>
+                <input type="radio" name="importance-{{id}}" id="importance-{{id}}-2" value="2" {{#ifCond importance '==' 2 }}checked="checked"{{/ifCond}}/>
                 <label for="importance-{{id}}-2"></label>
-                <input type="radio" id="importance-{{id}}-1" value="1" {{#ifCond importance '===' 1 }}checked="checked"{{/ifCond}}/>
+                <input type="radio" name="importance-{{id}}" id="importance-{{id}}-1" value="1" {{#ifCond importance '==' 1 }}checked="checked"{{/ifCond}}/>
                 <label for="importance-{{id}}-1"></label>
             </div>
             <div class="notes-entry-cell notes-entry-title">
@@ -23,8 +23,8 @@
                 <textarea id="description-{{id}}" title="description" rows="6" cols="50" class="input-field input-field-full" placeholder="Please enter some meaningfull values" >{{content}}</textarea>
             </div>
             <div class="notes-entry-cell notes-entry-finished">
-                <input id="notes-entry-{{id}}" type="checkbox" {{#ifCond finished '==' true}}checked="checked"{{/ifCond}} />
-                <label for="notes-entry-{{id}}">Finished</label>
+                <input id="notes-entry-{{id}}-finished" type="checkbox" {{#ifCond finished '==' true}}checked="checked"{{/ifCond}} value="true" />
+                <label for="notes-entry-{{id}}-finished">Finished</label>
             </div>
             <div class="notes-entry-cell notes-entry-action">
                 <button data-note-id="{{id}}" name="action-revert" accesskey="r" class="img-button img-button-revert action-revert" title="Revert"></button>
@@ -37,15 +37,15 @@
     <div class="notes-entry block">
         <div class="notes-entry-cell notes-entry-date">{{formatDate due "short"}}</div>
         <div class="notes-entry-cell notes-entry-importance edit-area importance-selection">
-            <input type="radio" id="importance-{{id}}-5" value="5" {{#ifCond importance '===' 5 }}checked="checked"{{/ifCond}}/><label
+            <input type="radio" id="importance-{{id}}-5" value="5" {{#ifCond importance '==' 5 }}checked="checked"{{/ifCond}}/><label
                 for="importance-{{id}}-5"></label>
-            <input type="radio" id="importance-{{id}}-4" value="4" {{#ifCond importance '===' 4 }}checked="checked"{{/ifCond}}/><label
+            <input type="radio" id="importance-{{id}}-4" value="4" {{#ifCond importance '==' 4 }}checked="checked"{{/ifCond}}/><label
                 for="importance-{{id}}-4"></label>
-            <input type="radio" id="importance-{{id}}-3" value="3" {{#ifCond importance '===' 3 }}checked="checked"{{/ifCond}}/><label
+            <input type="radio" id="importance-{{id}}-3" value="3" {{#ifCond importance '==' 3 }}checked="checked"{{/ifCond}}/><label
                 for="importance-{{id}}-3"></label>
-            <input type="radio" id="importance-{{id}}-2" value="2" {{#ifCond importance '===' 2 }}checked="checked"{{/ifCond}}/><label
+            <input type="radio" id="importance-{{id}}-2" value="2" {{#ifCond importance '==' 2 }}checked="checked"{{/ifCond}}/><label
                 for="importance-{{id}}-2"></label>
-            <input type="radio" id="importance-{{id}}-1" value="1" {{#ifCond importance '===' 1 }}checked="checked"{{/ifCond}}/><label
+            <input type="radio" id="importance-{{id}}-1" value="1" {{#ifCond importance '==' 1 }}checked="checked"{{/ifCond}}/><label
                 for="importance-{{id}}-1"></label>
         </div>
         <div class="notes-entry-cell notes-entry-title">{{title}}</div>
@@ -56,7 +56,7 @@
             </label>
         </div>
         <div class="notes-entry-cell notes-entry-finished">
-            <button data-note-id="{{id}}" name="action-finished" class="img-button {{#ifCond finished '===' true}}img-button-checked{{else}}img-button-unchecked{{/ifCond}}"></button>
+            <button data-note-id="{{id}}" data-note-finished="{{finished}}" name="action-finished" class="img-button {{#ifCond finished '===' true}}img-button-checked{{else}}img-button-unchecked{{/ifCond}} action-finished"></button>
         </div>
         <div class="notes-entry-cell notes-entry-action">
             <button data-note-id="{{id}}" name="action-delete" class="img-button img-button-delete action-delete"></button>

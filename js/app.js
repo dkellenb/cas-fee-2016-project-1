@@ -100,7 +100,22 @@
 /**
  * Notes application.
  */
-(function ($) {
+(function ($, moment) {
+
+    /**
+     * Class Note.
+     */
+    class Note {
+        constructor(title, content, importance, finished, due) {
+            this.id = null;
+            this.title = "" + title;
+            this.content = "" + content;
+            this.importance = importance > 0 && importance <= 5 ? importance : 3;
+            this.finished = finished === true;
+            this.due = due !== null ? moment(due).format('YYYY-MM-DD') : null;
+            this.isEditable = true;
+        }
+    }
 
     /**
      * Notes repository which is capable of selecting, inserting, updating and deleting notes.
@@ -150,7 +165,7 @@
          * @param note the note to persist
          * @returns the persisted note
          */
-        var publicPersistNote = function (note) {
+        var publicSaveNote = function (note) {
             var id = note.id;
             if (id === null || id === undefined) {
                 note.id = privateNextNoteId();
@@ -224,7 +239,7 @@
         return {
             searchNotes: publicSearchNote,
             getNote: publicGetNote,
-            persistNote: publicPersistNote,
+            saveNote: publicSaveNote,
             deleteNote: publicDeleteNote
         };
     }();
@@ -268,6 +283,14 @@
             $('.action-create').unbind('click').on('click', function () {
                 privateNewNote();
             });
+
+            $('.action-revert').unbind('click').on('click', function () {
+                privateRenderData();
+            });
+            
+            $('.action-finished').unbind('click').on('click', function () {
+                privateSetFinished(event.target.getAttribute('data-note-id'), event.target.getAttribute('data-note-finished'))
+            });
         };
 
         /**
@@ -275,7 +298,7 @@
          * @param noteId
          */
         var privateEditNote = function (noteId) {
-            notesRepository.persistNote(privateToggleNodeEditMode(notesRepository.getNote(noteId)));
+            notesRepository.saveNote(privateToggleNodeEditMode(notesRepository.getNote(noteId)));
             privateRenderData();
         };
 
@@ -285,15 +308,15 @@
          * @param noteId
          */
         var privateSaveNote = function (noteId) {
-            var formData = new FormData(document.querySelector('#edit-form-note-' + noteId));
-            console.log(formData);
             var note = notesRepository.getNote(noteId);
-
             note.content = $('#description-' + noteId).val();
             note.title = $('#title-' + noteId).val();
             note.due = $('#due-date-' + noteId).val();
+            note.importance = $("input:radio[name='importance-" + noteId + "']:checked").val();
+            note.finished = $("#notes-entry-" + noteId + "-finished").val() == 'true';
+            console.log(note);
 
-            notesRepository.persistNote(privateToggleNodeEditMode(note));
+            notesRepository.saveNote(privateToggleNodeEditMode(note));
             privateRenderData();
         };
 
@@ -306,17 +329,19 @@
             privateRenderData();
         };
 
+        /**
+         * Creates a new note and sets it into edit state.
+         */
         var privateNewNote = function () {
-            var newNote = {
-                id: null,
-                title: '',
-                content: '',
-                finished: false,
-                importance: 3,
-                due: null,
-                isEditable: true
-            };
-            notesRepository.persistNote(newNote);
+            var newNote = new Note('', '', 3, false, null);
+            notesRepository.saveNote(newNote);
+            privateRenderData();
+        };
+
+        var privateSetFinished = function (noteId, previousFinishedState) {
+            var note = notesRepository.getNote(noteId);
+            note.finished = previousFinishedState !== "true" && previousFinishedState !== true;
+            notesRepository.saveNote(note);
             privateRenderData();
         };
 
@@ -337,5 +362,5 @@
     }($, notesRepository);
 
     overviewController.initialize();
-})(jQuery);
+})(jQuery, moment);
 
