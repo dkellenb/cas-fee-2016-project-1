@@ -68,7 +68,7 @@
         return Handlebars.templates[name];
     };
 
-    Handlebars.registerPartial('noteTemplate',Handlebars.getTemplate('note-template'))
+    Handlebars.registerPartial('noteTemplate', Handlebars.getTemplate('note-template'))
 
 })(Handlebars);
 
@@ -107,6 +107,9 @@
          * Notes repository which is capable of selecting, inserting, updating and deleting notes.
          */
         var notesRepository = function () {
+
+            const LOCAL_SORAGE_NOTES_KEY = 'notes';
+            const LOCAL_SORAGE_NOTES_SEQUENCE_KEY = 'noteIdSequence';
 
             var notes;
 
@@ -172,7 +175,7 @@
              * @returns {map<number,{}>} map<noteId,Note>
              */
             var privateLoadNotes = function () {
-                var serializedNotes = localStorage.getItem('notes');
+                var serializedNotes = localStorage.getItem(LOCAL_SORAGE_NOTES_KEY);
                 console.log("Load notes: " + serializedNotes);
                 return serializedNotes === undefined || serializedNotes === null ? {} : JSON.parse(serializedNotes);
             };
@@ -185,7 +188,7 @@
              */
             var privateSaveNotes = function (notes) {
                 var serializedNotes = notes === undefined || notes === null ? "{}" : JSON.stringify(notes);
-                localStorage.setItem('notes', serializedNotes);
+                localStorage.setItem(LOCAL_SORAGE_NOTES_KEY, serializedNotes);
                 return notes;
             };
 
@@ -194,12 +197,12 @@
              * @returns {number} noteId
              */
             var privateNextNoteId = function () {
-                var sequence = localStorage.getItem('noteIdSequence');
+                var sequence = localStorage.getItem(LOCAL_SORAGE_NOTES_SEQUENCE_KEY);
                 if (sequence == undefined || sequence == null) {
                     sequence = 0;
                 }
                 sequence++;
-                localStorage.setItem('noteIdSequence', sequence);
+                localStorage.setItem(LOCAL_SORAGE_NOTES_SEQUENCE_KEY, sequence);
 
                 return sequence;
             };
@@ -228,7 +231,6 @@
          * The edit form controller. Dependes on:
          * - notesRepository
          */
-
         var overviewController = function ($, notesRepository) {
 
             var publicInitialize = function () {
