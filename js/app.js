@@ -249,15 +249,15 @@
              * Function for register all Events.
              */
             var privateRegisterEvents = function () {
-                $('.edit-button').unbind('click').on('click', function (event) {
+                $('.action-edit').unbind('click').on('click', function (event) {
                     privateEditNote(event.target.getAttribute('data-note-id'));
                 });
 
-                $('.save-button').unbind('click').on('click', function (event) {
+                $('.action-save').unbind('click').on('click', function (event) {
                     privateSaveNote(event.target.getAttribute('data-note-id'));
                 });
 
-                $('#create-note').unbind('click').on('click', function () {
+                $('.action-create').unbind('click').on('click', function () {
                     privateNewNote();
                 });
             };

@@ -22,6 +22,7 @@
 body {
     --default-space: 0.25em;
     --default-input-full-width: 100%;
+    --input-border-color: rgb(145, 145, 145);
 
     /* Brown. */
     --main-color-dark-brown: rgb(135, 88, 35);
@@ -29,6 +30,8 @@ body {
     --main-color-default-brown: rgb(197, 156, 55);
     --main-color-lighter-brown: rgb(245, 216, 137);
     --main-color-light-brown: rgb(245, 237, 201);
+    --focus-border-color-brown: var(--main-color-dark-brown);
+    --focus-border-shaddow-brown: 0 0 10px rgb(197, 156, 55);
 
     /* Blue. */
     --main-color-dark-blue: rgb(32, 83, 135);
@@ -36,6 +39,8 @@ body {
     --main-color-default-blue: rgb(119, 156, 197);
     --main-color-lighter-blue: rgb(161, 210, 245);
     --main-color-light-blue: rgb(217, 237, 245);
+    --focus-border-color-blue: var(--main-color-dark-blue);
+    --focus-border-shaddow-blue: 0 0 10px rgb(119, 156, 197);
 
     /* Green. */
     --main-color-dark-green: rgb(32, 135, 87);
@@ -43,6 +48,8 @@ body {
     --main-color-default-green: rgb(96, 197, 102);
     --main-color-lighter-green: rgb(182, 245, 144);
     --main-color-light-green: rgb(209, 245, 202);
+    --focus-border-color-green: var(--main-color-dark-green);
+    --focus-border-shaddow-green: 0 0 10px rgb(96, 197, 102);
 
     /* Red. */
     --main-color-dark-red: rgb(135, 21, 28);
@@ -50,6 +57,8 @@ body {
     --main-color-default-red: rgb(197, 92, 94);
     --main-color-lighter-red: rgb(245, 167, 154);
     --main-color-light-red: rgb(245, 229, 226);
+    --focus-border-color-red: var(--main-color-dark-red);
+    --focus-border-shaddow-red: 0 0 10px rgb(197, 92, 94);
 }
 
 /** Style specific definitions. */
@@ -59,6 +68,8 @@ body {
     --main-color-default: var(--main-color-default-brown);
     --main-color-lighter: var(--main-color-lighter-brown);
     --main-color-light: var(--main-color-light-brown);
+    --focus-border-color: var(--focus-border-color-red);
+    --focus-border-shadow: var(--focus-border-shaddow-brown);
 }
 .blue-style {
     --main-color-dark: var(--main-color-dark-blue);
@@ -66,6 +77,8 @@ body {
     --main-color-default: var(--main-color-default-blue);
     --main-color-lighter: var(--main-color-lighter-blue);
     --main-color-light: var(--main-color-light-blue);
+    --focus-border-color: var(--focus-border-color-blue);
+    --focus-border-shadow: var(--focus-border-shaddow-blue);
 }
 .green-style {
     --main-color-dark: var(--main-color-dark-green);
@@ -73,6 +86,8 @@ body {
     --main-color-default: var(--main-color-default-green);
     --main-color-lighter: var(--main-color-lighter-green);
     --main-color-light: var(--main-color-light-green);
+    --focus-border-color: var(--focus-border-color-green);
+    --focus-border-shadow: var(--focus-border-shaddow-green);
 }
 .red-style {
     --main-color-dark: var(--main-color-dark-red);
@@ -80,6 +95,8 @@ body {
     --main-color-default: var(--main-color-default-red);
     --main-color-lighter: var(--main-color-lighter-red);
     --main-color-light: var(--main-color-light-red);
+    --focus-border-color: var(--focus-border-color-red);
+    --focus-border-shadow: var(--focus-border-shaddow-red);
 }
 
 /** Media type specific definitions. */
@@ -116,27 +133,51 @@ body, div, p, span, input, textarea, select, button {
 }
 
 /* Button elements. */
-
 @keyframes img-button-color-change-in {
-    from { background-color: rgba(0, 0, 0, 0.40); }
-    to { background-color: rgba(0, 0, 0, 0.20); }
+    from { background-color: rgba(0, 0, 0, 0.3); }
+    to { background-color: rgba(0, 0, 0, 0.2); }
 }
 button.img-button, button.sort-button, button.filter-button {
     transition: all 0.1s ease-in;
-    background-color: rgba(0, 0, 0, 0.20);
-    border: 1px solid rgba(0, 0, 0, 0.40);
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.3);
     cursor: pointer;
     box-sizing: border-box;
 }
 button.img-button:hover, button.sort-button:hover, button.filter-button:hover {
-    border-color: #000;
-    border-width: 2px;
-    background-color: rgba(0, 0, 0, 0.40);
+    border: 2px solid var(--focus-border-color);
+    background-color: rgba(0, 0, 0, 0.3);
+    box-shadow: var(--focus-border-shadow);
 }
 button.img-button {
     font-size: 1.3em;
     height: 1.5em;
     width: 1.5em;
+    text-align: center;
+}
+button.img-button:before {
+    text-align: center;
+}
+.img-button-add:before {
+    content: "+";
+}
+.img-button-save:before {
+    content: "\2713  ";
+}
+.img-button-delete:before {
+    content: "\2715  ";
+}
+.img-button-edit:before {
+    content: "\270e  ";
+}
+.img-button-revert:before {
+    content: "\21B6  ";
+}
+.img-button-checked:before {
+    content: "\2611";
+}
+.img-button-unchecked:before {
+    content: "\2610";
 }
 
 
@@ -216,6 +257,9 @@ button.img-button {
 /**
  * Sort and filtering.
  */
+#filter-bar {
+    line-height: 2em;
+}
 .sort-button, .filter-button {
     font-size: 0.7em;
     padding: 0.2em;
@@ -238,12 +282,35 @@ button.img-button {
 .sort-inactive.sort-desc:hover:before {
     content: "\25BC  ";
 }
-.filter-active:before {
+.filter-active:before,
+.filter-inactive:hover:before {
     content: "\2611  ";
 }
-.filter-inactive:before {
+.filter-inactive:before,
+.filter-active:hover:before {
     content: "\2610  ";
 }
+
+/**
+ * Input elements.
+ */
+.input-field {
+    border: 1px solid var(--input-border-color);
+    padding: 0.2em;
+    font-size: 1em;
+}
+input.input-field {
+    height: 1.5em;
+}
+.input-field:focus, .input-field:hover {
+    border-color: var(--focus-border-color);
+    box-shadow: var(--focus-border-shadow);
+}
+.input-field-full {
+    width: var(--default-input-full-width);
+}
+
+
 
 .button {
     border: 0.1em solid #aaa;
@@ -259,18 +326,7 @@ button.img-button {
     margin: 0;
     border: 0.2em solid #ba6700;
 }
-.save-button:before {
-    content: "\2713  ";
-}
-.delete-button:before {
-    content: "\2715  ";
-}
-.edit-button:before {
-    content: "\270e  ";
-}
-.edit-revert:before {
-    content: "\21B6  ";
-}
+
 
 /** Notes. */
 .notes-entry {
@@ -295,6 +351,9 @@ button.img-button {
 .notes-entry-title, .notes-entry-content {
     flex: 1 0 auto;
     flex-basis: 95%;
+}
+.notes-entry-action {
+    text-align: right;
 }
 @media all and (min-width: 1024px) {
     .notes-entry-date, .notes-entry-importance, .notes-entry-finished, .notes-entry-action {
@@ -355,18 +414,6 @@ button.img-button {
 }
 .edit-area {
     float: left;
-}
-.input-field-full {
-    width: var(--default-input-full-width);
-}
-.input-field {
-    border: 1px solid #999;
-}
-.input-field:focus, .button:focus {
-    border-color: #3679ba;
-}
-.input-field:hover, .button:hover {
-    border-color: #7EB3CB;
 }
 
 /** importance selection. */
