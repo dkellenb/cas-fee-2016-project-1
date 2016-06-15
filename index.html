@@ -2,34 +2,40 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/Symbola.css"/>
     <link rel="stylesheet" href="css/style.css"/>
     <title>Notes</title>
+    <script>
+        if (screen.width < 360)
+        {
+            var mvp = document.getElementById('viewport');
+            mvp.setAttribute('content','width=360');
+        }
+    </script>
 </head>
-<body>
+<body class="red-style">
 <nav class="nav">
     <div class="title">Notes!</div>
     <div class="actions">
-        <button class="button" id="create-note" type="button">Create New Note</button>
-        <div>
-            <label for="styleSelection" class="sr-only">Select your style</label>
-            <select id="styleSelection" class="button">
-                <option value="blue">Blue style</option>
-                <option value="brown">Brown style</option>
-            </select>
+        <div class="change-color-box">
+            <button class="img-button change-style" id="change-style-blue" type="button" title="Change color style to blue" data-body-style="blue-style">&nbsp;</button>
+            <button class="img-button change-style" id="change-style-brown" type="button" title="Change color style to brown" data-body-style="brown-style">&nbsp;</button>
+            <button class="img-button change-style" id="change-style-green" type="button" title="Change color style to green" data-body-style="green-style">&nbsp;</button>
+            <button class="img-button change-style" id="change-style-red" type="button" title="Change color style to red" data-body-style="red-style">&nbsp;</button>
         </div>
+        <button class="img-button" id="create-note" type="button" title="Create new note">+</button>
     </div>
 </nav>
 <content>
     <div id="wrapper">
         <div id="filter-bar" class="block">
             <div class="sort-criterias push-left">
-                <label for="sortByFinishDate" class="button">By finish Date</label> <input type="radio" name="sortBy" value="finishedDate"
+                <label for="sortByFinishDate" class="button">&#9660; &#x1f4c5; finish Date</label> <input type="radio" name="sortBy" value="finishedDate"
                                                                                            id="sortByFinishDate"/>
-                <label for="sortByCreatedDate" class="button">By create Date</label> <input type="radio" name="sortBy" value="createdDate"
+                <label for="sortByCreatedDate" class="button">&#9660; create Date</label> <input type="radio" name="sortBy" value="createdDate"
                                                                                             id="sortByCreatedDate"/>
-                <label for="sortByImportance" class="button">By Importance</label> <input type="radio" name="sortBy" value="importance" id="sortByImportance"/>
+                <label for="sortByImportance" class="button">&#9942; Importance</label> <input type="radio" name="sortBy" value="importance" id="sortByImportance"/>
             </div>
             <div class="push-right">
                 <a href="#" id="showFinishedToggle" class="button">Show finished</a>

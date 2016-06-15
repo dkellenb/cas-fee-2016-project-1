@@ -3,6 +3,70 @@
  * TODO: general: split up coloring / structure
  */
 
+/**
+ * Variable definitions.
+ */
+body {
+    --default-space: 0.25em;
+
+    /* Brown. */
+    --main-color-dark-brown: rgb(135, 88, 35);
+    --main-color-darker-brown: rgb(186, 103, 0);
+    --main-color-default-brown: rgb(197, 156, 55);
+    --main-color-lighter-brown: rgb(245, 216, 137);
+    --main-color-light-brown: rgb(245, 237, 201);
+
+    /* Blue. */
+    --main-color-dark-blue: rgb(32, 83, 135);
+    --main-color-darker-blue: rgb(87, 122, 186);
+    --main-color-default-blue: rgb(119, 156, 197);
+    --main-color-lighter-blue: rgb(161, 210, 245);
+    --main-color-light-blue: rgb(217, 237, 245);
+
+    /* Green. */
+    --main-color-dark-green: rgb(32, 135, 87);
+    --main-color-darker-green: rgb(44, 186, 87);
+    --main-color-default-green: rgb(96, 197, 102);
+    --main-color-lighter-green: rgb(182, 245, 144);
+    --main-color-light-green: rgb(209, 245, 202);
+
+    /* Red. */
+    --main-color-dark-red: rgb(135, 21, 28);
+    --main-color-darker-red: rgb(186, 59, 67);
+    --main-color-default-red: rgb(197, 92, 94);
+    --main-color-lighter-red: rgb(245, 167, 154);
+    --main-color-light-red: rgb(245, 229, 226);
+}
+.brown-style {
+    --main-color-dark: var(--main-color-dark-brown);
+    --main-color-darker: var(--main-color-darker-brown);
+    --main-color-default: var(--main-color-default-brown);
+    --main-color-lighter: var(--main-color-lighter-brown);
+    --main-color-light: var(--main-color-light-brown);
+}
+.blue-style {
+    --main-color-dark: var(--main-color-dark-blue);
+    --main-color-darker: var(--main-color-darker-blue);
+    --main-color-default: var(--main-color-default-blue);
+    --main-color-lighter: var(--main-color-lighter-blue);
+    --main-color-light: var(--main-color-light-blue);
+}
+.green-style {
+    --main-color-dark: var(--main-color-dark-green);
+    --main-color-darker: var(--main-color-darker-green);
+    --main-color-default: var(--main-color-default-green);
+    --main-color-lighter: var(--main-color-lighter-green);
+    --main-color-light: var(--main-color-light-green);
+}
+.red-style {
+    --main-color-dark: var(--main-color-dark-red);
+    --main-color-darker: var(--main-color-darker-red);
+    --main-color-default: var(--main-color-default-red);
+    --main-color-lighter: var(--main-color-lighter-red);
+    --main-color-light: var(--main-color-light-red);
+}
+
+
 /* Browser reset. */
 * {
     padding:0;
@@ -20,23 +84,27 @@ body, div, p, span, input, textarea, select, button {
 }
 .push-left {
     float: left;
-    margin-right: 0.25em;
+    margin-right: var(--default-space);
 }
 .push-right {
     float: right;
-    margin-left: 0.25em;
+    margin-left: var(--default-space);
 }
 
 /** Navigation. */
 .nav {
-    height: 4em;
-    padding: 1em;
-    background: #ba6700;
+    padding: 0.5em;
+    background: var(--main-color-darker);
     color: #fff;
+}
+.nav:after {
+    clear: both;
+    content: " ";
+    display: table;
 }
 .nav .title {
     float: left;
-    font-size: 2em;
+    font-size: 1.5em;
     font-weight: bold;
 }
 .nav .actions {
@@ -45,10 +113,19 @@ body, div, p, span, input, textarea, select, button {
 .nav .actions > div, .nav .actions > a {
     float: left;
 }
-.nav .actions > div:before, .nav .actions > a:before {
-    content: " ";
-    margin-left: 0.25em;
+.nav .actions > div, .nav .actions > button {
+    margin-right: var(--default-space);
 }
+.change-color-box {
+    font-size: 0.45em;
+    line-height: 0.5em;
+    width: 4.25em;
+}
+.change-color-box button {
+    margin-bottom: var(--default-space);
+}
+
+
 
 .footer {
     margin-top: 2em;
@@ -56,7 +133,7 @@ body, div, p, span, input, textarea, select, button {
 }
 
 #wrapper {
-    margin: 1em;
+    margin: 0.5em;
 }
 .block {
     margin-bottom: 10px;
@@ -68,11 +145,40 @@ body, div, p, span, input, textarea, select, button {
 }
 
 /** Button. */
+@keyframes img-button-color-change-in {
+    from { background-color: rgba(0, 0, 0, 0.30); }
+    to { background-color: rgba(0, 0, 0, 0.10); }
+}
+.img-button {
+    transition: all 0.1s ease-in;
+    background-color: rgba(0, 0, 0, 0.10);
+    border: 1px solid rgba(0, 0, 0, 0.30);
+    font-size: 1.3em;
+    height: 1.5em;
+    width: 1.5em;
+    cursor: pointer;
+}
+.img-button:hover {
+    border-color: #000;
+    background-color: rgba(0, 0, 0, 0.30);
+}
+#change-style-blue {
+    background-color: var(--main-color-default-blue)
+}
+#change-style-brown {
+    background-color: var(--main-color-default-brown)
+}
+#change-style-green {
+    background-color: var(--main-color-default-green)
+}
+#change-style-red {
+    background-color: var(--main-color-default-red)
+}
 .button {
     border: 0.1em solid #aaa;
     margin: 0.1em;
     border-radius: 0.25em;
-    padding: 0.25em;
+    padding: 0.1em;
     background: #e5ddda;
     text-decoration: none;
     color: #000;
@@ -87,10 +193,10 @@ body, div, p, span, input, textarea, select, button {
 .notes-entry {
     display: flex;
     flex-flow: row wrap;
-    border: 1px solid #f5d889;
+    border: 1px solid var(--main-color-lighter);
     border-radius: 0.5em;
-    background-color: #f5edc9;
-    padding: 0.5em;
+    background-color: var(--main-color-light);
+    padding: 0.25em;
 }
 .notes-entry-cell {
     flex: 1 100%;
@@ -100,7 +206,7 @@ body, div, p, span, input, textarea, select, button {
 .notes-entry-title {
     font-weight: bold;
 }
-@media all and (min-width: 600px) {
+@media all and (min-width: 320px) {
     .notes-entry-date, .notes-entry-importance, .notes-entry-finished, .notes-entry-action {
         flex: 1 0 auto;
         flex-basis: 45%;
