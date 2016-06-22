@@ -141,7 +141,7 @@
                 return notes[key];
             });
 
-            return sortController.filterAndSortNotes(notes, sortKey, asc, filterKey);
+            return sortController.filterAndSortNotes(notesArray, sortKey, asc, filterKey);
         };
 
         /**
@@ -237,35 +237,49 @@
         var sortController = function () {
 
             var sortFunktions = {
-                due: function (noteA, noteB) {
-                    if (noteA.due == noteB.due) {
-                        return 0;
+                finished: function (direction) {
+                    return function (noteA, noteB) {
+                        if (noteA.due == noteB.due) {
+                            return 0;
+                        }
+                        return (direction && noteA.due < noteB.due) ? -1 : 1;
                     }
-                    return (this.asc && noteA.due < noteB.due) ? -1 : 1;
                 },
-                create: function (noteA, noteB) {
-                    if (noteA.createDate == noteB.createDate) {
-                        return 0;
+                created: function (direction) {
+                    return function (noteA, noteB) {
+                        if (noteA.createDate == noteB.createDate) {
+                            return 0;
+                        }
+                        return (direction && noteA.due < noteB.due) ? -1 : 1;
                     }
-                    return (this.asc && noteA.due < noteB.due) ? -1 : 1;
                 },
-                importance: function (noteA, noteB) {
-                    if (noteA.due == noteB.due) {
-                        return 0;
+                importance: function (direction) {
+                    return function (noteA, noteB) {
+                        if (noteA.due == noteB.due) {
+                            return 0;
+                        }
+                        return (direction && noteA.due < noteB.due) ? -1 : 1;
                     }
-                    return (this.asc && noteA.due < noteB.due) ? -1 : 1;
                 }
             };
 
             var filterFunktions = {
                 finished: function (note) {
-                    return note.finished;
+                    return !note.finished;
                 }
             };
 
 
-            var publicFilterAndSortNotes = function (notes, sortKey, asc, filterKey) {
-                return notes
+            var publicFilterAndSortNotes = function (notesArray, sortKey, asc, filterKey) {
+                console.log('SortFunction was called with -> sortKey: ' + sortKey + ' arc: ' + asc + ' filterKey: ' + filterKey);
+                if (filterKey !== null && filterKey !== undefined) {
+                    notesArray = notesArray.filter(filterFunktions[filterKey]);
+                }
+
+                if (sortKey !== null && sortKey !== undefined) {
+                    notesArray = notesArray.sort(sortFunktions[sortKey](asc));
+                }
+                return notesArray;
             };
 
             return {
@@ -300,7 +314,8 @@
         var privateRenderData = function () {
 
             var activSortButton = filterBarController.getActiveSortButton();
-            var generatedHtml = Handlebars.getTemplate('notes-template')(notesRepository.searchNotes(activSortButton.name, activSortButton.asc, null));
+            var activFilterButton = filterBarController.getActiveFilterButton();
+            var generatedHtml = Handlebars.getTemplate('notes-template')(notesRepository.searchNotes(activSortButton.name, activSortButton.asc, activFilterButton.name));
             $('#notes-table').html(generatedHtml);
             privateRegisterEvents();
         };
