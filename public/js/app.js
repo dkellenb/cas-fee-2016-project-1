@@ -320,11 +320,17 @@
         };
 
         /**
-         * redenr Single Note at the beginning of the List.
+         * Render Single Note in Note-Table
+         * @param note Note for Render
+         * @param replace true = Replace existing / false = place at beginning of table new Note
          */
-        var privateRenderSingleNote = function (note) {
+        var privateRenderSingleNote = function (note, replace) {
             var generatedHtml = Handlebars.getTemplate('note-template')(note);
-            $('#notes-table').prepend(generatedHtml);
+            if (replace) {
+                $('#note-' + note.id).replaceWith(generatedHtml);
+            } else {
+                $('#notes-table').prepend(generatedHtml);
+            }
             privateRegisterEvents();
         };
 
@@ -349,7 +355,7 @@
             });
 
             $('.action-revert').unbind('click').on('click', function () {
-                privateRenderData();
+                privateRevertNote(event.target.getAttribute('data-note-id'));
             });
 
             $('.action-finished').unbind('click').on('click', function () {
@@ -362,8 +368,7 @@
          * @param noteId
          */
         var privateEditNote = function (noteId) {
-            notesRepository.saveNote(privateToggleNodeEditMode(notesRepository.getNote(noteId)));
-            privateRenderData();
+            privateRenderSingleNote(notesRepository.saveNote(privateToggleNodeEditMode(notesRepository.getNote(noteId))), true);
         };
 
 
@@ -381,7 +386,13 @@
             console.log(note);
 
             notesRepository.saveNote(privateToggleNodeEditMode(note));
-            privateRenderData();
+            privateRenderSingleNote(note,true);
+        };
+
+        var privateRevertNote = function(noteId){
+            var note = notesRepository.getNote(noteId);
+            note.isEditable=false;
+            privateRenderSingleNote(note,true);
         };
 
         /**
@@ -399,7 +410,7 @@
         var privateNewNote = function () {
             var newNote = new Note('', '', 3, false, null);
             notesRepository.saveNote(newNote);
-            privateRenderSingleNote(newNote);
+            privateRenderSingleNote(newNote, false);
         };
 
         var privateSetFinished = function (noteId, previousFinishedState) {
