@@ -1,6 +1,6 @@
 {{#if isEditable}}
     <form id="edit-form-note-{{id}}">
-        <div class="notes-entry block">
+        <div id="note-{{id}}" class="notes-entry block">
             <div class="notes-entry-cell notes-entry-date">
                 <input id="due-date-{{id}}" title="Due until" type="date" class="input-field input-field-full" value="{{formatDate due "input"}}"
                        placeholder="dd.mm.yyyy"/>
@@ -22,7 +22,7 @@
             </div>
             <div class="notes-entry-cell notes-entry-content">
                 <textarea id="description-{{id}}" title="description" rows="6" cols="50" class="input-field input-field-full"
-                          placeholder="Please enter some meaningfull values">{{content}}</textarea>
+                          placeholder="Please enter some meaningfull values">{{{content}}}</textarea>
             </div>
             <div class="notes-entry-cell notes-entry-finished">
                 <input id="notes-entry-{{id}}-finished" type="checkbox" {{#ifCond finished '==' true}}checked="checked"{{/ifCond}} value="true"/>
@@ -39,7 +39,7 @@
         </div>
     </form>
 {{else}}
-    <div class="notes-entry block">
+    <div id="note-{{id}}" class="notes-entry block">
         <div class="notes-entry-cell notes-entry-date">{{formatDate due "short"}}</div>
         <div class="notes-entry-cell notes-entry-importance edit-area importance-selection">
             <input type="radio" id="importance-{{id}}-5" value="5" {{#ifCond importance '==' 5 }}checked="checked"{{/ifCond}}/><label

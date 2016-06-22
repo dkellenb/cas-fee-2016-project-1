@@ -114,112 +114,35 @@
             this.finished = finished === true;
             this.due = due !== null ? moment(due).format('YYYY-MM-DD') : null;
             this.isEditable = true;
+            this.createDate = new Date();
         }
     }
 
-        /**
-         * Controller for sorting the Lists
-         */
-        var sortController = function () {
+    /**
+     * Notes repository which is capable of selecting, inserting, updating and deleting notes.
+     * @type {{searchNotes, getNote, persistNote, deleteNote}}
+     */
+    var notesRepository = function () {
 
-            const LOCAL_SORAGE_BUTTON_KEY = 'buttons';
-
-            function Button(label, aktive) {
-                this.label = label;
-                this.aktive = aktive;
-            }
-
-            function FilterButton(label, aktive, filterFunction) {
-                Button.call(label, aktive);
-                this.filterFunction = filterFunction;
-            }
-
-            function SortButton(label, aktive, asc, quantifier, sortFunction) {
-                Button.call(label, aktive);
-                this.quantifier = quantifier;
-                this.asc = asc;
-                this.sortFunction = sortFunction;
-            }
-
-            var privateLoadButtons = function () {
-                var serializedButtons = localStorage.getItem(LOCAL_SORAGE_BUTTON_KEY);
-                console.log("Load buttons: " + serializedButtons);
-                return serializedButtons === undefined || serializedButtons === null ? privateInitButtons() : JSON.parse(serializedButtons);
-            };
-
-            var privateSaveButtons = function (buttons) {
-                if (buttons === undefined || buttons === null) {
-                    buttons = privateInitButtons();
-                }
-                var serializedButtons = JSON.stringify(buttons);
-                localStorage.setItem(LOCAL_SORAGE_BUTTON_KEY, serializedButtons);
-                return notes;
-            };
-
-            var privateInitButtons = function () {
-                return {
-                    filterButtons: [
-                        new FilterButton('finished', false, function (note) {
-                            return note.finished;
-                        })
-                    ],
-                    sortButtons: [
-                        new SortButton('created', false, true, 0, function (noteA, noteB) {
-                            if (noteA.due == noteB.due) {
-                                return 0;
-                            }
-                            return (this.asc && noteA.due < noteB.due) ? -1 : 1;
-                        }),
-
-                        new SortButton('importance', false, true, 0, function (noteA, noteB) {
-                            if (noteA.importance == noteB.importance) {
-                                return 0;
-                            }
-                            return (this.asc && noteA.importance < noteB.importance) ? -1 : 1;
-                        })
-                    ]
-                };
-            };
-
-            var publicFilterAndSortNotes = function (notes) {
-                return notes;
-            };
-
-            var publicGetButtons = function () {
-                return privateLoadButtons();
-            };
-
-            return {
-                publicGetButtons: publicGetButtons,
-                publicFilterAndSortNotes: publicFilterAndSortNotes
-            };
-        }();
-
-        /**
-         * Notes repository which is capable of selecting, inserting, updating and deleting notes.
-         * @type {{searchNotes, getNote, persistNote, deleteNote}}
-         */
-        var notesRepository = function (sortController) {
-
-            const LOCAL_SORAGE_NOTES_KEY = 'notes';
-            const LOCAL_SORAGE_NOTES_SEQUENCE_KEY = 'noteIdSequence';
+        const LOCAL_SORAGE_NOTES_KEY = 'notes';
+        const LOCAL_SORAGE_NOTES_SEQUENCE_KEY = 'noteIdSequence';
 
         /**
          * Gets all persisted notes.
          *
          * @returns {Array} the persisted notes
          */
-        var publicSearchNote = function () {
+        var publicSearchNote = function (sortKey, asc, filterKey) {
 
-                var notes = privateLoadNotes();
-                var ids = Object.keys(notes);
-                console.log(ids);
-                var notesArray = ids.map(function (key) {
-                    return notes[key];
-                });
+            var notes = privateLoadNotes();
+            var ids = Object.keys(notes);
+            console.log(ids);
+            var notesArray = ids.map(function (key) {
+                return notes[key];
+            });
 
-                return sortController.publicFilterAndSortNotes(notes);
-            };
+            return sortController.filterAndSortNotes(notesArray, sortKey, asc, filterKey);
+        };
 
         /**
          * Gets a note with the given id.
@@ -257,42 +180,42 @@
          * @return {Array} the updated notes
          */
         var publicDeleteNote = function (id) {
-            privatePutNote(key, undefined);
+            privatePutNote(id, undefined);
         };
 
-            /**
-             * loads all persisted notes from localStorage as a map<noteId,Note>.
-             * @returns {map<number,{}>} map<noteId,Note>
-             */
-            var privateLoadNotes = function () {
-                var serializedNotes = localStorage.getItem(LOCAL_SORAGE_NOTES_KEY);
-                console.log("Load notes: " + serializedNotes);
-                return serializedNotes === undefined || serializedNotes === null ? {} : JSON.parse(serializedNotes);
-            };
+        /**
+         * loads all persisted notes from localStorage as a map<noteId,Note>.
+         * @returns {map<number,{}>} map<noteId,Note>
+         */
+        var privateLoadNotes = function () {
+            var serializedNotes = localStorage.getItem(LOCAL_SORAGE_NOTES_KEY);
+            console.log("Load notes: " + serializedNotes);
+            return serializedNotes === undefined || serializedNotes === null ? {} : JSON.parse(serializedNotes);
+        };
 
-            /**
-             * Save all notes.
-             *
-             * @param notes saves all notes.
-             * @returns {map<number,{}>} Map<NoteId,Note> the persisted notes
-             */
-            var privateSaveNotes = function (notes) {
-                var serializedNotes = notes === undefined || notes === null ? "{}" : JSON.stringify(notes);
-                localStorage.setItem(LOCAL_SORAGE_NOTES_KEY, serializedNotes);
-                return notes;
-            };
+        /**
+         * Save all notes.
+         *
+         * @param notes saves all notes.
+         * @returns {map<number,{}>} Map<NoteId,Note> the persisted notes
+         */
+        var privateSaveNotes = function (notes) {
+            var serializedNotes = notes === undefined || notes === null ? "{}" : JSON.stringify(notes);
+            localStorage.setItem(LOCAL_SORAGE_NOTES_KEY, serializedNotes);
+            return notes;
+        };
 
-            /**
-             * get Next Id from note sequence in localStorage
-             * @returns {number} noteId
-             */
-            var privateNextNoteId = function () {
-                var sequence = localStorage.getItem(LOCAL_SORAGE_NOTES_SEQUENCE_KEY);
-                if (sequence == undefined || sequence == null) {
-                    sequence = 0;
-                }
-                sequence++;
-                localStorage.setItem(LOCAL_SORAGE_NOTES_SEQUENCE_KEY, sequence);
+        /**
+         * get Next Id from note sequence in localStorage
+         * @returns {number} noteId
+         */
+        var privateNextNoteId = function () {
+            var sequence = localStorage.getItem(LOCAL_SORAGE_NOTES_SEQUENCE_KEY);
+            if (sequence == undefined || sequence == null) {
+                sequence = 0;
+            }
+            sequence++;
+            localStorage.setItem(LOCAL_SORAGE_NOTES_SEQUENCE_KEY, sequence);
 
             return sequence;
         };
@@ -308,23 +231,80 @@
             privateSaveNotes(notes);
         };
 
-            // Return public interface.
-            return {
-                searchNotes: publicSearchNote,
-                getNote: publicGetNote,
-                saveNote: publicSaveNote,
-                deleteNote: publicDeleteNote
-            };
-        }(sortController);
-
         /**
-         * The edit form controller. Dependes on:
-         * - notesRepository
+         * Controller for sorting the Lists
          */
-        var overviewController = function ($, notesRepository) {
+        var sortController = function () {
+
+            var sortFunktions = {
+                finished: function (direction) {
+                    return function (noteA, noteB) {
+                        if (noteA.due == noteB.due) {
+                            return 0;
+                        }
+                        return (direction && noteA.due < noteB.due) ? -1 : 1;
+                    }
+                },
+                created: function (direction) {
+                    return function (noteA, noteB) {
+                        if (noteA.createDate == noteB.createDate) {
+                            return 0;
+                        }
+                        return (direction && noteA.due < noteB.due) ? -1 : 1;
+                    }
+                },
+                importance: function (direction) {
+                    return function (noteA, noteB) {
+                        if (noteA.due == noteB.due) {
+                            return 0;
+                        }
+                        return (direction && noteA.due < noteB.due) ? -1 : 1;
+                    }
+                }
+            };
+
+            var filterFunktions = {
+                finished: function (note) {
+                    return !note.finished;
+                }
+            };
+
+
+            var publicFilterAndSortNotes = function (notesArray, sortKey, asc, filterKey) {
+                console.log('SortFunction was called with -> sortKey: ' + sortKey + ' arc: ' + asc + ' filterKey: ' + filterKey);
+                if (filterKey !== null && filterKey !== undefined) {
+                    notesArray = notesArray.filter(filterFunktions[filterKey]);
+                }
+
+                if (sortKey !== null && sortKey !== undefined) {
+                    notesArray = notesArray.sort(sortFunktions[sortKey](asc));
+                }
+                return notesArray;
+            };
+
+            return {
+                filterAndSortNotes: publicFilterAndSortNotes
+            };
+        }();
+
+        // Return public interface.
+        return {
+            searchNotes: publicSearchNote,
+            getNote: publicGetNote,
+            saveNote: publicSaveNote,
+            deleteNote: publicDeleteNote
+        };
+    }();
+
+    /**
+     * The edit form controller. Dependes on:
+     * - notesRepository
+     */
+    var overviewController = function ($, notesRepository) {
 
         var publicInitialize = function () {
             privateRenderData();
+            filterBarController.initialize();
         };
 
 
@@ -332,8 +312,25 @@
          * Render the Data from the notes Array with Handelbarstemplates.
          */
         var privateRenderData = function () {
-            var generatedHtml = Handlebars.getTemplate('notes-template')(notesRepository.searchNotes('date'));
+            var activSortButton = filterBarController.getActiveSortButton();
+            var activFilterButton = filterBarController.getActiveFilterButton();
+            var generatedHtml = Handlebars.getTemplate('notes-template')(notesRepository.searchNotes(activSortButton.name, activSortButton.asc, activFilterButton.name));
             $('#notes-table').html(generatedHtml);
+            privateRegisterEvents();
+        };
+
+        /**
+         * Render Single Note in Note-Table
+         * @param note Note for Render
+         * @param replace true = Replace existing / false = place at beginning of table new Note
+         */
+        var privateRenderSingleNote = function (note, replace) {
+            var generatedHtml = Handlebars.getTemplate('note-template')(note);
+            if (replace) {
+                $('#note-' + note.id).replaceWith(generatedHtml);
+            } else {
+                $('#notes-table').prepend(generatedHtml);
+            }
             privateRegisterEvents();
         };
 
@@ -349,7 +346,7 @@
                 privateSaveNote(event.target.getAttribute('data-note-id'));
             });
 
-            $('.action-delete').unbind('click').on('click', function(event) {
+            $('.action-delete').unbind('click').on('click', function (event) {
                 privateDeleteNote(event.target.getAttribute('data-note-id'));
             });
 
@@ -358,9 +355,9 @@
             });
 
             $('.action-revert').unbind('click').on('click', function () {
-                privateRenderData();
+                privateRevertNote(event.target.getAttribute('data-note-id'));
             });
-            
+
             $('.action-finished').unbind('click').on('click', function () {
                 privateSetFinished(event.target.getAttribute('data-note-id'), event.target.getAttribute('data-note-finished'))
             });
@@ -371,8 +368,7 @@
          * @param noteId
          */
         var privateEditNote = function (noteId) {
-            notesRepository.saveNote(privateToggleNodeEditMode(notesRepository.getNote(noteId)));
-            privateRenderData();
+            privateRenderSingleNote(notesRepository.saveNote(privateToggleNodeEditMode(notesRepository.getNote(noteId))), true);
         };
 
 
@@ -390,7 +386,13 @@
             console.log(note);
 
             notesRepository.saveNote(privateToggleNodeEditMode(note));
-            privateRenderData();
+            privateRenderSingleNote(note,true);
+        };
+
+        var privateRevertNote = function(noteId){
+            var note = notesRepository.getNote(noteId);
+            note.isEditable=false;
+            privateRenderSingleNote(note,true);
         };
 
         /**
@@ -408,7 +410,7 @@
         var privateNewNote = function () {
             var newNote = new Note('', '', 3, false, null);
             notesRepository.saveNote(newNote);
-            privateRenderData();
+            privateRenderSingleNote(newNote, false);
         };
 
         var privateSetFinished = function (noteId, previousFinishedState) {
@@ -429,11 +431,93 @@
             return note;
         };
 
+        var filterBarController = function ($) {
+            var activeSortButton = {
+                name: null,
+                asc: true,
+                countClicks: 0
+            };
+
+            var activFilterButton = {
+                name: 'finished',
+                activ: true
+            };
+
+            var init = function () {
+                privateRegisterEvents();
+            };
+
+            var privatePerformSortButtonClick = function (event) {
+                var buttonName = event.target.textContent;
+                if (activeSortButton.name === buttonName) {
+                    if (activeSortButton.countClicks > 1) {
+                        activeSortButton.name = null;
+                        activeSortButton.countClicks = 0;
+                        activeSortButton.asc = true;
+                        event.target.className = 'sort-button sort-inactive sort-asc'
+                    } else {
+                        activeSortButton.countClicks++;
+                        activeSortButton.asc = false;
+                        event.target.className = 'sort-button sort-active sort-desc'
+                    }
+                } else {
+                    activeSortButton.name = buttonName;
+                    activeSortButton.countClicks = 1;
+                    activeSortButton.asc = true;
+                    event.target.className = 'sort-button sort-active sort-asc'
+                }
+
+                $('.sort-button').not(event.target).attr('class', 'sort-button sort-inactive sort-asc');
+                privateRenderData();
+            };
+
+
+            var privatePerformFilterButtonClick = function (event) {
+                var buttonName = event.target.textContent;
+
+                if (activFilterButton.name === buttonName) {
+                    activFilterButton.name = null;
+                    event.target.className = 'filter-button filter-inactive';
+                } else {
+                    activFilterButton.name = buttonName;
+                    event.target.className = 'filter-button filter-active';
+                }
+                $('.filter-button').not(event.target).attr('class', 'filter-button filter-inactive');
+                privateRenderData();
+            };
+
+
+            var privateRegisterEvents = function () {
+                $('.sort-button').unbind('click').on('click', function (event) {
+                    privatePerformSortButtonClick(event);
+                });
+
+                $('.filter-button').unbind('click').on('click', function (event) {
+                    privatePerformFilterButtonClick(event);
+                });
+            };
+
+            var publicGetActiveSortButton = function () {
+                return activeSortButton;
+            };
+
+            var publicGetActiveFilterButton = function () {
+                return activFilterButton;
+            };
+
+            return {
+                initialize: init,
+                getActiveSortButton: publicGetActiveSortButton,
+                getActiveFilterButton: publicGetActiveFilterButton
+            }
+        }($);
+
         return {
             initialize: publicInitialize
         }
     }($, notesRepository);
 
     overviewController.initialize();
-})(jQuery, moment);
+})
+(jQuery, moment);
 
