@@ -290,7 +290,7 @@
 
         var publicInitialize = function () {
             privateRenderData();
-            sortButtonsController.initialize();
+            filterBarController.initialize();
         };
 
 
@@ -298,7 +298,9 @@
          * Render the Data from the notes Array with Handelbarstemplates.
          */
         var privateRenderData = function () {
-            var generatedHtml = Handlebars.getTemplate('notes-template')(notesRepository.searchNotes('date'));
+
+            var activSortButton = filterBarController.getActiveSortButton();
+            var generatedHtml = Handlebars.getTemplate('notes-template')(notesRepository.searchNotes(activSortButton.name, activSortButton.asc, null));
             $('#notes-table').html(generatedHtml);
             privateRegisterEvents();
         };
@@ -395,50 +397,84 @@
             return note;
         };
 
-        var sortButtonsController = function ($) {
-            var activeButton = {
+        var filterBarController = function ($) {
+            var activeSortButton = {
                 name: null,
                 asc: true,
                 countClicks: 0
+            };
+
+            var activFilterButton = {
+                name: 'finished',
+                activ: true
             };
 
             var init = function () {
                 privateRegisterEvents();
             };
 
-            var privatePerformButtonClick = function (event) {
+            var privatePerformSortButtonClick = function (event) {
                 var buttonName = event.target.textContent;
-                if (activeButton.name === buttonName) {
-                    if (activeButton.countClicks > 1) {
-                        activeButton.name = null;
-                        activeButton.countClicks = 0;
-                        activeButton.asc = true;
+                if (activeSortButton.name === buttonName) {
+                    if (activeSortButton.countClicks > 1) {
+                        activeSortButton.name = null;
+                        activeSortButton.countClicks = 0;
+                        activeSortButton.asc = true;
                         event.target.className = 'sort-button sort-inactive sort-asc'
                     } else {
-                        activeButton.countClicks++;
-                        activeButton.asc = false;
+                        activeSortButton.countClicks++;
+                        activeSortButton.asc = false;
                         event.target.className = 'sort-button sort-active sort-desc'
                     }
                 } else {
-                    activeButton.name = buttonName;
-                    activeButton.countClicks = 1;
-                    activeButton.asc = true;
+                    activeSortButton.name = buttonName;
+                    activeSortButton.countClicks = 1;
+                    activeSortButton.asc = true;
                     event.target.className = 'sort-button sort-active sort-asc'
                 }
 
                 $('.sort-button').not(event.target).attr('class', 'sort-button sort-inactive sort-asc');
+                privateRenderData();
+            };
+
+
+            var privatePerformFilterButtonClick = function (event) {
+                var buttonName = event.target.textContent;
+
+                if (activFilterButton.name === buttonName) {
+                    activFilterButton.name = null;
+                    event.target.className = 'filter-button filter-inactive';
+                } else {
+                    activFilterButton.name = buttonName;
+                    event.target.className = 'filter-button filter-active';
+                }
+                $('.filter-button').not(event.target).attr('class', 'filter-button filter-inactive');
+                privateRenderData();
             };
 
 
             var privateRegisterEvents = function () {
                 $('.sort-button').unbind('click').on('click', function (event) {
-                    privatePerformButtonClick(event);
+                    privatePerformSortButtonClick(event);
+                });
+
+                $('.filter-button').unbind('click').on('click', function (event) {
+                    privatePerformFilterButtonClick(event);
                 });
             };
 
+            var publicGetActiveSortButton = function () {
+                return activeSortButton;
+            };
+
+            var publicGetActiveFilterButton = function () {
+                return activFilterButton;
+            };
 
             return {
                 initialize: init,
+                getActiveSortButton: publicGetActiveSortButton,
+                getActiveFilterButton: publicGetActiveFilterButton
             }
         }($);
 
