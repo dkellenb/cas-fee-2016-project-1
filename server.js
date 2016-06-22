@@ -16,8 +16,7 @@ app.use(bodyParser.json());
 
 app.use('/rest/notes', require('./src/backend/routes/notesRouter.js')(websocket));
 
-app.use(express.static(__dirname + '/public'));
-app.use(express.static(__dirname + '/views'));
+app.use(express.static(__dirname + '/src/public'));
 
 if (websocket) {
     websocket.on('connection', function (socket) {
