@@ -181,7 +181,6 @@
         };
 
         var init = function () {
-            $('.sort-button').attr('class', 'sort-button sort-inactive sort-asc');
             privateRegisterEvents();
         };
 
