@@ -84,7 +84,7 @@ function publicUpdate(note, callback) {
  * @param callback the callback being executed
  */
 function publicRemove(id, callback) {
-    db.remove({_id: id}, {$set: {"state": "DELETED"}}, {}, function (err, numRemoved) {
+    db.remove({_id: id}, {}, function (err, numRemoved) {
         callback(err, numRemoved);
     });
 }

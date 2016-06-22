@@ -1,7 +1,7 @@
 'use strict';
 
 var notesRepository = require('../services/notesRepository.js');
-var moment = require('moment');
+var moment = require('momentjs');
 var Note = require('../models/note.js');
 
 
@@ -29,7 +29,7 @@ function publicGetNotes(req, res) {
  * @param res responses
  */
 function publicGetNote(req, res) {
-    if (req.params.id < 0 || !isFinite(req.params.id)) {
+    if (!req.params.id) {
         res.statusCode = 400;
         return res.send('Invalid "id" parameter.');
     }
@@ -72,7 +72,7 @@ function publicCreateNote(req, res) {
  * @param res response
  */
 function publicUpdateNote(req, res) {
-    if (req.params.id < 0 || !isFinite(req.params.id)) {
+    if (!req.params.id) {
         res.statusCode = 400;
         return res.send('Invalid "id" parameter.');
     }
@@ -119,8 +119,8 @@ function publicUpdateNote(req, res) {
  * @param req request
  * @param res response
  */
-function publicDeleteNote(res, req) {
-    if (req.params.id < 0 || !isFinite(req.params.id)) {
+function publicDeleteNote(req, res) {
+    if (!req.params.id) {
         res.statusCode = 400;
         return res.send('Invalid "id" parameter.');
     }
