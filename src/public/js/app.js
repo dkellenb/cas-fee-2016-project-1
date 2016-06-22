@@ -521,3 +521,14 @@
 })
 (jQuery, moment);
 
+var socket = io('/');
+socket.on('created', function(msg){
+    console.log('created: ' + msg);
+});
+socket.on('deleted', function(msg){
+    console.log('created: ' + msg);
+});
+
+socket.on('updated', function(msg){
+    console.log('created: ' + msg);
+});
