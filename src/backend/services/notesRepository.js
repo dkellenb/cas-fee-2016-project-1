@@ -10,7 +10,6 @@ var db = new Datastore({
  * Returns all existing notes.
  *
  * @param callback callback being executed
- * @return an array
  */
 function publicFindAll(callback) {
     db.find({}, function (err, notes) {
@@ -55,12 +54,25 @@ function publicGet(id, callback) {
  *
  * @param note the note to be persisted
  * @param callback callback being executed
- * @return the note being inserted
  */
 function publicAdd(note, callback) {
     db.insert(note, function (err, newNote) {
         if (callback) {
             callback(err, newNote);
+        }
+    });
+}
+
+/**
+ * Updates the given note.
+ *
+ * @param note the note to be updated
+ * @param callback callback being executed
+ */
+function publicUpdate(note, callback) {
+    db.update({ _id: note._id }, note, {}, function (err, numReplaced) {
+        if (callback) {
+            callback(err, numReplaced);
         }
     });
 }
@@ -73,11 +85,7 @@ function publicAdd(note, callback) {
  */
 function publicRemove(id, callback) {
     db.remove({_id: id}, {$set: {"state": "DELETED"}}, {}, function (err, numRemoved) {
-        if (err) {
-            callback(err);
-        } else {
-            publicGet(id, callback);
-        }
+        callback(err, numRemoved);
     });
 }
 
@@ -86,5 +94,6 @@ module.exports = {
     filtered: publicFindFiltered,
     get: publicGet,
     add: publicAdd,
+    update: publicUpdate,
     remove: publicRemove
 };
