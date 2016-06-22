@@ -9,7 +9,9 @@ This repository contains the project work of the two students [Daniel Kellenberg
 - npm start
 
 ## 3. REST Api
+
 | Method          | CMD    | Description |
+|-----------------|--------|-------------|
 | /rest/notes     | GET    | Returns all persisted notes |
 | /rest/notes     | POST   | Adds a new note |
 | /rest/notes/:id | GET    | Returns a note with the given id |
