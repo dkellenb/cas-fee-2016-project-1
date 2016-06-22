@@ -119,116 +119,10 @@
     }
 
     /**
-     * Controller for sorting the Lists
-     */
-    var sortController = function () {
-
-        var sortFunktions = {
-            due: function (noteA, noteB) {
-                if (noteA.due == noteB.due) {
-                    return 0;
-                }
-                return (this.asc && noteA.due < noteB.due) ? -1 : 1;
-            },
-            create: function (noteA, noteB) {
-                if (noteA.createDate == noteB.createDate) {
-                    return 0;
-                }
-                return (this.asc && noteA.due < noteB.due) ? -1 : 1;
-            },
-            importance: function (noteA, noteB) {
-                if (noteA.due == noteB.due) {
-                    return 0;
-                }
-                return (this.asc && noteA.due < noteB.due) ? -1 : 1;
-            }
-        };
-
-        var filterFunktions = {
-            finished: function (note) {
-                return note.finished;
-            }
-        };
-
-
-        var publicFilterAndSortNotes = function (notes, sortKey, asc, filterKey) {
-            return notes
-        };
-
-        var publicGetSortFunktionKeys = function () {
-
-        };
-
-
-        var publicGetFilterFunktionKeys = function () {
-
-        };
-
-        return {
-            getSortFunktionKeys: publicGetSortFunktionKeys,
-            getFilterFunktionKeys: publicGetFilterFunktionKeys,
-            filterAndSortNotes: publicFilterAndSortNotes
-        };
-    }();
-
-
-    var sortButtonsController = function ($) {
-
-        var activeButton = {
-            name: null,
-            asc: true,
-            countClicks: 0
-        };
-
-        var init = function () {
-            privateRegisterEvents();
-        };
-
-        var privatePerformButtonClick = function (event) {
-            var buttonName = event.target.textContent;
-            if (activeButton.name === buttonName) {
-                if (activeButton.countClicks > 1) {
-                    activeButton.name = null;
-                    activeButton.countClicks = 0;
-                    activeButton.asc = true;
-                    event.target.className = 'sort-button sort-inactive sort-asc'
-                } else {
-                    activeButton.countClicks++;
-                    activeButton.asc = false;
-                    event.target.className = 'sort-button sort-active sort-desc'
-                }
-            } else {
-                activeButton.name = buttonName;
-                activeButton.countClicks = 1;
-                activeButton.asc = true;
-                event.target.className = 'sort-button sort-active sort-asc'
-            }
-
-            $('.sort-button').not(event.target).attr('class', 'sort-button sort-inactive sort-asc');
-        };
-
-
-        var privateRegisterEvents = function () {
-            $('.sort-button').unbind('click').on('click', function (event) {
-                privatePerformButtonClick(event);
-            });
-        };
-
-        var publicGetActivButton = function () {
-            return activeButton;
-        };
-
-        return {
-            initialize: init,
-            getActivButton: publicGetActivButton
-        }
-    }($);
-
-    /**
      * Notes repository which is capable of selecting, inserting, updating and deleting notes.
      * @type {{searchNotes, getNote, persistNote, deleteNote}}
      */
-    var notesRepository = function (sortController, sortButtonsController) {
+    var notesRepository = function () {
 
         const LOCAL_SORAGE_NOTES_KEY = 'notes';
         const LOCAL_SORAGE_NOTES_SEQUENCE_KEY = 'noteIdSequence';
@@ -238,7 +132,7 @@
          *
          * @returns {Array} the persisted notes
          */
-        var publicSearchNote = function () {
+        var publicSearchNote = function (sortKey, asc, filterKey) {
 
             var notes = privateLoadNotes();
             var ids = Object.keys(notes);
@@ -247,7 +141,7 @@
                 return notes[key];
             });
 
-            return sortController.filterAndSortNotes(notes);
+            return sortController.filterAndSortNotes(notes, sortKey, asc, filterKey);
         };
 
         /**
@@ -286,7 +180,7 @@
          * @return {Array} the updated notes
          */
         var publicDeleteNote = function (id) {
-            privatePutNote(key, undefined);
+            privatePutNote(id, undefined);
         };
 
         /**
@@ -337,6 +231,48 @@
             privateSaveNotes(notes);
         };
 
+        /**
+         * Controller for sorting the Lists
+         */
+        var sortController = function () {
+
+            var sortFunktions = {
+                due: function (noteA, noteB) {
+                    if (noteA.due == noteB.due) {
+                        return 0;
+                    }
+                    return (this.asc && noteA.due < noteB.due) ? -1 : 1;
+                },
+                create: function (noteA, noteB) {
+                    if (noteA.createDate == noteB.createDate) {
+                        return 0;
+                    }
+                    return (this.asc && noteA.due < noteB.due) ? -1 : 1;
+                },
+                importance: function (noteA, noteB) {
+                    if (noteA.due == noteB.due) {
+                        return 0;
+                    }
+                    return (this.asc && noteA.due < noteB.due) ? -1 : 1;
+                }
+            };
+
+            var filterFunktions = {
+                finished: function (note) {
+                    return note.finished;
+                }
+            };
+
+
+            var publicFilterAndSortNotes = function (notes, sortKey, asc, filterKey) {
+                return notes
+            };
+
+            return {
+                filterAndSortNotes: publicFilterAndSortNotes
+            };
+        }();
+
         // Return public interface.
         return {
             searchNotes: publicSearchNote,
@@ -344,7 +280,7 @@
             saveNote: publicSaveNote,
             deleteNote: publicDeleteNote
         };
-    }(sortController, sortButtonsController);
+    }();
 
     /**
      * The edit form controller. Dependes on:
@@ -354,6 +290,7 @@
 
         var publicInitialize = function () {
             privateRenderData();
+            sortButtonsController.initialize();
         };
 
 
@@ -458,13 +395,59 @@
             return note;
         };
 
+        var sortButtonsController = function ($) {
+            var activeButton = {
+                name: null,
+                asc: true,
+                countClicks: 0
+            };
+
+            var init = function () {
+                privateRegisterEvents();
+            };
+
+            var privatePerformButtonClick = function (event) {
+                var buttonName = event.target.textContent;
+                if (activeButton.name === buttonName) {
+                    if (activeButton.countClicks > 1) {
+                        activeButton.name = null;
+                        activeButton.countClicks = 0;
+                        activeButton.asc = true;
+                        event.target.className = 'sort-button sort-inactive sort-asc'
+                    } else {
+                        activeButton.countClicks++;
+                        activeButton.asc = false;
+                        event.target.className = 'sort-button sort-active sort-desc'
+                    }
+                } else {
+                    activeButton.name = buttonName;
+                    activeButton.countClicks = 1;
+                    activeButton.asc = true;
+                    event.target.className = 'sort-button sort-active sort-asc'
+                }
+
+                $('.sort-button').not(event.target).attr('class', 'sort-button sort-inactive sort-asc');
+            };
+
+
+            var privateRegisterEvents = function () {
+                $('.sort-button').unbind('click').on('click', function (event) {
+                    privatePerformButtonClick(event);
+                });
+            };
+
+
+            return {
+                initialize: init,
+            }
+        }($);
+
         return {
             initialize: publicInitialize
         }
     }($, notesRepository);
 
     overviewController.initialize();
-    sortButtonsController.initialize();
 })
 (jQuery, moment);
 
