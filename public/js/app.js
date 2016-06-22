@@ -312,11 +312,19 @@
          * Render the Data from the notes Array with Handelbarstemplates.
          */
         var privateRenderData = function () {
-
             var activSortButton = filterBarController.getActiveSortButton();
             var activFilterButton = filterBarController.getActiveFilterButton();
             var generatedHtml = Handlebars.getTemplate('notes-template')(notesRepository.searchNotes(activSortButton.name, activSortButton.asc, activFilterButton.name));
             $('#notes-table').html(generatedHtml);
+            privateRegisterEvents();
+        };
+
+        /**
+         * redenr Single Note at the beginning of the List.
+         */
+        var privateRenderSingleNote = function (note) {
+            var generatedHtml = Handlebars.getTemplate('note-template')(note);
+            $('#notes-table').prepend(generatedHtml);
             privateRegisterEvents();
         };
 
@@ -391,7 +399,7 @@
         var privateNewNote = function () {
             var newNote = new Note('', '', 3, false, null);
             notesRepository.saveNote(newNote);
-            privateRenderData();
+            privateRenderSingleNote(newNote);
         };
 
         var privateSetFinished = function (noteId, previousFinishedState) {
