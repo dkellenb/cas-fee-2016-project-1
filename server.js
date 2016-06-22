@@ -20,7 +20,7 @@ app.use(express.static(__dirname + '/src/public'));
 
 if (websocket) {
     websocket.on('connection', function (socket) {
-        console.log('a user connected');
+        console.log('user connected');
         socket.on('disconnect', function () {
             console.log('user disconnected');
         });
@@ -28,4 +28,5 @@ if (websocket) {
 }
 
 const port = 3001;
-http.listen(port, () => {  console.log(`Server running at http://localhost:${port}/`); });
+const host = 'localhost';
+http.listen(port, host, () => {  console.log(`Server running at http://${host}:${port}/`); });
