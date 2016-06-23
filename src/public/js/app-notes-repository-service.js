@@ -4,118 +4,10 @@
  */
 (function (namespace) {
 
-    const LOCAL_SORAGE_NOTES_KEY = 'notes';
-    const LOCAL_SORAGE_NOTES_SEQUENCE_KEY = 'noteIdSequence';
-
-    /**
-     * Gets all persisted notes.
-     *
-     * @returns {Array} the persisted notes
-     */
-    var publicSearchNote = function (sortKey, asc, filterKey) {
-
-        var notes = privateLoadNotes();
-        var ids = Object.keys(notes);
-        console.log(ids);
-        var notesArray = ids.map(function (key) {
-            return notes[key];
-        });
-
-        return sortController.filterAndSortNotes(notesArray, sortKey, asc, filterKey);
-    };
-
-    /**
-     * Gets a note with the given id.
-     *
-     * @param id the id of the note
-     * @returns {*|{}} null or the object
-     */
-    var publicGetNote = function (id) {
-        var note = privateLoadNotes()[id];
-        if (note === undefined) {
-            return null;
-        }
-        return note;
-    };
-
-    /**
-     * Saves a given note. Updates an existing persisted one.
-     *
-     * @param note the note to persist
-     * @returns the persisted note
-     */
-    var publicSaveNote = function (note) {
-        var id = note.id;
-        if (id === null || id === undefined) {
-            note.id = privateNextNoteId();
-        }
-        privatePutNote(note.id, note);
-        return note;
-    };
-
-    /**
-     * Deletes a given note.
-     *
-     * @param id if the note to be deleted
-     * @return {Array} the updated notes
-     */
-    var publicDeleteNote = function (id) {
-        privatePutNote(id, undefined);
-    };
-
-    /**
-     * loads all persisted notes from localStorage as a map<noteId,Note>.
-     * @returns {map<number,{}>} map<noteId,Note>
-     */
-    var privateLoadNotes = function () {
-        var serializedNotes = localStorage.getItem(LOCAL_SORAGE_NOTES_KEY);
-        console.log("Load notes: " + serializedNotes);
-        return serializedNotes === undefined || serializedNotes === null ? {} : JSON.parse(serializedNotes);
-    };
-
-    /**
-     * Save all notes.
-     *
-     * @param notes saves all notes.
-     * @returns {map<number,{}>} Map<NoteId,Note> the persisted notes
-     */
-    var privateSaveNotes = function (notes) {
-        var serializedNotes = notes === undefined || notes === null ? "{}" : JSON.stringify(notes);
-        localStorage.setItem(LOCAL_SORAGE_NOTES_KEY, serializedNotes);
-        return notes;
-    };
-
-    /**
-     * get Next Id from note sequence in localStorage
-     * @returns {number} noteId
-     */
-    var privateNextNoteId = function () {
-        var sequence = localStorage.getItem(LOCAL_SORAGE_NOTES_SEQUENCE_KEY);
-        if (sequence == undefined || sequence == null) {
-            sequence = 0;
-        }
-        sequence++;
-        localStorage.setItem(LOCAL_SORAGE_NOTES_SEQUENCE_KEY, sequence);
-
-        return sequence;
-    };
-
-    /**
-     * Put function fuer Notes Map<NoteId,Note>
-     * @param key noteId
-     * @param value Note
-     */
-    var privatePutNote = function (key, value) {
-        var notes = privateLoadNotes();
-        notes[key] = value;
-        privateSaveNotes(notes);
-    };
-
     /**
      * Controller for sorting the Lists
      */
     var sortController = function () {
-
         var sortFunktions = {
             finished: function (direction) {
                 return function (noteA, noteB) {
@@ -167,11 +59,133 @@
         };
     }();
 
+    /**
+     * Loads all notes.
+     * @param callback after all notes have been loaded.
+     */
+    var privateLoadNotes = function (callback) {
+        $.ajax({
+            dataType: 'json',
+            method: 'GET',
+            url: '/rest/notes/'
+        }).done(function(notes) {
+            if (notes) {
+                notes.forEach(function (note) {
+                    note.id = note._id;
+                })
+            }
+            callback(undefined, notes);
+        }).fail(function(jqxhr, textStatus, error) {
+            var err = textStatus + ", " + error;
+            console.log('Load notes failed: ' + err );
+            callback(err);
+        });
+    };
+
+    /**
+     * Gets all persisted notes.
+     *
+     * @returns {Array} the persisted notes
+     */
+    var publicSearchNote = function (sortKey, asc, filterKey, callback) {
+        privateLoadNotes(function (err, notes) {
+            if (err) {
+                callback(err);
+            } else {
+                //var sortedNotes = sortController.filterAndSortNotes(notes, sortKey, asc, filterKey);
+                callback(err, notes);
+            }
+        });
+    };
+
+    /**
+     * Gets a note with the given id.
+     *
+     * @param id the id of the note
+     * @param callback success callback
+     */
+    var publicGetNote = function (id, callback) {
+        $.ajax({
+            dataType: 'json',
+            method: 'GET',
+            url: '/rest/notes/' + id + '/'
+            //data: { name: "Michael" }
+        }).done(function(note) {
+            note.id = note._id;
+            callback(undefined, note);
+        }).fail(function(jqxhr, textStatus, error) {
+            var err = textStatus + ", " + error;
+            console.log('Load note for id "' + id + '" failed: ' + err );
+            callback(err);
+        });
+    };
+
+    /**
+     * Saves a given note. Updates an existing persisted one.
+     *
+     * @param note the note to persist
+     * @param callback success callback
+     */
+    var publicSaveNote = function (note, callback) {
+        $.ajax({
+            dataType: 'json',
+            method: 'PUT',
+            url: '/rest/notes/' + note.id + '/',
+            data: note
+        }).done(function(note) {
+            callback(undefined, note);
+        }).fail(function(jqxhr, textStatus, error) {
+            var err = textStatus + ", " + error;
+            console.log('Save note for id "' + id + '" failed: ' + err );
+            callback(err);
+        });
+    };
+
+    /**
+     * Deletes a given note.
+     *
+     * @param id if the note to be deleted
+     * @param callback the callback executed after delete
+     */
+    var publicDeleteNote = function (id, callback) {
+        $.ajax({
+            dataType: 'json',
+            method: 'DELETE',
+            url: '/rest/notes/' + id + '/'
+        }).done(function(note) {
+            callback(undefined, note);
+        }).fail(function(jqxhr, textStatus, error) {
+            var err = textStatus + ", " + error;
+            console.log('Save note for id "' + id + '" failed: ' + err );
+            callback(err);
+        });
+    };
+
+    /**
+     * Creates a note.
+     * @param callback after note has been created
+     */
+    var publicCreateNote = function(callback) {
+        $.ajax({
+            dataType: 'json',
+            method: 'POST',
+            url: '/rest/notes/'
+        }).done(function(note) {
+            note.id = note._id;
+            callback(undefined, note);
+        }).fail(function(jqxhr, textStatus, error) {
+            var err = textStatus + ", " + error;
+            console.log('Load notes failed: ' + err );
+            callback(err);
+        });
+    };
+
     namespace.notesRepository = {
         searchNotes: publicSearchNote,
         getNote: publicGetNote,
         saveNote: publicSaveNote,
-        deleteNote: publicDeleteNote
+        deleteNote: publicDeleteNote,
+        createNote: publicCreateNote
     };
 
 })(window.notesnamespace);

@@ -54,7 +54,7 @@ function publicGetNote(req, res) {
  * @param res reponse
  */
 function publicCreateNote(req, res) {
-    var note = new Note("", "", 3, false, null, null);
+    var note = new Note("", "", 3, false, null);
     notesRepository.add(note, function (err, newNote) {
         if (err) {
             console.log('notesController:publicCreateNote: ' + err);
@@ -96,9 +96,10 @@ function publicUpdateNote(req, res) {
 
         // Calculate the finished Date
         var finishedDate;
-        if (req.body.finished === 'true' && persistedNote.finishedDate == null) {
+        var isFinished = req.body.isFinished === 'true';
+        if (isFinished && persistedNote.finishedDate == null) {
             finishedDate = moment().format('YYYY-MM-DD');
-        } else if (req.body.finished === 'false' && persistedNote.finishedDate != null) {
+        } else if (!isFinished && persistedNote.finishedDate != null) {
             finishedDate = null;
         } else {
             finishedDate = persistedNote.finishedDate;
@@ -107,6 +108,7 @@ function publicUpdateNote(req, res) {
         // Create the updated note
         var updatedNote = new Note(req.body.title, req.body.content, req.body.importance, finishedDate, req.body.dueDate);
         updatedNote._id = persistedNote._id;
+        updatedNote.createdDate = persistedNote.createdDate;
 
         notesRepository.update(updatedNote, function (err, numReplaced) {
             if (err) {
