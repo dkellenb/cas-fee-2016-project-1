@@ -87,7 +87,8 @@
      *
      * @returns {Array} the persisted notes
      */
-    var publicSearchNote = function (sortKey, asc, filterKey, callback) {
+    var publicSearchNote = function (sortConfiguration, filterConfiguration, callback) {
+        // TODO pass sort configuration and filter configuration
         privateLoadNotes(function (err, notes) {
             if (err) {
                 callback(err);

@@ -2,7 +2,7 @@
 
 var notesRepository = require('../services/notesRepository');
 var moment = require('momentjs');
-var websocket = require('../services/socketService').get();
+var socket = require('../services/socketProvider').get();
 var Note = require('../models/note');
 
 /**
@@ -63,8 +63,8 @@ function publicCreateNote(req, res) {
         }
 
         // push notification
-        if (websocket) {
-            websocket.emit('created', { id: newNote._id });
+        if (socket) {
+            socket.emit('created', { id: newNote._id });
         }
 
         // return the new note
@@ -118,8 +118,8 @@ function publicUpdateNote(req, res) {
             }
 
             // push notification
-            if (websocket) {
-                websocket.emit('updated', { id: req.params.id });
+            if (socket) {
+                socket.emit('updated', { id: req.params.id });
             }
 
             // return updated note
@@ -151,8 +151,8 @@ function publicDeleteNote(req, res) {
         }
 
         // push notification
-        if (websocket) {
-            websocket.emit('deleted', { id: req.params.id });
+        if (socket) {
+            socket.emit('deleted', { id: req.params.id });
         }
 
         return res.send('{ "deleted": "true" }');

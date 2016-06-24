@@ -7,17 +7,9 @@
 
     // TODO: Documentation
 
-    var privatePerformReload = function () {
-        var sortConfiguration = sortFilterRepository.getSort();
-        var filterConfiguration = sortFilterRepository.getFilter();
-
-        notesController.reloadNotes(sortConfiguration, filterConfiguration);
-    };
-
     var privatePerformSortButtonClick = function (event) {
         var sortConfiguration = sortFilterRepository.getSort();
         var sortAttribute = event.target.getAttribute('data-sort-name');
-        var buttonName = event.target.textContent;
 
         // If the current sort attribute is defined
         if (sortConfiguration.attribute === sortAttribute) {
@@ -33,6 +25,7 @@
             }
         } else {
             sortConfiguration.direction = 'asc';
+            sortConfiguration.attribute = sortAttribute;
             event.target.className = 'sort-button sort-active sort-asc';
         }
 
@@ -43,22 +36,31 @@
         sortFilterRepository.setSort(sortConfiguration);
 
         // trigger new search
-        privatePerformReload();
+        notesController.reloadNotes();
     };
 
 
     var privatePerformFilterButtonClick = function (event) {
-        var buttonName = event.target.textContent;
+        var filterConfiguration = sortFilterRepository.getFilter();
+        var filterAttribute = event.target.getAttribute('data-filter-name');
 
-        if (activFilterButton.name === buttonName) {
-            activFilterButton.name = null;
+        // If the current sort attribute is defined
+        if (filterConfiguration.attribute === filterAttribute) {
+            filterConfiguration.attribute = '';
             event.target.className = 'filter-button filter-inactive';
         } else {
-            activFilterButton.name = buttonName;
+            filterConfiguration.attribute = filterAttribute;
             event.target.className = 'filter-button filter-active';
         }
+
+        // all others: reset
         $('.filter-button').not(event.target).attr('class', 'filter-button filter-inactive');
-        privateRenderData();
+
+        // save state
+        sortFilterRepository.setFilter(filterConfiguration);
+
+        // trigger new search
+        notesController.reloadNotes();
     };
 
     var privateRegisterEvents = function () {
@@ -71,10 +73,6 @@
         });
     };
 
-
-    namespace.sortFilterController = {
-
-    }
-    
+    privateRegisterEvents();
 
 })(jQuery, window.notesnamespace);

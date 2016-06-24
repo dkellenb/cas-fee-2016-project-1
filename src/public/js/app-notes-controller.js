@@ -4,6 +4,7 @@
 
     var notesRepository = notesnamespace.notesRepository;
     var localStorageUtil = notesnamespace.localStorageUtil;
+    var sortFilterRepository = notesnamespace.sortFilterRepository;
 
     const LOCAL_STORAGE_EDIT_MODE = 'notes-edit-modes';
 
@@ -295,6 +296,19 @@
         privateClearEditModeState(id);
     };
 
+    /**
+     * Reload all notes.
+     */
+    var publicReloadNotes = function() {
+        var sortConfiguration = sortFilterRepository.getSort();
+        var filterConfiguration = sortFilterRepository.getFilter();
+        notesRepository.searchNotes(sortConfiguration, filterConfiguration, function (err, notes) {
+            if (!err) {
+                privateRenderAllNotes(notes);
+            }
+        });
+    };
+
     var initialize = function () {
         // Bind create note
         $('.action-create').on('click', function () {
@@ -302,18 +316,15 @@
         });
 
         // Load notes
-        notesRepository.searchNotes(null, null, null, function (err, notes) {
-            if (!err) {
-                privateRenderAllNotes(notes);
-            }
-        });
+        publicReloadNotes();
     };
 
     initialize();
     notesnamespace.notesController = {
         onExternalNoteCreation : publicOnExternalNoteCreation,
         onExternalNoteUpdate : publicOnExternalNoteUpdate,
-        onExternalNoteDelete : publicOnExternalNoteDelete
+        onExternalNoteDelete : publicOnExternalNoteDelete,
+        reloadNotes: publicReloadNotes
     };
 })
 (jQuery, window.notesnamespace);
