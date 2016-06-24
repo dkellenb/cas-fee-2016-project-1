@@ -5,61 +5,6 @@
 (function (namespace) {
 
     /**
-     * Controller for sorting the Lists
-     */
-    var sortController = function () {
-        var sortFunktions = {
-            finished: function (direction) {
-                return function (noteA, noteB) {
-                    if (noteA.due == noteB.due) {
-                        return 0;
-                    }
-                    return (direction && noteA.due < noteB.due) ? -1 : 1;
-                }
-            },
-            created: function (direction) {
-                return function (noteA, noteB) {
-                    if (noteA.createDate == noteB.createDate) {
-                        return 0;
-                    }
-                    return (direction && noteA.due < noteB.due) ? -1 : 1;
-                }
-            },
-            importance: function (direction) {
-                return function (noteA, noteB) {
-                    if (noteA.due == noteB.due) {
-                        return 0;
-                    }
-                    return (direction && noteA.due < noteB.due) ? -1 : 1;
-                }
-            }
-        };
-
-        var filterFunktions = {
-            finished: function (note) {
-                return !note.finished;
-            }
-        };
-
-
-        var publicFilterAndSortNotes = function (notesArray, sortKey, asc, filterKey) {
-            console.log('SortFunction was called with -> sortKey: ' + sortKey + ' arc: ' + asc + ' filterKey: ' + filterKey);
-            if (filterKey !== null && filterKey !== undefined) {
-                notesArray = notesArray.filter(filterFunktions[filterKey]);
-            }
-
-            if (sortKey !== null && sortKey !== undefined) {
-                notesArray = notesArray.sort(sortFunktions[sortKey](asc));
-            }
-            return notesArray;
-        };
-
-        return {
-            filterAndSortNotes: publicFilterAndSortNotes
-        };
-    }();
-
-    /**
      * Loads all notes.
      * @param callback after all notes have been loaded.
      */
@@ -88,12 +33,10 @@
      * @returns {Array} the persisted notes
      */
     var publicGetNotes = function (callback) {
-        // TODO pass sort configuration and filter configuration
         privateLoadNotes(function (err, notes) {
             if (err) {
                 callback(err);
             } else {
-                //var sortedNotes = sortController.filterAndSortNotes(notes, sortKey, asc, filterKey);
                 callback(err, notes);
             }
         });
@@ -163,13 +106,15 @@
 
     /**
      * Creates a note.
+     * @param note the note to be created
      * @param callback after note has been created
      */
-    var publicCreateNote = function(callback) {
+    var publicCreateNote = function(note, callback) {
         $.ajax({
             dataType: 'json',
             method: 'POST',
-            url: '/rest/notes/'
+            url: '/rest/notes/',
+            data: note
         }).done(function(note) {
             note.id = note._id;
             callback(undefined, note);

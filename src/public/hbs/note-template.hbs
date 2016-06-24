@@ -40,7 +40,7 @@
     </form>
 {{else}}
     <div id="note-{{id}}" class="notes-entry block">
-        <div class="notes-entry-cell notes-entry-date">{{formatDate due "short"}}</div>
+        <div class="notes-entry-cell notes-entry-date">{{formatDate dueDate "short"}}</div>
         <div class="notes-entry-cell notes-entry-importance edit-area importance-selection">
             <input type="radio" id="importance-{{id}}-5" value="5" {{#ifCond importance '==' 5 }}checked="checked"{{/ifCond}} disabled="disabled"/>
             <label for="importance-{{id}}-5"></label>

@@ -46,15 +46,25 @@
     };
 
     /**
+     * Returns the local new note.
+     *
+     * @param id the note id
+     */
+    var privateGetLocalNewNote = function (id) {
+        return localNewNotes.find(function (entry) {
+            return entry.id === id;
+        });
+    };
+
+    /**
      * Clears the local persisted new notes (housekeeping).
      *
-     * @param note the note to be cleared
+     * @param newNote the note id to be cleared
      */
-    var privateClearNewNote = function (note) {
-        privateClearEditModeState(note.id);
-        var temporaryNewNote = localNewNotes.find(function (entry) { return entry.id === note.id; });
-        localNewNotes.splice(localNewNotes.indexOf(temporaryNewNote), 1);
-        delete note.id;
+    var privateClearNewNote = function (newNote) {
+        privateClearEditModeState(newNote.id);
+        localNewNotes.splice(localNewNotes.indexOf(newNote), 1);
+        delete newNote.id;
     };
 
     /**
@@ -187,35 +197,47 @@
     };
 
     /**
+     * Updates the given note with the values from the UI.
+     *
+     * @param note the note to be updated
+     * @param noteId the id from the note
+     */
+    var privateUpdateNoteFromForm = function (note, noteId) {
+        note.content = $('#description-' + noteId).val();
+        note.title = $('#title-' + noteId).val();
+        note.dueDate = $('#due-date-' + noteId).val();
+        note.importance = $("input:radio[name='importance-" + noteId + "']:checked").val();
+        note.isFinished = $("#notes-entry-" + noteId + "-finished").is(':checked');
+    };
+
+    /**
      * save note data to the note at the noteIndex.
      * @param noteId
      */
     var privateSaveNote = function (noteId) {
-        notesRepository.getNote(noteId, function (err, note) {
-            if (!err) {
-                note.content = $('#description-' + noteId).val();
-                note.title = $('#title-' + noteId).val();
-                note.dueDate = $('#due-date-' + noteId).val();
-                note.importance = $("input:radio[name='importance-" + noteId + "']:checked").val();
-                note.isFinished = $("#notes-entry-" + noteId + "-finished").is(':checked');
-
-                if (note.id.substr(0, 3) === 'new') {
-                    privateClearNewNote(note);
-                    notesRepository.createNote(note, function (err, createdNote) {
-                        if (!err) {
-                            privateRerenderSingleNote(createdNote);
-                        }
-                    });
-                } else {
+        if (noteId.substr(0, 3) === 'new') {
+            var newNote = privateGetLocalNewNote(noteId);
+            privateUpdateNoteFromForm(newNote, noteId);
+            privateClearNewNote(newNote);
+            notesRepository.createNote(newNote, function (err, createdNote) {
+                if (!err) {
+                    privateRenderRemoveSingleNote(noteId);
+                    // it will be added with socket events.
+                }
+            });
+        } else {
+            notesRepository.getNote(noteId, function (err, note) {
+                if (!err) {
+                    privateUpdateNoteFromForm(note, noteId);
                     privateSetNodeToEditMode(note, false);
                     notesRepository.saveNote(note, function (err, savedNote) {
                         if (!err) {
-                            privateRerenderSingleNote(savedNote);
+                            // nothing needed to be done. will be updated with socket events
                         }
                     });
                 }
-            }
-        });
+            });
+        }
     };
 
     /**
