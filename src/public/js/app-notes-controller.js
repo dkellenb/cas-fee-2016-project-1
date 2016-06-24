@@ -3,8 +3,9 @@
 (function ($, notesnamespace) {
 
     var notesRepository = notesnamespace.notesRepository;
+    var localStorageUtil = notesnamespace.localStorageUtil;
 
-    const LOCAL_STORRAGE_EDIT_MODE = 'notes-edit-modes';
+    const LOCAL_STORAGE_EDIT_MODE = 'notes-edit-modes';
 
     /**
      * Checks if the node with the given id is in edit mode.
@@ -13,8 +14,7 @@
      * @returns {boolean} true if in edit mode
      */
     var privateIsInEditMode = function (id) {
-        var serializedStates = localStorage.getItem(LOCAL_STORRAGE_EDIT_MODE);
-        var persistedStates = serializedStates ? JSON.parse(serializedStates) : {};
+        var persistedStates = localStorageUtil.load(LOCAL_STORAGE_EDIT_MODE);
         return persistedStates[id];
     };
 
@@ -25,14 +25,20 @@
      * @param editMode true if in edit mode
      */
     var privateSetEditMode = function (id, editMode) {
-        var serializedStates = localStorage.getItem(LOCAL_STORRAGE_EDIT_MODE);
-        var allStates = serializedStates ? JSON.parse(serializedStates) : {};
-        if (!allStates || allStates === '' || allStates instanceof Array) { // array if for migration purpose
-            allStates = {};
-        }
+        var allStates = localStorageUtil.load(LOCAL_STORAGE_EDIT_MODE);
         allStates[id] = editMode;
-        var serialized = JSON.stringify(allStates);
-        localStorage.setItem(LOCAL_STORRAGE_EDIT_MODE, serialized);
+        localStorageUtil.save(LOCAL_STORAGE_EDIT_MODE, allStates);
+    };
+
+    /**
+     * Clear the edit mode state (housekeeping).
+     *
+     * @param id the id of the state to be removed
+     */
+    var privateClearEditModeState = function (id) {
+        var allStates = localStorageUtil.load(LOCAL_STORAGE_EDIT_MODE);
+        delete allStates[id];
+        localStorageUtil.save(LOCAL_STORAGE_EDIT_MODE, allStates);
     };
 
     /**
@@ -159,6 +165,7 @@
             if (!err) {
                 privateSetNodeToEditMode(note, true);
                 privateRerenderSingleNote(note);
+                // TODO: window.scrollTo ...
             }
         });
     };
@@ -217,7 +224,8 @@
     var privateDeleteNote = function (noteId) {
         notesRepository.deleteNote(noteId, function (err) {
             if (!err) {
-                privateRenderRemoveSingleNote(noteId)
+                privateRenderRemoveSingleNote(noteId);
+                privateClearEditModeState(noteId);
             }
         });
     };
@@ -284,6 +292,7 @@
             // TODO implement. At the moment: just delete
         }
         privateRenderRemoveSingleNote(id);
+        privateClearEditModeState(id);
     };
 
     var initialize = function () {
