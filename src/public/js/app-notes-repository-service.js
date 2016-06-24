@@ -110,7 +110,6 @@
             dataType: 'json',
             method: 'GET',
             url: '/rest/notes/' + id + '/'
-            //data: { name: "Michael" }
         }).done(function(note) {
             note.id = note._id;
             callback(undefined, note);
@@ -181,12 +180,33 @@
         });
     };
 
+    /**
+     * Gets a note model.
+     *
+     * @param callback success callback
+     */
+    var publicGetNoteModel = function (callback) {
+        $.ajax({
+            dataType: 'json',
+            method: 'GET',
+            url: '/rest/notes/model/'
+        }).done(function(note) {
+            note.id = note._id;
+            callback(undefined, note);
+        }).fail(function(jqxhr, textStatus, error) {
+            var err = textStatus + ", " + error;
+            console.log('Load note for id "' + id + '" failed: ' + err );
+            callback(err);
+        });
+    };
+
     namespace.notesRepository = {
         getNotes: publicGetNotes,
         getNote: publicGetNote,
         saveNote: publicSaveNote,
         deleteNote: publicDeleteNote,
-        createNote: publicCreateNote
+        createNote: publicCreateNote,
+        getNoteModel: publicGetNoteModel
     };
 
 })(window.notesnamespace);

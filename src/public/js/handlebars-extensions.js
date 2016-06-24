@@ -17,6 +17,9 @@
     Handlebars.registerHelper("formatDate", function (datetime, format) {
         if (moment) {
             // can use other formats like 'lll' too
+            if (!datetime) {
+                return '';
+            }
             format = DateFormats[format] || format;
             return moment(datetime).format(format);
         }

@@ -1,6 +1,6 @@
 'use strict';
 
-(function ($, notesnamespace) {
+(function ($, UUID, notesnamespace) {
 
     const LOCAL_STORAGE_EDIT_MODE = 'notes-edit-modes';
 
@@ -8,6 +8,8 @@
     var notesRepository = notesnamespace.notesRepository;
     var localStorageUtil = notesnamespace.localStorageUtil;
     var sortFilterRepository = notesnamespace.sortFilterRepository;
+
+    var localNewNotes = [];
 
     /**
      * Checks if the node with the given id is in edit mode.
@@ -33,7 +35,7 @@
     };
 
     /**
-     * Clear the edit mode state (housekeeping).
+     * Clears the edit mode state (housekeeping).
      *
      * @param id the id of the state to be removed
      */
@@ -41,6 +43,18 @@
         var allStates = localStorageUtil.load(LOCAL_STORAGE_EDIT_MODE);
         delete allStates[id];
         localStorageUtil.save(LOCAL_STORAGE_EDIT_MODE, allStates);
+    };
+
+    /**
+     * Clears the local persisted new notes (housekeeping).
+     *
+     * @param note the note to be cleared
+     */
+    var privateClearNewNote = function (note) {
+        privateClearEditModeState(note.id);
+        var temporaryNewNote = localNewNotes.find(function (entry) { return entry.id === note.id; });
+        localNewNotes.splice(localNewNotes.indexOf(temporaryNewNote), 1);
+        delete note.id;
     };
 
     /**
@@ -185,12 +199,21 @@
                 note.importance = $("input:radio[name='importance-" + noteId + "']:checked").val();
                 note.isFinished = $("#notes-entry-" + noteId + "-finished").is(':checked');
 
-                privateSetNodeToEditMode(note, false);
-                notesRepository.saveNote(note, function (err, savedNote) {
-                    if (!err) {
-                        privateRerenderSingleNote(note);
-                    }
-                });
+                if (note.id.substr(0, 3) === 'new') {
+                    privateClearNewNote(note);
+                    notesRepository.createNote(note, function (err, createdNote) {
+                        if (!err) {
+                            privateRerenderSingleNote(createdNote);
+                        }
+                    });
+                } else {
+                    privateSetNodeToEditMode(note, false);
+                    notesRepository.saveNote(note, function (err, savedNote) {
+                        if (!err) {
+                            privateRerenderSingleNote(savedNote);
+                        }
+                    });
+                }
             }
         });
     };
@@ -210,8 +233,10 @@
      * Create a new note.
      */
     var privateCreateNote = function() {
-        notesRepository.createNote(function (err, note) {
+        notesRepository.getNoteModel(function (err, note) {
             if (!err) {
+                note.id = 'new-' + UUID.generate();
+                localNewNotes.push(note);
                 privateSetNodeToEditMode(note, true);
                 privateRenderSingleNote(note, 'top');
                 privateRegisterEvents(note);
@@ -250,6 +275,24 @@
             }
         });
     };
+
+    /**
+     * Sorts by a given property
+     *
+     * @param property the property
+     * @param direction 'asc' or 'desc'
+     */
+    var sortByProperty = function(property, direction) {
+        return function(a,b) {
+            var factor = 'asc' === direction ? 1 : -1;
+            if (typeof a[property] == "number") {
+                return (a[property] - b[property]);
+            } else {
+                return ((a[property] < b[property]) ? factor * -1 : ((a[property] > b[property]) ? factor : 0));
+            }
+        };
+    };
+
 
     /**
      * If new nodes are coming in => add them at the end.
@@ -305,8 +348,21 @@
         var filterConfiguration = sortFilterRepository.getFilter();
         notesRepository.getNotes(function (err, notes) {
             if (!err) {
-                // TODO: Filter and sort
-                privateRenderAllNotes(notes);
+                // filter
+                if (filterConfiguration.attribute !== 'isFinished') {
+                    notes = notes.filter(function (entry) { return 'false' == entry.isFinished});
+                }
+                
+                // sort
+                if (sortConfiguration.direction === 'asc' || sortConfiguration.direction === 'desc') {
+                    notes = notes.sort(sortByProperty(sortConfiguration.attribute, sortConfiguration.direction));
+                }
+                
+                // merge with the local ones
+                var displayNotes = localNewNotes.concat(notes);
+                
+                // rerender
+                privateRenderAllNotes(displayNotes);
             }
         });
     };
@@ -332,4 +388,4 @@
         reloadNotes: publicReloadNotes
     };
 })
-(jQuery, window.notesnamespace);
+(jQuery, UUID, window.notesnamespace);

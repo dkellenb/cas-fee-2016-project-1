@@ -49,7 +49,7 @@
 
         // If the current sort attribute is defined
         if (filterConfiguration.attribute === filterAttribute) {
-            filterConfiguration.attribute = '';
+            delete filterConfiguration.attribute;
             target.className = 'filter-button filter-inactive';
         } else {
             filterConfiguration.attribute = filterAttribute;
