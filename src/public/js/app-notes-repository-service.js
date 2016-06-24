@@ -87,7 +87,7 @@
      *
      * @returns {Array} the persisted notes
      */
-    var publicSearchNote = function (sortConfiguration, filterConfiguration, callback) {
+    var publicGetNotes = function (callback) {
         // TODO pass sort configuration and filter configuration
         privateLoadNotes(function (err, notes) {
             if (err) {
@@ -182,7 +182,7 @@
     };
 
     namespace.notesRepository = {
-        searchNotes: publicSearchNote,
+        getNotes: publicGetNotes,
         getNote: publicGetNote,
         saveNote: publicSaveNote,
         deleteNote: publicDeleteNote,

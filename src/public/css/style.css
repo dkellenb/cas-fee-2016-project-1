@@ -1,7 +1,4 @@
 /**
- * TODO: general: apply styleguide style order
- * TODO: general: split up coloring / structure
- *
  * Rules:
  * - Default design is for minimal screens (< 400px)
  * - Two alternatives designs for bigger screens (<1024px, greater)
@@ -291,22 +288,16 @@ button.img-button:before {
 .sort-inactive.sort-desc:before {
     content: "\25BD  ";
 }
-.sort-active.sort-asc:before,
-.sort-active.sort-desc:hover:before,
-.sort-inactive.sort-asc:hover:before {
+.sort-active.sort-asc:before {
     content: "\25B2  ";
 }
-.sort-active.sort-desc:before,
-.sort-active.sort-asc:hover:before,
-.sort-inactive.sort-desc:hover:before {
+.sort-active.sort-desc:before {
     content: "\25BC  ";
 }
-.filter-active:before,
-.filter-inactive:hover:before {
+.filter-active:before {
     content: "\2611  ";
 }
-.filter-inactive:before,
-.filter-active:hover:before {
+.filter-inactive:before {
     content: "\2610  ";
 }
 

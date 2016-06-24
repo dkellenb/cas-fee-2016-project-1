@@ -8,12 +8,21 @@ This repository contains the project work of the two students [Daniel Kellenberg
 - npm install
 - npm start
 
-## 3. REST Api
+## Documentation
+### Supported features
 
-| Method          | CMD    | Description |
-|-----------------|--------|-------------|
-| /rest/notes     | GET    | Returns all persisted notes |
-| /rest/notes     | POST   | Adds a new note |
-| /rest/notes/:id | GET    | Returns a note with the given id |
-| /rest/notes/:id | PUT    | Updates a note by the given id |
-| /rest/notes/:id | DELETE | Deletes a note by the given id |
+- Create/Edit note inline with the others
+- Change color to your favorite style
+- Work on the same set with your friend at the same time
+
+### REST Api
+
+| Method             | CMD    | Description                      |
+|--------------------|--------|----------------------------------|
+| /rest/notes        | GET    | Returns all persisted notes      |
+| /rest/notes        | POST   | Adds a new note                  |
+| /rest/notes/model/ | GET    | Gets a template model            |
+| /rest/notes/:id    | GET    | Returns a note with the given id |
+| /rest/notes/:id    | PUT    | Updates a note by the given id   |
+| /rest/notes/:id    | DELETE | Deletes a note by the given id   |
+

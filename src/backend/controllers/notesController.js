@@ -47,6 +47,11 @@ function publicGetNote(req, res) {
     });
 }
 
+function publicCreateModel(req, res) {
+    var note = new Note("", "", 3, false, null);
+    return res.json(note);
+}
+
 /**
  * Creates a new note. Expects nothing.
  *
@@ -54,7 +59,9 @@ function publicGetNote(req, res) {
  * @param res reponse
  */
 function publicCreateNote(req, res) {
-    var note = new Note("", "", 3, false, null);
+    var isFinished = req.body.isFinished === 'true';
+    var finishedDate = isFinished ? moment().format('YYYY-MM-DD') : null;
+    var note = new Note(req.body.title, req.body.content, req.body.importance, finishedDate, req.body.dueDate);
     notesRepository.add(note, function (err, newNote) {
         if (err) {
             console.log('notesController:publicCreateNote: ' + err);
@@ -162,6 +169,7 @@ function publicDeleteNote(req, res) {
 module.exports = {
     getNotes: publicGetNotes,
     getNote: publicGetNote,
+    createNoteModel: publicCreateModel,
     createNote: publicCreateNote,
     updateNote: publicUpdateNote,
     delete: publicDeleteNote

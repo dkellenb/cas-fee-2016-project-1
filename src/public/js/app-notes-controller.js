@@ -2,11 +2,12 @@
 
 (function ($, notesnamespace) {
 
+    const LOCAL_STORAGE_EDIT_MODE = 'notes-edit-modes';
+
+    // dependencies
     var notesRepository = notesnamespace.notesRepository;
     var localStorageUtil = notesnamespace.localStorageUtil;
     var sortFilterRepository = notesnamespace.sortFilterRepository;
-
-    const LOCAL_STORAGE_EDIT_MODE = 'notes-edit-modes';
 
     /**
      * Checks if the node with the given id is in edit mode.
@@ -302,13 +303,17 @@
     var publicReloadNotes = function() {
         var sortConfiguration = sortFilterRepository.getSort();
         var filterConfiguration = sortFilterRepository.getFilter();
-        notesRepository.searchNotes(sortConfiguration, filterConfiguration, function (err, notes) {
+        notesRepository.getNotes(function (err, notes) {
             if (!err) {
+                // TODO: Filter and sort
                 privateRenderAllNotes(notes);
             }
         });
     };
 
+    /**
+     * Initializes the application.
+     */
     var initialize = function () {
         // Bind create note
         $('.action-create').on('click', function () {
