@@ -5,6 +5,13 @@
     var notesController = namespace.notesController;
     var sortFilterRepository = namespace.sortFilterRepository;
 
+    //Sort Direction Enum
+    const SortDirection = {
+        ASC:'arc',
+        DESC:'desc',
+        NONE:'none'
+    };
+
     // TODO: Documentation
 
     var privatePerformSortButtonClick = function (event) {
@@ -14,18 +21,18 @@
 
         // If the current sort attribute is defined
         if (sortConfiguration.attribute === sortAttribute) {
-            if (sortConfiguration.direction === 'asc') {
-                sortConfiguration.direction = 'desc';
+            if (sortConfiguration.direction === SortDirection.ASC) {
+                sortConfiguration.direction = SortDirection.DESC;
                 target.className = 'sort-button sort-active sort-desc';
-            } else if (sortConfiguration.direction === 'desc') {
-                sortConfiguration.direction = 'none';
+            } else if (sortConfiguration.direction === SortDirection.DESC) {
+                sortConfiguration.direction = SortDirection.NONE;
                 target.className = 'sort-button sort-inactive sort-asc';
             } else {
-                sortConfiguration.direction = 'asc';
+                sortConfiguration.direction = SortDirection.ASC;
                 target.className = 'sort-button sort-active sort-asc';
             }
         } else {
-            sortConfiguration.direction = 'asc';
+            sortConfiguration.direction = SortDirection.ASC;
             sortConfiguration.attribute = sortAttribute;
             target.className = 'sort-button sort-active sort-asc';
         }
@@ -80,9 +87,9 @@
         var sortConfiguration = sortFilterRepository.getSort();
         $('.sort-button').each(function () {
             if ($(this).data('sortName') == sortConfiguration.attribute) {
-                if (sortConfiguration.direction == 'asc') {
+                if (sortConfiguration.direction == SortDirection.ASC) {
                     this.className = 'sort-button sort-active sort-asc';
-                } else if (sortConfiguration.direction == 'desc') {
+                } else if (sortConfiguration.direction == SortDirection.DESC) {
                     this.className = 'sort-button sort-active sort-desc';
                 } else {
                     this.className = 'sort-button sort-inactive';
