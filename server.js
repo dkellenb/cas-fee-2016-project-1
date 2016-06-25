@@ -19,7 +19,7 @@ app.use(express.static(__dirname + '/src/public'));
 
 // Setup websocket
 websocket.on('connection', function (socket) {
-    console.log('user connected');
+    console.log(new Date()+' user connected');
     socket.on('disconnect', function () {
         console.log('user disconnected');
     });
@@ -27,5 +27,5 @@ websocket.on('connection', function (socket) {
 
 // Setup http listener
 const port = 3001;
-const host = 'localhost';
+const host = '0.0.0.0'; //changed so it can get accessed from external ip adress(real mobile test)
 http.listen(port, host, () => {  console.log(`Server running at http://${host}:${port}/`); });
