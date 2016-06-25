@@ -4,12 +4,45 @@
 
     const LOCAL_STORAGE_EDIT_MODE = 'notes-edit-modes';
 
+    // Constants for Data Key-Attributes
+    const DATA_KEY_BUTTON_NOTE_ID = 'data-note-id';
+
     // dependencies
     var notesRepository = notesnamespace.notesRepository;
     var localStorageUtil = notesnamespace.localStorageUtil;
     var sortFilterRepository = notesnamespace.sortFilterRepository;
 
     var localNewNotes = [];
+
+    /**
+     * Class for representing the Buttons and CallBack Functions
+     * @param buttonSelector Selector for the Button
+     * @param callBack callBack Function
+     * @constructor
+     */
+    function ButtonFunction(buttonSelector, callBack) {
+        this.buttonSelector = buttonSelector;
+        this.callBack = callBack;
+    }
+
+    //All Buttons in the Application
+    const noteButtonFunctions = [
+        new ButtonFunction('.action-edit', function (event) {
+            privateEditNote(event.target.getAttribute(DATA_KEY_BUTTON_NOTE_ID));
+        }),
+        new ButtonFunction('.action-save', function (event) {
+            privateSaveNote(event.target.getAttribute(DATA_KEY_BUTTON_NOTE_ID));
+        }),
+        new ButtonFunction('.action-delete', function (event) {
+            privateDeleteNote(event.target.getAttribute(DATA_KEY_BUTTON_NOTE_ID));
+        }),
+        new ButtonFunction('.action-revert', function (event) {
+            privateRevertNote(event.target.getAttribute(DATA_KEY_BUTTON_NOTE_ID));
+        }),
+        new ButtonFunction('.action-finished', function (event) {
+            privateSetFinished(event.target.getAttribute(DATA_KEY_BUTTON_NOTE_ID), event.target.getAttribute('data-note-finished'));
+        })
+    ];
 
     /**
      * Checks if the node with the given id is in edit mode.
@@ -160,24 +193,10 @@
      */
     var privateRegisterEvents = function (note) {
         var prefix = note ? '#note-' + note.id + ' ' : '';
-        $(prefix + '.action-edit').unbind('click').on('click', function (event) {
-            privateEditNote(event.target.getAttribute('data-note-id'));
-        });
 
-        $(prefix + '.action-save').unbind('click').on('click', function (event) {
-            privateSaveNote(event.target.getAttribute('data-note-id'));
-        });
-
-        $(prefix + '.action-delete').unbind('click').on('click', function (event) {
-            privateDeleteNote(event.target.getAttribute('data-note-id'));
-        });
-
-        $(prefix + '.action-revert').unbind('click').on('click', function () {
-            privateRevertNote(event.target.getAttribute('data-note-id'));
-        });
-
-        $(prefix + '.action-finished').unbind('click').on('click', function () {
-            privateSetFinished(event.target.getAttribute('data-note-id'), event.target.getAttribute('data-note-finished'))
+        noteButtonFunctions.forEach(function (buttonFunction) {
+            console.log(prefix + buttonFunction.buttonSelector);
+            $(prefix + buttonFunction.buttonSelector).unbind('click').on('click', buttonFunction.callBack);
         });
     };
 
@@ -186,11 +205,10 @@
      */
     var privateDeregisterEvents = function (note) {
         var prefix = note ? '#note-' + note.id + ' ' : '';
-        $(prefix + '.action-edit').unbind('click');
-        $(prefix + '.action-save').unbind('click');
-        $(prefix + '.action-delete').unbind('click');
-        $(prefix + '.action-revert').unbind('click');
-        $(prefix + '.action-finished').unbind('click');
+
+        noteButtonFunctions.forEach(function (buttonFunction) {
+            $(prefix + buttonFunction.buttonSelector).unbind('click');
+        });
     };
 
     /**
@@ -414,6 +432,7 @@
         // Load notes
         publicReloadNotes();
     };
+
 
     initialize();
     notesnamespace.notesController = {
