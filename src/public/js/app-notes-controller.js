@@ -1,6 +1,6 @@
 'use strict';
 
-(function ($, UUID, notesnamespace) {
+(function ($, UUID, namespace) {
 
     const LOCAL_STORAGE_EDIT_MODE = 'notes-edit-modes';
 
@@ -8,9 +8,9 @@
     const DATA_KEY_BUTTON_NOTE_ID = 'data-note-id';
 
     // dependencies
-    var notesRepository = notesnamespace.notesRepository;
-    var localStorageUtil = notesnamespace.localStorageUtil;
-    var sortFilterRepository = notesnamespace.sortFilterRepository;
+    var notesRepository = namespace.notesRepository;
+    var localStorageUtil = namespace.localStorageUtil;
+    var sortFilterRepository = namespace.sortFilterRepository;
 
     var localNotesInEditMode = {};
     var localNewNotes = {};
@@ -101,7 +101,7 @@
      * @param singleNotePlacement -> ENUM SingleNotePlacement
      */
     var privateRenderSingleNote = function (note, singleNotePlacement) {
-        var generatedHtml = Handlebars.getTemplate('note-template')(note);
+        var generatedHtml = Handlebars.getTemplate(namespace.hbsTemplates.NOTE_TEMPLATE_NAME)(note);
         if (SingleNotePlacement.REPALCE === singleNotePlacement) {
             privateDeregisterEvents(note);
             $('#note-' + note.id).replaceWith(generatedHtml);
@@ -147,7 +147,7 @@
         notes.forEach(function (note) {
             privateDecorateWithState(note);
         });
-        var generatedHtml = Handlebars.getTemplate('notes-template')(notes);
+        var generatedHtml = Handlebars.getTemplate(namespace.hbsTemplates.NOTES_TEMPLATE_NAME)(notes);
         $('#existing-notes').html(generatedHtml);
         privateRegisterEvents();
     };
@@ -265,7 +265,7 @@
      * @param noteId
      */
     var privateDeleteNote = function (noteId) {
-        if(noteId in localNewNotes){
+        if (noteId in localNewNotes) {
             privateRenderRemoveSingleNote(noteId);
             return;
         }
@@ -410,7 +410,7 @@
     }
 
     initialize();
-    notesnamespace.notesController = {
+    namespace.notesController = {
         onExternalNoteCreation: publicOnExternalNoteCreation,
         onExternalNoteUpdate: publicOnExternalNoteUpdate,
         onExternalNoteDelete: publicOnExternalNoteDelete,

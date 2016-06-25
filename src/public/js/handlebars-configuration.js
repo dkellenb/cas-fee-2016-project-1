@@ -2,7 +2,7 @@
  * Goal: Configure handlebars for the needs of the application.
  */
 
-(function (Handlebars, $) {
+(function (Handlebars, $, namespace) {
     Handlebars.getTemplate = function (name) {
         if (Handlebars.templates === undefined || Handlebars.templates[name] === undefined) {
             $.ajax({
@@ -19,6 +19,12 @@
         return Handlebars.templates[name];
     };
 
-    Handlebars.registerPartial('noteTemplate', Handlebars.getTemplate('note-template'))
+    Handlebars.registerPartial('noteTemplate', Handlebars.getTemplate('note-template'));
 
-})(Handlebars, jQuery);
+    //register template names in namespace for rendering.
+    namespace.hbsTemplates = {
+        NOTE_TEMPLATE_NAME: 'note-template',
+        NOTES_TEMPLATE_NAME: 'notes-template'
+    }
+
+})(Handlebars, jQuery, window.notesnamespace);
