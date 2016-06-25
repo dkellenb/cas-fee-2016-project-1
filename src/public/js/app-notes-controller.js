@@ -90,19 +90,28 @@
     };
 
     /**
+     * Enum for Placements if rendering a SingleNote
+     * @type {{REPALCE: string, NEW: string, APPEND: string}}
+     */
+    const SingleNotePlacement = {
+        REPALCE: 'replace',
+        NEW: 'new',
+        APPEND: 'append'
+    };
+    /**
      * Render Single Note in Note-Table
      * @param note Note for Render
-     * @param placement 'top', 'bottom', 'replace'
+     * @param singleNotePlacement -> ENUM SingleNotePlacement
      */
-    var privateRenderSingleNote = function (note, placement) {
+    var privateRenderSingleNote = function (note, singleNotePlacement) {
         var generatedHtml = Handlebars.getTemplate('note-template')(note);
-        if ('replace' == placement) {
+        if (SingleNotePlacement.REPALCE === singleNotePlacement) {
             privateDeregisterEvents(note);
             $('#note-' + note.id).replaceWith(generatedHtml);
-        } else if ('top' == placement) {
-            $('#notes-table').prepend(generatedHtml).show('fast');
+        } else if (SingleNotePlacement.NEW === singleNotePlacement) {
+            $('#new-notes').prepend(generatedHtml).show('fast');
         } else {
-            $('#notes-table').append(generatedHtml).show('fast');
+            $('#existing-notes').append(generatedHtml).show('fast');
         }
         privateRegisterEvents(note);
     };
@@ -115,7 +124,7 @@
     var privateRerenderSingleNote = function (note) {
         privateDeregisterEvents(note);
         privateDecorateWithState(note);
-        privateRenderSingleNote(note, 'replace');
+        privateRenderSingleNote(note, SingleNotePlacement.REPALCE);
         privateRegisterEvents(note);
     };
 
@@ -126,7 +135,9 @@
      */
     var privateRenderRemoveSingleNote = function (id) {
         var element = $('#note-' + id);
-        element.hide('fast', function(){ element.remove(); });
+        element.hide('fast', function () {
+            element.remove();
+        });
     };
 
     /**
@@ -137,10 +148,10 @@
     var privateRenderAllNotes = function (notes) {
         privateDeregisterEvents();
         notes.forEach(function (note) {
-           privateDecorateWithState(note);
+            privateDecorateWithState(note);
         });
         var generatedHtml = Handlebars.getTemplate('notes-template')(notes);
-        $('#notes-table').html(generatedHtml);
+        $('#existing-notes').html(generatedHtml);
         privateRegisterEvents();
     };
 
@@ -244,7 +255,7 @@
      * Revert the content of the note => Just refresh.
      * @param noteId
      */
-    var privateRevertNote = function(noteId) {
+    var privateRevertNote = function (noteId) {
         notesRepository.getNote(noteId, function (err, note) {
             privateSetNodeToEditMode(note, false);
             privateRerenderSingleNote(note);
@@ -254,13 +265,13 @@
     /**
      * Create a new note.
      */
-    var privateCreateNote = function() {
+    var privateCreateNote = function () {
         notesRepository.getNoteModel(function (err, note) {
             if (!err) {
                 note.id = 'new-' + UUID.generate();
                 localNewNotes.push(note);
                 privateSetNodeToEditMode(note, true);
-                privateRenderSingleNote(note, 'top');
+                privateRenderSingleNote(note, SingleNotePlacement.NEW);
                 privateRegisterEvents(note);
             }
         });
@@ -290,9 +301,9 @@
             if (!err) {
                 note.isFinished = previousFinishedState !== "true" && previousFinishedState !== true;
                 notesRepository.saveNote(note, function (err, savedNote) {
-                   if (!err) {
-                       privateRerenderSingleNote(savedNote);
-                   }
+                    if (!err) {
+                        privateRerenderSingleNote(savedNote);
+                    }
                 });
             }
         });
@@ -304,8 +315,8 @@
      * @param property the property
      * @param direction 'asc' or 'desc'
      */
-    var sortByProperty = function(property, direction) {
-        return function(a,b) {
+    var sortByProperty = function (property, direction) {
+        return function (a, b) {
             var factor = 'asc' === direction ? 1 : -1;
             if (typeof a[property] == "number") {
                 return (a[property] - b[property]);
@@ -320,11 +331,11 @@
      * If new nodes are coming in => add them at the end.
      * @param id the id of the new node
      */
-    var publicOnExternalNoteCreation  = function (id) {
+    var publicOnExternalNoteCreation = function (id) {
         notesRepository.getNote(id, function (err, note) {
             // already present?
             if ($('#note-' + id).length === 0) {
-                privateRenderSingleNote(note, 'end');
+                privateRenderSingleNote(note, SingleNotePlacement.APPEND);
             }
         });
     };
@@ -342,7 +353,7 @@
         }
         notesRepository.getNote(id, function (err, note) {
             if (!err) {
-                privateRenderSingleNote(note, 'replace');
+                privateRenderSingleNote(note, SingleNotePlacement.REPALCE);
             }
         });
     };
@@ -365,24 +376,26 @@
     /**
      * Reload all notes.
      */
-    var publicReloadNotes = function() {
+    var publicReloadNotes = function () {
         var sortConfiguration = sortFilterRepository.getSort();
         var filterConfiguration = sortFilterRepository.getFilter();
         notesRepository.getNotes(function (err, notes) {
             if (!err) {
                 // filter
                 if (filterConfiguration.attribute !== 'isFinished') {
-                    notes = notes.filter(function (entry) { return !entry.isFinished});
+                    notes = notes.filter(function (entry) {
+                        return !entry.isFinished
+                    });
                 }
-                
+
                 // sort
                 if (sortConfiguration.direction === 'asc' || sortConfiguration.direction === 'desc') {
                     notes = notes.sort(sortByProperty(sortConfiguration.attribute, sortConfiguration.direction));
                 }
-                
+
                 // merge with the local ones
                 var displayNotes = localNewNotes.concat(notes);
-                
+
                 // rerender
                 privateRenderAllNotes(displayNotes);
             }
@@ -404,9 +417,9 @@
 
     initialize();
     notesnamespace.notesController = {
-        onExternalNoteCreation : publicOnExternalNoteCreation,
-        onExternalNoteUpdate : publicOnExternalNoteUpdate,
-        onExternalNoteDelete : publicOnExternalNoteDelete,
+        onExternalNoteCreation: publicOnExternalNoteCreation,
+        onExternalNoteUpdate: publicOnExternalNoteUpdate,
+        onExternalNoteDelete: publicOnExternalNoteDelete,
         reloadNotes: publicReloadNotes
     };
 })
