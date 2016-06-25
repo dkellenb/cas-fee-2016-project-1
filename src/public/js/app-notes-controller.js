@@ -12,8 +12,8 @@
     var localStorageUtil = notesnamespace.localStorageUtil;
     var sortFilterRepository = notesnamespace.sortFilterRepository;
 
-    var localNewNotes = [];
     var localNotesInEditMode = {};
+    var localNewNotes = {};
 
     //All Buttons for manipulations on a note.
     const noteButtonFunctions = [
@@ -63,27 +63,6 @@
         delete localNotesInEditMode[id];
     };
 
-    /**
-     * Returns the local new note.
-     *
-     * @param id the note id
-     */
-    var privateGetLocalNewNote = function (id) {
-        return localNewNotes.find(function (entry) {
-            return entry.id === id;
-        });
-    };
-
-    /**
-     * Clears the local persisted new notes (housekeeping).
-     *
-     * @param newNote the note id to be cleared
-     */
-    var privateClearNewNote = function (newNote) {
-        privateClearEditModeState(newNote.id);
-        localNewNotes.splice(localNewNotes.indexOf(newNote), 1);
-        delete newNote.id;
-    };
 
     /**
      * Extends a note object with the edit mode.
@@ -229,13 +208,13 @@
      * @param noteId
      */
     var privateSaveNote = function (noteId) {
-        if (noteId.substr(0, 3) === 'new') {
-            var newNote = privateGetLocalNewNote(noteId);
+        if (noteId in localNewNotes) {
+            var newNote = localNewNotes[noteId];
             privateUpdateNoteFromForm(newNote, noteId);
-            privateClearNewNote(newNote);
             notesRepository.createNote(newNote, function (err, createdNote) {
                 if (!err) {
                     privateRenderRemoveSingleNote(noteId);
+                    delete localNewNotes[noteId];
                     // it will be added with socket events.
                 }
             });
@@ -271,11 +250,12 @@
     var privateCreateNote = function () {
         notesRepository.getNoteModel(function (err, note) {
             if (!err) {
-                note.id = 'new-' + UUID.generate();
-                localNewNotes.push(note);
+                note.id = UUID.generate();
+                note.isNew = true;
                 privateSetNodeToEditMode(note, true);
                 privateRenderSingleNote(note, SingleNotePlacement.NEW);
                 privateRegisterEvents(note);
+                localNewNotes[note.id] = note;
             }
         });
     };
@@ -396,11 +376,8 @@
                     notes = notes.sort(sortByProperty(sortConfiguration.attribute, sortConfiguration.direction));
                 }
 
-                // merge with the local ones
-                var displayNotes = localNewNotes.concat(notes);
-
                 // rerender
-                privateRenderAllNotes(displayNotes);
+                privateRenderAllNotes(notes);
             }
         });
     };
