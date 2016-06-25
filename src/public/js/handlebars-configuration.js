@@ -3,6 +3,13 @@
  */
 
 (function (Handlebars, $, namespace) {
+
+    //Enum with template names
+    const TemplatesNames = {
+        NOTE_TEMPLATE_NAME: 'note-template',
+        NOTES_TEMPLATE_NAME: 'notes-template'
+    };
+
     Handlebars.getTemplate = function (name) {
         if (Handlebars.templates === undefined || Handlebars.templates[name] === undefined) {
             $.ajax({
@@ -19,12 +26,8 @@
         return Handlebars.templates[name];
     };
 
-    Handlebars.registerPartial('noteTemplate', Handlebars.getTemplate('note-template'));
+    Handlebars.registerPartial('noteTemplate', Handlebars.getTemplate(TemplatesNames.NOTE_TEMPLATE_NAME));
 
-    //register template names in namespace for rendering.
-    namespace.hbsTemplates = {
-        NOTE_TEMPLATE_NAME: 'note-template',
-        NOTES_TEMPLATE_NAME: 'notes-template'
-    }
+    namespace.hbsTemplates = TemplatesNames;
 
 })(Handlebars, jQuery, window.notesnamespace);
