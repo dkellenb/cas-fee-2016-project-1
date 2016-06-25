@@ -42,6 +42,20 @@
 })(Handlebars);
 
 /**
+ * Register keyword countdownLoop -> {{countdownLoop 10}}block{{/countdownLoop}} repeat the block 10 times. index can be accessed with {{this}}
+ */
+Handlebars.registerHelper('countdownLoop', function(n, block) {
+    var accum = '';
+    const indexKey = 'countdownLoopIndex';
+    for(var i = n; i > 0; --i) {
+        this[indexKey] = i;
+        accum += block.fn(this);
+    }
+    this[indexKey] = undefined;
+    return accum;
+});
+
+/**
  * If condition extension.
  */
 (function (Handlebars) {
