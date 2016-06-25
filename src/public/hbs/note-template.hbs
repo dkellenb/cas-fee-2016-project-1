@@ -25,7 +25,10 @@
             {{#if isEditable}}<textarea id="description-{{id}}" title="description" rows="6" cols="50" class="input-field input-field-full"
                                         placeholder="Please enter some meaningfull values">{{{content}}}</textarea>
             {{else}}
-                {{lineBreakReplacer content}}
+                <input type="checkbox" id="content-visibility-{{id}}"/>
+                <label for="content-visibility-{{id}}">
+                    {{lineBreakReplacer content}}
+                </label>
             {{/if}}
         </div>
         <div class="notes-entry-cell notes-entry-finished">
