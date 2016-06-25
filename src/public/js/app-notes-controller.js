@@ -13,19 +13,9 @@
     var sortFilterRepository = notesnamespace.sortFilterRepository;
 
     var localNewNotes = [];
+    var localNotesInEditMode = {};
 
-    /**
-     * Class for representing the Buttons and CallBack Functions
-     * @param buttonSelector Selector for the Button
-     * @param callBack callBack Function
-     * @constructor
-     */
-    function ButtonFunction(buttonSelector, callBack) {
-        this.buttonSelector = buttonSelector;
-        this.callBack = callBack;
-    }
-
-    //All Buttons in the Application
+    //All Buttons for manipulations on a note.
     const noteButtonFunctions = [
         new ButtonFunction('.action-edit', function (event) {
             privateEditNote(event.target.getAttribute(DATA_KEY_BUTTON_NOTE_ID));
@@ -51,8 +41,7 @@
      * @returns {boolean} true if in edit mode
      */
     var privateIsInEditMode = function (id) {
-        var persistedStates = localStorageUtil.load(LOCAL_STORAGE_EDIT_MODE);
-        return persistedStates[id];
+        return localNotesInEditMode[id];
     };
 
     /**
@@ -62,9 +51,7 @@
      * @param editMode true if in edit mode
      */
     var privateSetEditMode = function (id, editMode) {
-        var allStates = localStorageUtil.load(LOCAL_STORAGE_EDIT_MODE);
-        allStates[id] = editMode;
-        localStorageUtil.save(LOCAL_STORAGE_EDIT_MODE, allStates);
+        localNotesInEditMode[id] = editMode;
     };
 
     /**
@@ -73,9 +60,7 @@
      * @param id the id of the state to be removed
      */
     var privateClearEditModeState = function (id) {
-        var allStates = localStorageUtil.load(LOCAL_STORAGE_EDIT_MODE);
-        delete allStates[id];
-        localStorageUtil.save(LOCAL_STORAGE_EDIT_MODE, allStates);
+        delete localNotesInEditMode[id];
     };
 
     /**
@@ -433,6 +418,16 @@
         publicReloadNotes();
     };
 
+    /**
+     * Class for representing the Buttons and CallBack Functions
+     * @param buttonSelector Selector for the Button
+     * @param callBack callBack Function
+     * @constructor
+     */
+    function ButtonFunction(buttonSelector, callBack) {
+        this.buttonSelector = buttonSelector;
+        this.callBack = callBack;
+    }
 
     initialize();
     notesnamespace.notesController = {
