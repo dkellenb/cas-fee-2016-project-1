@@ -41,9 +41,9 @@
             {{/if}}
         </div>
         <div class="notes-entry-cell notes-entry-action">
-            {{#if isEditable}}
+            {{#if isEditable}}{{#unless isNew}}
                 <button data-note-id="{{id}}" name="action-revert" class="img-button img-button-revert action-revert" title="Revert"
-                        type="button"></button>{{/if}}
+                        type="button"></button>{{/unless}}{{/if}}
             <button data-note-id="{{id}}" name="action-delete" class="img-button img-button-delete action-delete" title="Delete"
                     type="button"></button>
             {{#unless isEditable}}

@@ -252,7 +252,7 @@
             if (!err) {
                 note.id = UUID.generate();
                 note.isNew = true;
-                privateSetNodeToEditMode(note, true);
+                note.isEditable = true;
                 privateRenderSingleNote(note, SingleNotePlacement.NEW);
                 privateRegisterEvents(note);
                 localNewNotes[note.id] = note;
@@ -265,6 +265,10 @@
      * @param noteId
      */
     var privateDeleteNote = function (noteId) {
+        if(noteId in localNewNotes){
+            privateRenderRemoveSingleNote(noteId);
+            return;
+        }
         notesRepository.deleteNote(noteId, function (err) {
             if (!err) {
                 privateRenderRemoveSingleNote(noteId);
@@ -308,7 +312,6 @@
             }
         };
     };
-
 
     /**
      * If new nodes are coming in => add them at the end.
