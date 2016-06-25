@@ -372,7 +372,7 @@
             if (!err) {
                 // filter
                 if (filterConfiguration.attribute !== 'isFinished') {
-                    notes = notes.filter(function (entry) { return 'false' == entry.isFinished});
+                    notes = notes.filter(function (entry) { return !entry.isFinished});
                 }
                 
                 // sort
