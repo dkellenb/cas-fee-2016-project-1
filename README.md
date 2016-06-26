@@ -12,37 +12,39 @@ This repository contains the project work of the two students [Daniel Kellenberg
 
 ### Supported features
 * __Easy to use note application__
-..* Easy to start with your first note. you simply can't miss the big button at your screen for adding your first note=P
-...* Application will know if there are not notes and will show you a big plus-sign for adding a note
+  * Easy to start with your first note. you simply can't miss the big button at your screen for adding your first note=P
+   * Application will know if there are not notes and will show you a big plus-sign for adding a note
+  * There is no annoying input validation you can enter what you like the system can handel it.
+   * you have a fast feedback if you hit the save button and you can switch back to edit in no time.
 * __All functions you wish like__
-..* Create note
-..* Edit a note
-..* Revert a note to his stored state
-..* Delete a note
-..* Give notes dates until they have to be finished
-..* mark notes as finished
-..* give notes a importance value between 1-5
+  * Create note
+  * Edit a note
+  * Revert a note to his stored state
+  * Delete a note
+  * Give notes dates until they have to be finished
+  * mark notes as finished
+  * give notes a importance value between 1-5
 * __Filter and sort your notes for better overview__
-..* sort by create date
-..* sort by importance
-..* sort by date until job has to be done
-..* filter finished notes
+  * sort by create date
+  * sort by importance
+  * sort by date until job has to be done
+  * filter finished notes
 * __Work on the same set with your frind at the same time__
-..* Sharing new notes.
-..* Sharing every edit and update.
-..* Deleted notes will be removed by your frinds.
+  * Sharing new notes.
+  * Sharing every edit and update.
+  * Deleted notes will be removed by your frinds.
 *__Works with IOs and Android Browsers on your mobile.__
-..* You can even use all the share functions like with your friends
+  * You can even use all the share functions like with your friends
 * __Change color to your favorite style__
-..* Your selection get stored in the LocalStorage and will be persisted between visits
-..* Choose beween 4 color sets
+  * Your selection get stored in the LocalStorage and will be persisted between visits
+  * Choose beween 4 color sets
 * __multi edit and new notes is possible__
-..* you can have multiple notes in edit mode. they will stay in edit mode even if you hit the sort or filter buttons
-..* you can start with multiple new notes. they will stay at any time at the top of the list and will not be affected by sorting oder filtering.
+  * you can have multiple notes in edit mode. they will stay in edit mode even if you hit the sort or filter buttons
+  * you can start with multiple new notes. they will stay at any time at the top of the list and will not be affected by sorting oder filtering.
 
 ###Tecnical features
 * the Application uses a REST-API on a node.js server for storing notes in a nedb.
-..*it is possible to send your websocket id through the rest interface. the websocket event will contain your id.
+  *it is possible to send your websocket id through the rest interface. the websocket event will contain your id.
 * Events for create, update and delete of notes are shared by a websocket with the id of the note and the socketId if present. The client can then decide what he want to to with it.
 * for the color switching CSS properties are used. (no big dom changes needed or complicate selectors)
 * Handelbars is used for doing all the template rendering.
