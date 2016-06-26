@@ -38,7 +38,7 @@ This repository contains the project work of the two students [Daniel Kellenberg
 * __Change color to your favorite style__
   * Your selection get stored in the LocalStorage and will be persisted between visits
   * Choose between 4 color sets
-* __multi edit and new notes is possible__
+* __Multi edit and new notes is possible__
   * You can have multiple notes in edit mode. they will stay in edit mode even if you hit the sort or filter buttons
   * You can start with multiple new notes. they will stay at any time at the top of the list and will not be affected by sorting oder filtering.
 
