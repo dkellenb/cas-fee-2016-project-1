@@ -97,7 +97,7 @@
      */
     var privateUpdateSortButtonStates = function (sortConfiguration) {
         $('.sort-button').each(function (index, element) {
-            privateUpdateSortButtonClass(element, (privateReadDataFromButtonElement(target, DATA_KEY_SORT_NAME) == sortConfiguration.attribute), sortConfiguration.direction);
+            privateUpdateSortButtonClass(element, (privateReadDataFromButtonElement(element, DATA_KEY_SORT_NAME) == sortConfiguration.attribute), sortConfiguration.direction);
         });
     };
 
@@ -107,7 +107,7 @@
      */
     var privateUpdateFilterButtonStates = function (filterConfiguration) {
         $('.filter-button').each(function (index, element) {
-            privateUpdateFilterButtonClass(element, privateReadDataFromButtonElement(target, DATA_KEY_FILTER_NAME) == filterConfiguration.attribute);
+            privateUpdateFilterButtonClass(element, privateReadDataFromButtonElement(element, DATA_KEY_FILTER_NAME) == filterConfiguration.attribute);
         });
     };
 
