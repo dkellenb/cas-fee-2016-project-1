@@ -201,7 +201,13 @@
         var dueDate = $('#due-date-' + noteId).val();
         console.log('datumformat' + dueDate);
         if (dueDate) {
-            note.dueDate = dueDate;
+            var parsedDate;
+            if (dueDate.match(/\d{2}\.\d{2}\.\d{4}/g)) {
+                parsedDate = moment(dueDate, "DD.MM.YYYY").toDate();
+            } else {
+                parsedDate = moment(dueDate).toDate();
+            }
+            note.dueDate = parsedDate;
         }
 
         note.importance = $("input:radio[name='importance-" + noteId + "']:checked").val();
