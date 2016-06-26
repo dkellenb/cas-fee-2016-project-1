@@ -316,7 +316,6 @@
      * @param direction 'asc' or 'desc'
      */
     var sortByProperty = function (property, direction) {
-        console.log('sortParam:' + property + 'direction: ' + direction);
         return function (a, b) {
             var propertyA = a[property];
             var propertyB = b[property];
