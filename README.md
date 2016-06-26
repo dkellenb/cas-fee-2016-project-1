@@ -44,7 +44,7 @@ This repository contains the project work of the two students [Daniel Kellenberg
 
 ###Technical features
 * The Application uses a REST-API on a node.js server for storing notes in a nedb.
-  *It is possible to send your websocket id through the rest interface. the websocket event will contain your id.
+  * It is possible to send your websocket id through the rest interface. the websocket event will contain your id.
 * Events for create, update and delete of notes are shared by a websocket with the id of the note and the socketId if present. The client can then decide what he want to to with it.
 * For the color switching CSS properties are used. (no big dom changes needed or complicate selectors)
 * Handelbars is used for doing all the template rendering.
