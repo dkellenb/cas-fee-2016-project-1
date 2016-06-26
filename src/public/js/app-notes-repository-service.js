@@ -63,6 +63,7 @@
      */
     var publicSaveNote = function (note, callback) {
         $.ajax(privateSetUpRequest('PUT', '/rest/notes/' + note.id + '/', note)).done(function (note) {
+            note.id = note._id;
             callback(undefined, note);
         }).fail(function (jqxhr, textStatus, error) {
             var err = textStatus + ", " + error;
@@ -79,6 +80,7 @@
      */
     var publicDeleteNote = function (id, callback) {
         $.ajax(privateSetUpRequest('DELETE', '/rest/notes/' + id + '/')).done(function (note) {
+            note.id = note._id;
             callback(undefined, note);
         }).fail(function (jqxhr, textStatus, error) {
             var err = textStatus + ", " + error;

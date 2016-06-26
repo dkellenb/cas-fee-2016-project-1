@@ -104,6 +104,7 @@
     var privateRenderSingleNote = function (note, singleNotePlacement) {
         var generatedHtml = Handlebars.getTemplate(namespace.hbsTemplates.NOTE_TEMPLATE_NAME)(note);
         if (SingleNotePlacement.REPALCE === singleNotePlacement) {
+            console.log('replaceNote: ' + note);
             privateDeregisterEvents(note);
             $('#note-' + note.id).replaceWith(generatedHtml);
         } else if (SingleNotePlacement.NEW === singleNotePlacement) {
@@ -124,7 +125,13 @@
     var privateRerenderSingleNote = function (note) {
         privateDeregisterEvents(note);
         privateDecorateWithState(note);
-        privateRenderSingleNote(note, SingleNotePlacement.REPALCE);
+        var filterName = sortFilterRepository.getFilter().attribute;
+
+        if (filterName !== 'isFinished' && note.isFinished) {
+            privateRenderRemoveSingleNote(note.id);
+        } else {
+            privateRenderSingleNote(note, SingleNotePlacement.REPALCE);
+        }
         privateRegisterNoteButtonEvents(note);
     };
 
@@ -134,7 +141,7 @@
      * @param id the note to be removed.
      */
     var privateRenderRemoveSingleNote = function (id) {
-
+        console.log('remove id:' + id);
         var element = $('#note-' + id);
         element.hide('fast', function () {
             element.remove();
@@ -373,6 +380,7 @@
      * @param id the id of the new node
      */
     var publicOnExternalNoteCreation = function (id) {
+        console.log('create Note from external with id: ' + id);
         notesRepository.getNote(id, function (err, note) {
             // already present?
             if ($('#note-' + id).length === 0) {
@@ -389,6 +397,7 @@
      * @param id
      */
     var publicOnExternalNoteUpdate = function (id) {
+        console.log('update Note from external with id: ' + id);
         if (privateIsInEditMode(id)) {
             // TODO implement. At the moment: just replace
         }
@@ -407,6 +416,7 @@
      * @param id the id
      */
     var publicOnExternalNoteDelete = function (id) {
+        console.log('delete Note from external with id: ' + id);
         if (privateIsInEditMode(id)) {
             // TODO implement. At the moment: just delete
         }
