@@ -8,40 +8,40 @@
     //Sort Direction Enum
     const SortDirection = {
         ASC: 'asc',
-        DESC: 'desc',
-        NONE: 'none'
+        DESC: 'desc'
     };
 
-    // TODO: Documentation
-
+    /**
+     * Performe Event if sortButton is clicked
+     * - update sortConfiguration
+     * - trigger updateButtons (gui)
+     * - trigger new Search
+     * @param event
+     */
     var privatePerformSortButtonClick = function (event) {
+        //update sortConfiguration
         var sortConfiguration = sortFilterRepository.getSort();
         var target = event.target;
         var sortAttribute = target.getAttribute('data-sort-name');
 
-        // If the current sort attribute is defined
-        if (sortConfiguration.attribute === sortAttribute) {
-            if (sortConfiguration.direction === SortDirection.ASC) {
-                sortConfiguration.direction = SortDirection.DESC;
-                target.className = 'sort-button sort-active sort-desc';
-            } else if (sortConfiguration.direction === SortDirection.DESC) {
-                sortConfiguration.direction = SortDirection.NONE;
-                target.className = 'sort-button sort-inactive sort-asc';
-            } else {
-                sortConfiguration.direction = SortDirection.ASC;
-                target.className = 'sort-button sort-active sort-asc';
-            }
-        } else {
-            sortConfiguration.direction = SortDirection.ASC;
+        if (sortConfiguration.attribute !== sortAttribute) {
+            //first Click on Button (activate)
             sortConfiguration.attribute = sortAttribute;
-            target.className = 'sort-button sort-active sort-asc';
+            sortConfiguration.direction = SortDirection.ASC;
+        } else {
+            if (sortConfiguration.direction === SortDirection.ASC) {
+                //second Click on Button (change direction)
+                sortConfiguration.direction = SortDirection.DESC;
+            } else {
+                // last click on Button (deactivate)
+                sortConfiguration.attribute = undefined;
+                sortConfiguration.direction = SortDirection.ASC;
+            }
         }
-
-        // all others: reset
-        $('.sort-button').not(target).attr('class', 'sort-button sort-inactive sort-asc');
-
-        // save state
         sortFilterRepository.setSort(sortConfiguration);
+
+        //trigger updateButton
+        privateUpdateSortButtonStates(sortConfiguration);
 
         // trigger new search
         notesController.reloadNotes();
@@ -73,6 +73,9 @@
         notesController.reloadNotes();
     };
 
+    /**
+     * Function for register all Events for sort- and filterButtons.
+     */
     var privateRegisterEvents = function () {
         $('.sort-button').unbind('click').on('click', function (event) {
             privatePerformSortButtonClick(event);
@@ -83,12 +86,21 @@
         });
     };
 
-    var privateInitializeWithPersistedState = function () {
-        var sortConfiguration = sortFilterRepository.getSort();
+    /**
+     * Update state of all sortButtons with given sortCOnfiguration.
+     * @param sortConfiguration
+     */
+    var privateUpdateSortButtonStates = function (sortConfiguration) {
         $('.sort-button').each(function (index, element) {
             privateUpdateSortButtonClass(element, ($(element).data('sortName') == sortConfiguration.attribute), sortConfiguration.direction);
         });
-        var filterConfiguration = sortFilterRepository.getFilter();
+    };
+
+    /**
+     *  Update state of all filterButtons with given filterConfiguration.
+     * @param filterConfiguration
+     */
+    var privateUpdateFilterButtonStates = function (filterConfiguration) {
         $('.filter-button').each(function (index, element) {
             privateUpdateFilterButtonClass(element, $(element).data('filterName') == filterConfiguration.attribute);
         });
@@ -102,8 +114,10 @@
      */
     var privateUpdateSortButtonClass = function (buttonElement, active, sortDirection) {
         var classString = 'sort-button sort-' + (active ? 'active' : 'inactive');
-        if (sortDirection !== null && sortDirection !== undefined) {
+        if (sortDirection !== null && sortDirection !== undefined && active) {
             classString = classString + ' sort-' + sortDirection;
+        }else{
+            classString = classString + ' sort-' + SortDirection.ASC;
         }
         buttonElement.className = classString;
     };
@@ -117,7 +131,15 @@
         buttonElement.className = 'filter-button filter-' + (active ? 'active' : 'inactive');
     };
 
-    privateRegisterEvents();
-    privateInitializeWithPersistedState();
+    /**
+     * Load Button with correct state from LocalRepository and register all Events for the Buttons.
+     */
+    var privateInitButtons = function () {
+        privateUpdateSortButtonStates(sortFilterRepository.getSort());
+        privateUpdateFilterButtonStates(sortFilterRepository.getFilter());
+        privateRegisterEvents();
+    };
+
+    privateInitButtons();
 
 })(jQuery, window.notesnamespace);
