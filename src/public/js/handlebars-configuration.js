@@ -7,7 +7,8 @@
     //Enum with template names
     const TemplatesNames = {
         NOTE_TEMPLATE_NAME: 'note-template',
-        NOTES_TEMPLATE_NAME: 'notes-template'
+        NOTES_TEMPLATE_NAME: 'notes-template',
+        WHITE_SPACE_TEMPLATE :'white-space-tempalte'
     };
 
     Handlebars.getTemplate = function (name) {

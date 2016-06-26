@@ -108,12 +108,12 @@
             $('#note-' + note.id).replaceWith(generatedHtml);
         } else if (SingleNotePlacement.NEW === singleNotePlacement) {
             $('#new-notes').prepend(generatedHtml).show('fast');
-        } else if(SingleNotePlacement.TOP === singleNotePlacement){
+        } else if (SingleNotePlacement.TOP === singleNotePlacement) {
             $('#existing-notes').prepend(generatedHtml).show('fast');
-        }else {
+        } else {
             $('#existing-notes').append(generatedHtml).show('fast');
         }
-        privateRegisterEvents(note);
+        privateRegisterNoteButtonEvents(note);
     };
 
     /**
@@ -125,7 +125,7 @@
         privateDeregisterEvents(note);
         privateDecorateWithState(note);
         privateRenderSingleNote(note, SingleNotePlacement.REPALCE);
-        privateRegisterEvents(note);
+        privateRegisterNoteButtonEvents(note);
     };
 
     /**
@@ -134,6 +134,7 @@
      * @param id the note to be removed.
      */
     var privateRenderRemoveSingleNote = function (id) {
+
         var element = $('#note-' + id);
         element.hide('fast', function () {
             element.remove();
@@ -146,19 +147,38 @@
      * @param notes all notes
      */
     var privateRenderAllNotes = function (notes) {
+        if (notes.length === 0 && Object.keys(localNewNotes).length === 0) {
+            privateRenderWhiteSpaceTemplate();
+            return;
+        }
+
         privateDeregisterEvents();
         notes.forEach(function (note) {
             privateDecorateWithState(note);
         });
         var generatedHtml = Handlebars.getTemplate(namespace.hbsTemplates.NOTES_TEMPLATE_NAME)(notes);
         $('#existing-notes').html(generatedHtml);
-        privateRegisterEvents();
+        privateRegisterNoteButtonEvents();
     };
 
     /**
-     * Function for register all Events.
+     * create big button for beginn with first note.
      */
-    var privateRegisterEvents = function (note) {
+    var privateRenderWhiteSpaceTemplate = function () {
+        console.log('whitespace Mode no Notes found');
+        var bigButtonHtml = Handlebars.getTemplate(namespace.hbsTemplates.WHITE_SPACE_TEMPLATE)();
+        $('#existing-notes').html(bigButtonHtml);
+
+        $('#create-note-whitespace').unbind('click').on('click', function () {
+            privateCreateNote();
+            $('#existing-notes').html('');
+        });
+    };
+
+    /**
+     * Function for register all Events on the Buttons for a single Note.
+     */
+    var privateRegisterNoteButtonEvents = function (note) {
         var prefix = note ? '#note-' + note.id + ' ' : '';
 
         noteButtonFunctions.forEach(function (buttonFunction) {
@@ -230,7 +250,7 @@
                 if (!err) {
                     privateRenderRemoveSingleNote(noteId);
                     delete localNewNotes[noteId];
-                    privateRenderSingleNote(createdNote,SingleNotePlacement.TOP)
+                    privateRenderSingleNote(createdNote, SingleNotePlacement.TOP)
                 }
             });
         } else {
@@ -269,7 +289,7 @@
                 note.isNew = true;
                 note.isEditable = true;
                 privateRenderSingleNote(note, SingleNotePlacement.NEW);
-                privateRegisterEvents(note);
+                privateRegisterNoteButtonEvents(note);
                 localNewNotes[note.id] = note;
             }
         });
@@ -280,14 +300,26 @@
      * @param noteId
      */
     var privateDeleteNote = function (noteId) {
+        var whitespace = $('.notes-entry').length === 1;
+
         if (noteId in localNewNotes) {
+            if (localNewNotes[noteId]) {
+                delete localNewNotes[noteId];
+            }
             privateRenderRemoveSingleNote(noteId);
+
+            if (whitespace) {
+                privateRenderWhiteSpaceTemplate()
+            }
             return;
         }
         notesRepository.deleteNote(noteId, function (err) {
             if (!err) {
                 privateRenderRemoveSingleNote(noteId);
                 privateClearEditModeState(noteId);
+                if (whitespace) {
+                    privateRenderWhiteSpaceTemplate()
+                }
             }
         });
     };

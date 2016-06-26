@@ -302,6 +302,15 @@ button.img-button:before {
 }
 
 /**
+*Big create Note Button if nothing is there.
+*/
+#create-note-whitespace{
+    width: 50%;
+    padding: 2.5em;
+    margin: 10% 25%;
+}
+
+/**
  * Sort and filtering.
  */
 #filter-bar {
