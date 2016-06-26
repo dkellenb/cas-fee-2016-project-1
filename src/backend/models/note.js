@@ -7,6 +7,7 @@ var moment = require('moment');
  */
 class Note {
     constructor(title, content, importance, finishedDate, dueDate) {
+        console.log(dueDate);
         this.title = "" + title;
         this.content = "" + content;
         this.importance = importance > 0 && importance <= 5 ? importance : 3;

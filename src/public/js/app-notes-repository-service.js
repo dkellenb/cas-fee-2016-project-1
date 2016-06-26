@@ -9,16 +9,7 @@
      * @param callback after all notes have been loaded.
      */
     var privateLoadNotes = function (callback) {
-        $.ajax({
-            //dataType: 'json',
-            method: 'GET',
-            url: '/rest/notes/',
-            converters: {
-                "text json": function (data) {
-                    return $.parseJSON(data, true);
-                }
-            }
-        }).done(function (notes) {
+        $.ajax(privateSetUpRequest('GET', 'rest/notes')).done(function (notes) {
             if (notes) {
                 notes.forEach(function (note) {
                     note.id = note._id;
@@ -54,11 +45,7 @@
      * @param callback success callback
      */
     var publicGetNote = function (id, callback) {
-        $.ajax({
-            dataType: 'json',
-            method: 'GET',
-            url: '/rest/notes/' + id + '/'
-        }).done(function (note) {
+        $.ajax(privateSetUpRequest('GET', '/rest/notes/' + id + '/')).done(function (note) {
             note.id = note._id;
             callback(undefined, note);
         }).fail(function (jqxhr, textStatus, error) {
@@ -75,12 +62,7 @@
      * @param callback success callback
      */
     var publicSaveNote = function (note, callback) {
-        $.ajax({
-            dataType: 'json',
-            method: 'PUT',
-            url: '/rest/notes/' + note.id + '/',
-            data: note
-        }).done(function (note) {
+        $.ajax(privateSetUpRequest('PUT', '/rest/notes/' + note.id + '/', note)).done(function (note) {
             callback(undefined, note);
         }).fail(function (jqxhr, textStatus, error) {
             var err = textStatus + ", " + error;
@@ -96,11 +78,7 @@
      * @param callback the callback executed after delete
      */
     var publicDeleteNote = function (id, callback) {
-        $.ajax({
-            dataType: 'json',
-            method: 'DELETE',
-            url: '/rest/notes/' + id + '/'
-        }).done(function (note) {
+        $.ajax(privateSetUpRequest('DELETE', '/rest/notes/' + id + '/')).done(function (note) {
             callback(undefined, note);
         }).fail(function (jqxhr, textStatus, error) {
             var err = textStatus + ", " + error;
@@ -115,12 +93,7 @@
      * @param callback after note has been created
      */
     var publicCreateNote = function (note, callback) {
-        $.ajax({
-            dataType: 'json',
-            method: 'POST',
-            url: '/rest/notes/',
-            data: note
-        }).done(function (note) {
+        $.ajax(privateSetUpRequest('POST', '/rest/notes/', note)).done(function (note) {
             note.id = note._id;
             callback(undefined, note);
         }).fail(function (jqxhr, textStatus, error) {
@@ -136,11 +109,7 @@
      * @param callback success callback
      */
     var publicGetNoteModel = function (callback) {
-        $.ajax({
-            dataType: 'json',
-            method: 'GET',
-            url: '/rest/notes/model/'
-        }).done(function (note) {
+        $.ajax(privateSetUpRequest('GET', '/rest/notes/model/')).done(function (note) {
             note.id = note._id;
             callback(undefined, note);
         }).fail(function (jqxhr, textStatus, error) {
@@ -149,6 +118,35 @@
             callback(err);
         });
     };
+
+    /**
+     * Methode for central setUp a Request with all information
+     * @param methodeType GET POST PUT DELETE etc
+     * @param url url for request
+     * @param data data if presend
+     * @returns RequestInforamtion Object.
+     */
+    var privateSetUpRequest = function (methodeType, url, data) {
+        var requestInfo = {
+            method: methodeType,
+            url: url,
+            converters: {
+                "text json": function (data) {
+                    return $.parseJSON(data, true);
+                }
+            }
+        };
+        if (data) {
+            requestInfo.data = data;
+        }
+        if (namespace.socket) {
+            requestInfo.beforeSend = function (request) {
+                request.setRequestHeader("X-Note-Socket-ID", namespace.socket.id);
+            }
+        }
+        return requestInfo;
+    };
+
 
     namespace.notesRepository = {
         getNotes: publicGetNotes,

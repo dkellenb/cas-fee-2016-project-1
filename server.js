@@ -21,7 +21,7 @@ app.use(express.static(__dirname + '/src/public'));
 websocket.on('connection', function (socket) {
     console.log(new Date() + ' user connected id:' + socket.id);
     socket.on('disconnect', function () {
-        console.log('user disconnected');
+        console.log('user disconnected id:' + socket.id);
     });
 });
 

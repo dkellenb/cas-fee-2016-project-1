@@ -93,7 +93,8 @@
     const SingleNotePlacement = {
         REPALCE: 'replace',
         NEW: 'new',
-        APPEND: 'append'
+        APPEND: 'append',
+        TOP: 'top'
     };
     /**
      * Render Single Note in Note-Table
@@ -107,7 +108,9 @@
             $('#note-' + note.id).replaceWith(generatedHtml);
         } else if (SingleNotePlacement.NEW === singleNotePlacement) {
             $('#new-notes').prepend(generatedHtml).show('fast');
-        } else {
+        } else if(SingleNotePlacement.TOP === singleNotePlacement){
+            $('#existing-notes').prepend(generatedHtml).show('fast');
+        }else {
             $('#existing-notes').append(generatedHtml).show('fast');
         }
         privateRegisterEvents(note);
@@ -199,13 +202,12 @@
         note.title = $('#title-' + noteId).val();
 
         var dueDate = $('#due-date-' + noteId).val();
-        console.log('datumformat' + dueDate);
         if (dueDate) {
             var parsedDate;
             if (dueDate.match(/\d{2}\.\d{2}\.\d{4}/g)) {
                 parsedDate = moment(dueDate, "DD.MM.YYYY").toDate();
             } else {
-                parsedDate = moment(dueDate).toDate();
+                parsedDate = moment(dueDate, "YYYY-DD-MM").toDate();
             }
             note.dueDate = parsedDate;
         } else {
@@ -228,7 +230,7 @@
                 if (!err) {
                     privateRenderRemoveSingleNote(noteId);
                     delete localNewNotes[noteId];
-                    // it will be added with socket events.
+                    privateRenderSingleNote(createdNote,SingleNotePlacement.TOP)
                 }
             });
         } else {
