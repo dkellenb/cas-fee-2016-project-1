@@ -267,7 +267,7 @@
                     privateSetNodeToEditMode(note, false);
                     notesRepository.saveNote(note, function (err, savedNote) {
                         if (!err) {
-                            // nothing needed to be done. will be updated with socket events
+                            privateRerenderSingleNote(note);
                         }
                     });
                 }
