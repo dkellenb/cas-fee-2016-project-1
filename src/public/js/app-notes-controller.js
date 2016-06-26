@@ -319,7 +319,7 @@
             if (propertyA == null || propertyA == undefined) return -1;
             if (propertyA === propertyB) return 0;
 
-            var factor = (('asc' === direction) ? 1 : -1);
+            var factor = (('asc' === direction) ? -1 : 1);
             if (typeof propertyA == "number") {
                 return factor * (propertyA - propertyB);
             } else {
