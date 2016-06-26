@@ -102,6 +102,12 @@
      * @param singleNotePlacement -> ENUM SingleNotePlacement
      */
     var privateRenderSingleNote = function (note, singleNotePlacement) {
+        // Check if note has to be shown.
+
+        if (sortFilterRepository.getFilter().attribute !== 'isFinished' && note.isFinished) {
+            return privateRenderRemoveSingleNote(note.id);
+        }
+
         var generatedHtml = Handlebars.getTemplate(namespace.hbsTemplates.NOTE_TEMPLATE_NAME)(note);
         if (SingleNotePlacement.REPALCE === singleNotePlacement) {
             console.log('replaceNote: ' + note);
@@ -126,12 +132,7 @@
         privateDeregisterEvents(note);
         privateDecorateWithState(note);
         var filterName = sortFilterRepository.getFilter().attribute;
-
-        if (filterName !== 'isFinished' && note.isFinished) {
-            privateRenderRemoveSingleNote(note.id);
-        } else {
-            privateRenderSingleNote(note, SingleNotePlacement.REPALCE);
-        }
+        privateRenderSingleNote(note, SingleNotePlacement.REPALCE);
         privateRegisterNoteButtonEvents(note);
     };
 
