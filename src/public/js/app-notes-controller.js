@@ -208,6 +208,8 @@
                 parsedDate = moment(dueDate).toDate();
             }
             note.dueDate = parsedDate;
+        } else {
+            note.dueDate = null;
         }
 
         note.importance = $("input:radio[name='importance-" + noteId + "']:checked").val();
