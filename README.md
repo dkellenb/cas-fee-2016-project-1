@@ -33,7 +33,7 @@ This repository contains the project work of the two students [Daniel Kellenberg
   * Sharing new notes.
   * Sharing every edit and update.
   * Deleted notes will be removed by your friends.
-*__Works with IOs and Android Browsers on your mobile.__
+* __Works with IOs and Android Browsers on your mobile.__
   * You can even use all the share functions like with your friends
 * __Change color to your favorite style__
   * Your selection get stored in the LocalStorage and will be persisted between visits
