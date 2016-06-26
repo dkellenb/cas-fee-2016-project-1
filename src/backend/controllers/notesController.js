@@ -1,7 +1,7 @@
 'use strict';
 
 var notesRepository = require('../services/notesRepository');
-var moment = require('momentjs');
+var moment = require('moment');
 var socket = require('../services/socketProvider').get();
 var Note = require('../models/note');
 
@@ -18,6 +18,9 @@ function publicGetNotes(req, res) {
             res.statusCode = 500;
             return res.send('An internal server error occured. Please contact sys admin or consult the log file');
         }
+        notes.forEach(function (note) {
+            privateEnhanceNoteObject(note);
+        });
         res.json(notes);
     });
 }
@@ -43,13 +46,13 @@ function publicGetNote(req, res) {
             res.statusCode = 404;
             return res.send('Note with id "' + res.params.id + '" not found');
         }
-        return res.json(note);
+        return res.json(privateEnhanceNoteObject(note));
     });
 }
 
 function publicCreateModel(req, res) {
     var note = new Note("", "", 3, false, null);
-    return res.json(note);
+    return res.json(privateEnhanceNoteObject(note));
 }
 
 /**
@@ -71,11 +74,11 @@ function publicCreateNote(req, res) {
 
         // push notification
         if (socket) {
-            socket.emit('created', { id: newNote._id });
+            socket.emit('created', {id: newNote._id});
         }
 
         // return the new note
-        return res.json(newNote);
+        return res.json(privateEnhanceNoteObject(newNote));
     });
 }
 
@@ -126,11 +129,11 @@ function publicUpdateNote(req, res) {
 
             // push notification
             if (socket) {
-                socket.emit('updated', { id: req.params.id });
+                socket.emit('updated', {id: req.params.id});
             }
 
             // return updated note
-            return res.json(updatedNote);
+            return res.json(privateEnhanceNoteObject(updatedNote));
         });
     });
 }
@@ -159,11 +162,30 @@ function publicDeleteNote(req, res) {
 
         // push notification
         if (socket) {
-            socket.emit('deleted', { id: req.params.id });
+            socket.emit('deleted', {id: req.params.id});
         }
 
         return res.send('{ "deleted": "true" }');
     });
+}
+
+/**
+ * Function for get the value types back to date and number.
+ * @param note
+ * @returns with type enhanced Note
+ */
+function privateEnhanceNoteObject(note) {
+    //note.dueDate = privateParseDateString(note.dueDate);
+    //note.createdDate = privateParseDateString(note.createdDate);
+    //note.finishedDate = privateParseDateString(note.finishedDate);
+    return note;
+}
+
+function privateParseDateString(dateString) {
+    if (dateString !== undefined && dateString !== null && dateString) {
+        return new Date(dateString.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"));
+    }
+    return null;
 }
 
 module.exports = {

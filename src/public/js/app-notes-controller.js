@@ -159,7 +159,6 @@
         var prefix = note ? '#note-' + note.id + ' ' : '';
 
         noteButtonFunctions.forEach(function (buttonFunction) {
-            console.log(prefix + buttonFunction.buttonSelector);
             $(prefix + buttonFunction.buttonSelector).unbind('click').on('click', buttonFunction.callBack);
         });
     };
@@ -198,7 +197,13 @@
     var privateUpdateNoteFromForm = function (note, noteId) {
         note.content = $('#description-' + noteId).val();
         note.title = $('#title-' + noteId).val();
-        note.dueDate = $('#due-date-' + noteId).val();
+
+        var dueDate = $('#due-date-' + noteId).val();
+        console.log('datumformat' + dueDate);
+        if (dueDate) {
+            note.dueDate = dueDate;
+        }
+
         note.importance = $("input:radio[name='importance-" + noteId + "']:checked").val();
         note.isFinished = $("#notes-entry-" + noteId + "-finished").is(':checked');
     };
@@ -303,12 +308,22 @@
      * @param direction 'asc' or 'desc'
      */
     var sortByProperty = function (property, direction) {
+        console.log('sortParam:' + property + 'direction: ' + direction);
         return function (a, b) {
-            var factor = 'asc' === direction ? 1 : -1;
-            if (typeof a[property] == "number") {
-                return (a[property] - b[property]);
+            var propertyA = a[property];
+            var propertyB = b[property];
+
+            //  console.log('sortParam:' + property + ' A: ' + propertyA + ' B: ' + propertyB);
+
+            if (propertyB == null || propertyB == undefined) return 0;
+            if (propertyA == null || propertyA == undefined) return -1;
+            if (propertyA === propertyB) return 0;
+
+            var factor = (('asc' === direction) ? 1 : -1);
+            if (typeof propertyA == "number") {
+                return factor * (propertyA - propertyB);
             } else {
-                return ((a[property] < b[property]) ? factor * -1 : ((a[property] > b[property]) ? factor : 0));
+                return factor * ((propertyA < propertyB) ? 1 : -1);
             }
         };
     };
@@ -366,6 +381,7 @@
         var sortConfiguration = sortFilterRepository.getSort();
         var filterConfiguration = sortFilterRepository.getFilter();
         notesRepository.getNotes(function (err, notes) {
+
             if (!err) {
                 // filter
                 if (filterConfiguration.attribute !== 'isFinished') {
@@ -375,7 +391,7 @@
                 }
 
                 // sort
-                if (sortConfiguration.direction === 'asc' || sortConfiguration.direction === 'desc') {
+                if (sortConfiguration.attribute !== undefined && sortConfiguration.attribute !== null) {
                     notes = notes.sort(sortByProperty(sortConfiguration.attribute, sortConfiguration.direction));
                 }
 

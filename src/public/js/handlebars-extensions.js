@@ -8,7 +8,7 @@
  * Date format extension.
  */
 (function (Handlebars) {
-    var DateFormats = {
+    const DateFormats = {
         short: 'DD.MM.YYYY',
         long: 'dddd DD.MM.YYYY HH:mm',
         input: 'YYYY-MM-DD'

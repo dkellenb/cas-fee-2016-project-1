@@ -1,6 +1,6 @@
 'use strict';
 
-var moment = require('momentjs');
+var moment = require('moment');
 
 /**
  * Class Note.
@@ -10,10 +10,10 @@ class Note {
         this.title = "" + title;
         this.content = "" + content;
         this.importance = importance > 0 && importance <= 5 ? importance : 3;
-        this.finishedDate = finishedDate ? moment(finishedDate).format('YYYY-MM-DD') : null;
-        this.createdDate = moment().format('YYYY-MM-DD');
+        this.finishedDate = finishedDate ? moment(finishedDate).toDate() : null;
+        this.createdDate = moment().toDate();
         this.isFinished = this.finishedDate !== null;
-        this.dueDate = dueDate ? moment(dueDate).format('YYYY-MM-DD') : null;
+        this.dueDate = dueDate ? moment(dueDate).toDate() : null;
     }
 }
 

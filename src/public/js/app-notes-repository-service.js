@@ -10,19 +10,24 @@
      */
     var privateLoadNotes = function (callback) {
         $.ajax({
-            dataType: 'json',
+            //dataType: 'json',
             method: 'GET',
-            url: '/rest/notes/'
-        }).done(function(notes) {
+            url: '/rest/notes/',
+            converters: {
+                "text json": function (data) {
+                    return $.parseJSON(data, true);
+                }
+            }
+        }).done(function (notes) {
             if (notes) {
                 notes.forEach(function (note) {
                     note.id = note._id;
                 })
             }
             callback(undefined, notes);
-        }).fail(function(jqxhr, textStatus, error) {
+        }).fail(function (jqxhr, textStatus, error) {
             var err = textStatus + ", " + error;
-            console.log('Load notes failed: ' + err );
+            console.log('Load notes failed: ' + err);
             callback(err);
         });
     };
@@ -53,12 +58,12 @@
             dataType: 'json',
             method: 'GET',
             url: '/rest/notes/' + id + '/'
-        }).done(function(note) {
+        }).done(function (note) {
             note.id = note._id;
             callback(undefined, note);
-        }).fail(function(jqxhr, textStatus, error) {
+        }).fail(function (jqxhr, textStatus, error) {
             var err = textStatus + ", " + error;
-            console.log('Load note for id "' + id + '" failed: ' + err );
+            console.log('Load note for id "' + id + '" failed: ' + err);
             callback(err);
         });
     };
@@ -75,11 +80,11 @@
             method: 'PUT',
             url: '/rest/notes/' + note.id + '/',
             data: note
-        }).done(function(note) {
+        }).done(function (note) {
             callback(undefined, note);
-        }).fail(function(jqxhr, textStatus, error) {
+        }).fail(function (jqxhr, textStatus, error) {
             var err = textStatus + ", " + error;
-            console.log('Save note for id "' + id + '" failed: ' + err );
+            console.log('Save note for id "' + id + '" failed: ' + err);
             callback(err);
         });
     };
@@ -95,11 +100,11 @@
             dataType: 'json',
             method: 'DELETE',
             url: '/rest/notes/' + id + '/'
-        }).done(function(note) {
+        }).done(function (note) {
             callback(undefined, note);
-        }).fail(function(jqxhr, textStatus, error) {
+        }).fail(function (jqxhr, textStatus, error) {
             var err = textStatus + ", " + error;
-            console.log('Save note for id "' + id + '" failed: ' + err );
+            console.log('Save note for id "' + id + '" failed: ' + err);
             callback(err);
         });
     };
@@ -109,18 +114,18 @@
      * @param note the note to be created
      * @param callback after note has been created
      */
-    var publicCreateNote = function(note, callback) {
+    var publicCreateNote = function (note, callback) {
         $.ajax({
             dataType: 'json',
             method: 'POST',
             url: '/rest/notes/',
             data: note
-        }).done(function(note) {
+        }).done(function (note) {
             note.id = note._id;
             callback(undefined, note);
-        }).fail(function(jqxhr, textStatus, error) {
+        }).fail(function (jqxhr, textStatus, error) {
             var err = textStatus + ", " + error;
-            console.log('Load notes failed: ' + err );
+            console.log('Load notes failed: ' + err);
             callback(err);
         });
     };
@@ -135,12 +140,12 @@
             dataType: 'json',
             method: 'GET',
             url: '/rest/notes/model/'
-        }).done(function(note) {
+        }).done(function (note) {
             note.id = note._id;
             callback(undefined, note);
-        }).fail(function(jqxhr, textStatus, error) {
+        }).fail(function (jqxhr, textStatus, error) {
             var err = textStatus + ", " + error;
-            console.log('Load note for id "' + id + '" failed: ' + err );
+            console.log('Load note for id "' + id + '" failed: ' + err);
             callback(err);
         });
     };
