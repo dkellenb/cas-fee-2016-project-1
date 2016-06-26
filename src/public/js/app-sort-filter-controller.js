@@ -7,9 +7,9 @@
 
     //Sort Direction Enum
     const SortDirection = {
-        ASC:'asc',
-        DESC:'desc',
-        NONE:'none'
+        ASC: 'asc',
+        DESC: 'desc',
+        NONE: 'none'
     };
 
     // TODO: Documentation
@@ -83,29 +83,39 @@
         });
     };
 
-    var privateInitializeWithPersistedState = function() {
+    var privateInitializeWithPersistedState = function () {
         var sortConfiguration = sortFilterRepository.getSort();
         $('.sort-button').each(function (index, element) {
-            if ($(this).data('sortName') == sortConfiguration.attribute) {
-                if (sortConfiguration.direction == SortDirection.ASC) {
-                    element.className = 'sort-button sort-active sort-asc';
-                } else if (sortConfiguration.direction == SortDirection.DESC) {
-                    element.className = 'sort-button sort-active sort-desc';
-                } else {
-                    element.className = 'sort-button sort-inactive';
-                }
-            }
+            privateUpdateSortButtonClass(element, ($(element).data('sortName') == sortConfiguration.attribute), sortConfiguration.direction);
         });
         var filterConfiguration = sortFilterRepository.getFilter();
         $('.filter-button').each(function (index, element) {
-            if ($(this).data('filterName') == filterConfiguration.attribute) {
-                element.className = 'filter-button filter-active';
-            } else {
-                element.className = 'filter-button filter-inactive';
-            }
+            privateUpdateFilterButtonClass(element, $(element).data('filterName') == filterConfiguration.attribute);
         });
     };
-    
+
+    /**
+     * update the classAttribute on a sortButton element
+     * @param buttonElement element of sortButton
+     * @param active
+     * @param sortDirection
+     */
+    var privateUpdateSortButtonClass = function (buttonElement, active, sortDirection) {
+        var classString = 'sort-button sort-' + (active ? 'active' : 'inactive');
+        if (sortDirection !== null && sortDirection !== undefined) {
+            classString = classString + ' sort-' + sortDirection;
+        }
+        buttonElement.className = classString;
+    };
+
+    /**
+     * update the classAttribute on a filterButton element
+     * @param buttonElement element of filterButton
+     * @param active
+     */
+    var privateUpdateFilterButtonClass = function (buttonElement, active) {
+        buttonElement.className = 'filter-button filter-' + (active ? 'active' : 'inactive');
+    };
 
     privateRegisterEvents();
     privateInitializeWithPersistedState();
