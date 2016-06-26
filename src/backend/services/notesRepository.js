@@ -1,5 +1,10 @@
 'use strict';
 
+/**
+ * Simple repository capable of storing notes. Supports CRUD.
+ */
+
+// Dependencies
 var Datastore = require('nedb');
 var db = new Datastore({
     filename: './data/notes.db',

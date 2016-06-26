@@ -4,13 +4,18 @@
 
 (function (Handlebars, $, namespace) {
 
-    //Enum with template names
+    // Enum with template names
     const TemplatesNames = {
         NOTE_TEMPLATE_NAME: 'note-template',
         NOTES_TEMPLATE_NAME: 'notes-template',
-        WHITE_SPACE_TEMPLATE :'white-space-tempalte'
+        WHITE_SPACE_TEMPLATE: 'white-space-template'
     };
 
+    /**
+     * Reading a given template synchronously.
+     *
+     * @param name the template to be read
+     */
     Handlebars.getTemplate = function (name) {
         if (Handlebars.templates === undefined || Handlebars.templates[name] === undefined) {
             $.ajax({

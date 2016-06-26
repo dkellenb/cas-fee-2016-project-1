@@ -3,7 +3,7 @@
 var moment = require('moment');
 
 /**
- * Class Note.
+ * Note domain model.
  */
 class Note {
     constructor(title, content, importance, finishedDate, dueDate) {

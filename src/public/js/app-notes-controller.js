@@ -214,7 +214,6 @@
             if (!err) {
                 privateSetNodeToEditMode(note, true);
                 privateRerenderSingleNote(note);
-                // TODO: window.scrollTo ...
             }
         });
     };
@@ -394,13 +393,12 @@
      * If the node has be update externally, then we have couple of scenarios:
      * - no edit mode: just update
      * - edit mode: notify the user. offer to reload or the keep the current state.
-     * TODO (implement the notification)
      * @param id
      */
     var publicOnExternalNoteUpdate = function (id) {
         console.log('update Note from external with id: ' + id);
         if (privateIsInEditMode(id)) {
-            // TODO implement. At the moment: just replace
+            // TODO: Here you may add a special logic for handling delta updates from other users while your are still in edit mode
         }
         notesRepository.getNote(id, function (err, note) {
             if (!err) {
@@ -413,13 +411,12 @@
      * If the node has be deleted externaly, then we have couple of scenarios:
      * - no edit mode: just delete
      * - edit mode: notify the user. offer to delete or to recreate with the same content
-     * TODO (implement notification and handling)
      * @param id the id
      */
     var publicOnExternalNoteDelete = function (id) {
         console.log('delete Note from external with id: ' + id);
         if (privateIsInEditMode(id)) {
-            // TODO implement. At the moment: just delete
+            // TODO: Here you may add a special logic for handling deletes from other users while you are still in edit mode
         }
         privateRenderRemoveSingleNote(id);
         privateClearEditModeState(id);

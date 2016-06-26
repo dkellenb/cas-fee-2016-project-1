@@ -1,5 +1,16 @@
 'use strict';
 
+/**
+ * Notes controller implements REST methods for all operations behind '/notes/' path. Supporting:
+ * - get all notes
+ * - get single note
+ * - get note model
+ * - create new note
+ * - update note
+ * - delete note
+ */
+
+// Dependencies
 var notesRepository = require('../services/notesRepository');
 var moment = require('moment');
 var socket = require('../services/socketProvider');

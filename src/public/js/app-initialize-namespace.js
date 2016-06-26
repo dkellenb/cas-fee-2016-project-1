@@ -1,5 +1,4 @@
 /**
- * Created by dkellenb on 22.06.2016.
+ * Unique namespace definition for the application.
  */
-
 window.notesnamespace = {};

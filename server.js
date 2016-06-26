@@ -27,7 +27,7 @@ websocket.on('connection', function (socket) {
 
 // Setup http listener
 const port = 3001;
-const host = '0.0.0.0'; //changed so it can get accessed from external ip adress(real mobile test)
+const host = '0.0.0.0'; //changed so it can get accessed from external ip address(real mobile test)
 http.listen(port, host, () => {
     console.log(`Server running at http://${host}:${port}/`);
 });
