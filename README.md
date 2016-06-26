@@ -43,7 +43,7 @@ This repository contains the project work of the two students [Daniel Kellenberg
   * Sharing every edit and update
   * Deleted notes by your friend will be removed immediately also on your screen
 * __Works with IOs and Android Browsers on your mobile__
-  * You can even use all the share functions with your friends
+  * You can even use all the share functions with your friends on your mobile device
 * __Change color to your favorite style__
   * Your selection get stored in the LocalStorage and will be persisted between visits
   * Choose between 4 color sets
@@ -60,6 +60,7 @@ This repository contains the project work of the two students [Daniel Kellenberg
 * There is a jquery-extension which allows the ajax-json-parser to identify date objects and convert them back to date objects instead of strings.
 * UUID is used for creating unique IDs for all notes
 * Everything in the application is set to the application namespace, there are no global definitions.
+* Responsive layout based on flex structure
 
 ### REST Api
 
