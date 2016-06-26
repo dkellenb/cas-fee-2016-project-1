@@ -71,7 +71,7 @@
         }
         sortFilterRepository.setFilter(filterConfiguration);
 
-        //triger updateFilterButtons
+        //trigger updateFilterButtons
         privateUpdateFilterButtonStates(filterConfiguration);
 
         // trigger new search
