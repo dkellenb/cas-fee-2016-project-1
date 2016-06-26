@@ -30,15 +30,15 @@
         if (sortConfiguration.attribute !== sortAttribute) {
             //first Click on Button (activate)
             sortConfiguration.attribute = sortAttribute;
-            sortConfiguration.direction = SortDirection.ASC;
+            sortConfiguration.direction = SortDirection.DESC;
         } else {
-            if (sortConfiguration.direction === SortDirection.ASC) {
+            if (sortConfiguration.direction === SortDirection.DESC) {
                 //second Click on Button (change direction)
-                sortConfiguration.direction = SortDirection.DESC;
+                sortConfiguration.direction = SortDirection.ASC;
             } else {
                 // last click on Button (deactivate)
                 sortConfiguration.attribute = undefined;
-                sortConfiguration.direction = SortDirection.ASC;
+                sortConfiguration.direction = SortDirection.DESC;
             }
         }
         sortFilterRepository.setSort(sortConfiguration);
@@ -122,7 +122,7 @@
         if (sortDirection !== null && sortDirection !== undefined && active) {
             classString = classString + ' sort-' + sortDirection;
         } else {
-            classString = classString + ' sort-' + SortDirection.ASC;
+            classString = classString + ' sort-' + SortDirection.DESC;
         }
         buttonElement.className = classString;
     };
