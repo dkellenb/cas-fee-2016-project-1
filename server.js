@@ -10,7 +10,7 @@ var express = require('express'),
 socketProvider = require('./src/backend/services/socketProvider').register(websocket);
 
 // Register json body parser
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 // Setup routing
@@ -19,7 +19,7 @@ app.use(express.static(__dirname + '/src/public'));
 
 // Setup websocket
 websocket.on('connection', function (socket) {
-    console.log(new Date()+' user connected');
+    console.log(new Date() + ' user connected id:' + socket.id);
     socket.on('disconnect', function () {
         console.log('user disconnected');
     });
@@ -28,4 +28,6 @@ websocket.on('connection', function (socket) {
 // Setup http listener
 const port = 3001;
 const host = '0.0.0.0'; //changed so it can get accessed from external ip adress(real mobile test)
-http.listen(port, host, () => {  console.log(`Server running at http://${host}:${port}/`); });
+http.listen(port, host, () => {
+    console.log(`Server running at http://${host}:${port}/`);
+});
