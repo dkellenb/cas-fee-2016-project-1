@@ -7,7 +7,7 @@
 
     //Sort Direction Enum
     const SortDirection = {
-        ASC:'arc',
+        ASC:'asc',
         DESC:'desc',
         NONE:'none'
     };
@@ -85,26 +85,27 @@
 
     var privateInitializeWithPersistedState = function() {
         var sortConfiguration = sortFilterRepository.getSort();
-        $('.sort-button').each(function () {
+        $('.sort-button').each(function (index, element) {
             if ($(this).data('sortName') == sortConfiguration.attribute) {
                 if (sortConfiguration.direction == SortDirection.ASC) {
-                    this.className = 'sort-button sort-active sort-asc';
+                    element.className = 'sort-button sort-active sort-asc';
                 } else if (sortConfiguration.direction == SortDirection.DESC) {
-                    this.className = 'sort-button sort-active sort-desc';
+                    element.className = 'sort-button sort-active sort-desc';
                 } else {
-                    this.className = 'sort-button sort-inactive';
+                    element.className = 'sort-button sort-inactive';
                 }
             }
         });
         var filterConfiguration = sortFilterRepository.getFilter();
-        $('.filter-button').each(function () {
+        $('.filter-button').each(function (index, element) {
             if ($(this).data('filterName') == filterConfiguration.attribute) {
-                this.className = 'filter-button filter-active';
+                element.className = 'filter-button filter-active';
             } else {
-                this.className = 'filter-button filter-inactive';
+                element.className = 'filter-button filter-inactive';
             }
         });
     };
+    
 
     privateRegisterEvents();
     privateInitializeWithPersistedState();
