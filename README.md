@@ -16,7 +16,7 @@ This repository contains the project work of the two students [Daniel Kellenberg
    * Application will know if there are not notes and will show you a big plus-sign for adding a note
   * There is no annoying input validation you can enter what you like the system can handel it.
    * you have a fast feedback if you hit the save button and you can switch back to edit in no time.
-* __All functions you wish like__
+* __All functions you wish__
   * Create note
   * Edit a note
   * Revert a note to his stored state
@@ -29,20 +29,20 @@ This repository contains the project work of the two students [Daniel Kellenberg
   * sort by importance
   * sort by date until job has to be done
   * filter finished notes
-* __Work on the same set with your frind at the same time__
+* __Work on the same set with your friend at the same time__
   * Sharing new notes.
   * Sharing every edit and update.
-  * Deleted notes will be removed by your frinds.
+  * Deleted notes will be removed by your friends.
 *__Works with IOs and Android Browsers on your mobile.__
   * You can even use all the share functions like with your friends
 * __Change color to your favorite style__
   * Your selection get stored in the LocalStorage and will be persisted between visits
-  * Choose beween 4 color sets
+  * Choose between 4 color sets
 * __multi edit and new notes is possible__
   * you can have multiple notes in edit mode. they will stay in edit mode even if you hit the sort or filter buttons
   * you can start with multiple new notes. they will stay at any time at the top of the list and will not be affected by sorting oder filtering.
 
-###Tecnical features
+###Technical features
 * the Application uses a REST-API on a node.js server for storing notes in a nedb.
   *it is possible to send your websocket id through the rest interface. the websocket event will contain your id.
 * Events for create, update and delete of notes are shared by a websocket with the id of the note and the socketId if present. The client can then decide what he want to to with it.
