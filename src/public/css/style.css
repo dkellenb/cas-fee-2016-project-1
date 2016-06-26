@@ -6,7 +6,7 @@
 
 /* Browser reset. */
 *, *:before, *:after {
-    padding:0;
+    padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
@@ -78,6 +78,7 @@ body {
     --focus-border-color: var(--focus-border-color-red);
     --focus-border-shadow: var(--focus-border-shaddow-brown);
 }
+
 .blue-style {
     --main-color-dark: var(--main-color-dark-blue);
     --main-color-darker: var(--main-color-darker-blue);
@@ -89,6 +90,7 @@ body {
     --focus-border-color: var(--focus-border-color-blue);
     --focus-border-shadow: var(--focus-border-shaddow-blue);
 }
+
 .green-style {
     --main-color-dark: var(--main-color-dark-green);
     --main-color-darker: var(--main-color-darker-green);
@@ -100,6 +102,7 @@ body {
     --focus-border-color: var(--focus-border-color-green);
     --focus-border-shadow: var(--focus-border-shaddow-green);
 }
+
 .red-style {
     --main-color-dark: var(--main-color-dark-red);
     --main-color-darker: var(--main-color-darker-red);
@@ -118,6 +121,7 @@ body {
         --full-input-width: 100%;
     }
 }
+
 @media all and (min-width: 1024px) {
     body {
         --full-input-width: 400px;
@@ -133,13 +137,16 @@ body, div, p, span, input, textarea, select, button {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 1em;
 }
+
 .sr-only { /* screen reader only. */
     display: none;
 }
+
 .push-left {
     float: left;
     margin-right: var(--default-space);
 }
+
 .push-right {
     float: right;
     margin-left: var(--default-space);
@@ -147,9 +154,14 @@ body, div, p, span, input, textarea, select, button {
 
 /* Button elements. */
 @keyframes img-button-color-change-in {
-    from { background-color: var(--button-background) }
-    to { background-color: var(--button-background-active) }
+    from {
+        background-color: var(--button-background)
+    }
+    to {
+        background-color: var(--button-background-active)
+    }
 }
+
 button.img-button, button.sort-button, button.filter-button {
     transition: all 0.1s ease-in;
     background-color: var(--button-background);
@@ -157,42 +169,51 @@ button.img-button, button.sort-button, button.filter-button {
     cursor: pointer;
     box-sizing: border-box;
 }
+
 button.img-button:hover, button.sort-button:hover, button.filter-button:hover {
     border: 2px solid var(--focus-border-color);
     background-color: var(--button-background-active);
     box-shadow: var(--focus-border-shadow);
 }
+
 button.img-button {
     font-size: 1.3em;
     height: 1.5em;
     width: 1.5em;
     text-align: center;
 }
+
 button.img-button:before {
     font-size: 0.8em;
 }
+
 .img-button-add:before {
     content: "+";
 }
+
 .img-button-save:before {
     content: "\2713  ";
 }
+
 .img-button-delete:before {
     content: "\2715  ";
 }
+
 .img-button-edit:before {
     content: "\270e  ";
 }
+
 .img-button-revert:before {
     content: "\21B6  ";
 }
+
 .img-button-checked:before {
     content: "\2611";
 }
+
 .img-button-unchecked:before {
     content: "\2610";
 }
-
 
 /**
  * Navigation.
@@ -202,44 +223,55 @@ button.img-button:before {
     background: var(--main-color-darker);
     color: #fff;
 }
+
 .nav:after {
     clear: both;
     content: " ";
     display: table;
 }
+
 .nav .title {
     float: left;
     font-size: 1.5em;
     font-weight: bold;
 }
+
 .nav .actions {
     float: right;
 }
+
 .nav .actions > div, .nav .actions > a {
     float: left;
 }
+
 .nav .actions > div, .nav .actions > button {
     margin-left: var(--default-space);
 }
+
 .change-color-box {
     line-height: 0.5em;
     width: 2.1em;
 }
+
 .change-color-box button {
     display: table-cell;
     font-size: 0.6em;
     line-height: 0.6em;
     margin-bottom: var(--default-space);
 }
+
 #change-style-blue {
     background-color: var(--main-color-default-blue);
 }
+
 #change-style-brown {
     background-color: var(--main-color-default-brown)
 }
+
 #change-style-green {
     background-color: var(--main-color-default-green)
 }
+
 #change-style-red {
     background-color: var(--main-color-default-red)
 }
@@ -258,9 +290,11 @@ button.img-button:before {
 #wrapper {
     margin: 0.5em;
 }
+
 .block {
     margin-bottom: 10px;
 }
+
 .block:after {
     clear: both;
     content: " ";
@@ -273,30 +307,38 @@ button.img-button:before {
 #filter-bar {
     line-height: 2em;
 }
+
 .sort-button, .filter-button {
     font-size: 0.7em;
     padding: 0.2em;
     height: 2em;
     width: 7em;
 }
+
 .sort-button:before, .filter-button:before {
     font-size: 0.7em;
 }
+
 .sort-inactive.sort-asc:before {
     content: "\25B3  ";
 }
+
 .sort-inactive.sort-desc:before {
     content: "\25BD  ";
 }
+
 .sort-active.sort-asc:before {
     content: "\25B2  ";
 }
+
 .sort-active.sort-desc:before {
     content: "\25BC  ";
 }
+
 .filter-active:before {
     content: "\2611  ";
 }
+
 .filter-inactive:before {
     content: "\2610  ";
 }
@@ -309,18 +351,19 @@ button.img-button:before {
     padding: 0.2em;
     font-size: 1em;
 }
+
 input.input-field {
     height: 1.5em;
 }
+
 .input-field:focus, .input-field:hover {
     border-color: var(--focus-border-color);
     box-shadow: var(--focus-border-shadow);
 }
+
 .input-field-full {
     width: var(--default-input-full-width);
 }
-
-
 
 .button {
     border: 0.1em solid #aaa;
@@ -332,11 +375,11 @@ input.input-field {
     color: #000;
     cursor: pointer;
 }
+
 .button:hover {
     margin: 0;
     border: 0.2em solid #ba6700;
 }
-
 
 /** Notes. */
 .notes-entry {
@@ -346,41 +389,76 @@ input.input-field {
     background-color: var(--main-color-light);
     padding: 0.25em;
 }
+
 .notes-entry-cell {
     flex: 1 100%;
     padding: 0.25em;
     box-sizing: border-box;
- }
+}
+
 .notes-entry-title {
     font-weight: bold;
 }
+
 .notes-entry-date, .notes-entry-importance, .notes-entry-finished, .notes-entry-action {
     flex: 1 0 auto;
     flex-basis: 45%;
 }
+
 .notes-entry-title, .notes-entry-content {
     flex: 1 0 auto;
     flex-basis: 95%;
 }
+
 .notes-entry-action {
     text-align: right;
 }
+
+.notes-entry-footer {
+    text-align: right;
+    font-style: italic;
+    font-size: 0.6em;
+}
+
 @media all and (min-width: 1024px) {
     .notes-entry-date, .notes-entry-importance, .notes-entry-finished, .notes-entry-action {
         flex: 1 1 auto;
         flex-basis: 12.5%;
     }
+
     .notes-entry-title, .notes-entry-content {
         flex: 1 1 auto;
         flex-basis: 75%;
         max-width: 75%;
     }
-    .notes-entry-date { order: 1 }
-    .notes-entry-title { order: 2 }
-    .notes-entry-importance { order: 3 }
-    .notes-entry-finished { order: 4 }
-    .notes-entry-content { order: 5 }
-    .notes-entry-action { order: 6 }
+
+    .notes-entry-date {
+        order: 1
+    }
+
+    .notes-entry-title {
+        order: 2
+    }
+
+    .notes-entry-importance {
+        order: 3
+    }
+
+    .notes-entry-finished {
+        order: 4
+    }
+
+    .notes-entry-content {
+        order: 5
+    }
+
+    .notes-entry-action {
+        order: 6
+    }
+
+    .notes-entry-footer {
+        order: 7
+    }
 }
 
 /** filter bar. */
@@ -392,6 +470,7 @@ input.input-field {
 .visibility-switcher input[type=checkbox] {
     display: none;
 }
+
 .visibility-switcher label {
     display: block;
     overflow: hidden;
@@ -400,6 +479,7 @@ input.input-field {
     height: 20px;
     transition: height 0.25s;
 }
+
 .visibility-switcher input:checked ~ label {
     text-overflow: initial;
     height: 150px;
@@ -412,16 +492,19 @@ input.input-field {
 .edit-row {
     padding: 2px 0 2px 0;
 }
+
 .edit-row:after {
     clear: both;
     content: " ";
     display: table;
 }
+
 .edit-label {
     display: inline-block;
     width: 200px;
     float: left;
 }
+
 .edit-area {
     float: left;
 }
@@ -432,15 +515,17 @@ input.input-field {
     direction: rtl;
     display: flex;
 }
+
 .importance-selection input[type=radio] {
     display: none;
 }
+
 .importance-selection label {
     font-family: 'Symbola', sans-serif;
     color: #ccc;
 }
-.importance-selection label:before
-{
+
+.importance-selection label:before {
     content: "\26A1";
     display: inline-block;
     line-height: 18px;
@@ -449,9 +534,11 @@ input.input-field {
     height: 18px;
     width: 18px;
 }
+
 .importance-selection input:checked ~ label {
     color: #f5b301;
 }
+
 div.importance-selection-editable label:hover,
 .importance-selection-editable label:hover,
 .importance-selection-editable label:hover ~ label {

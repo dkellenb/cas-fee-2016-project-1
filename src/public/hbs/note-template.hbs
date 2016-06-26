@@ -5,7 +5,7 @@
         <div class="notes-entry-cell notes-entry-date">
             {{#if isEditable}}
                 <input id="due-date-{{id}}" title="Due until" type="date" class="input-field input-field-full"
-                                     value="{{formatDate dueDate "input"}}" placeholder="dd.mm.yyyy"/>
+                       value="{{formatDate dueDate "input"}}" placeholder="dd.mm.yyyy"/>
             {{else}}
                 {{formatDate dueDate "short"}}
             {{/if}}
@@ -18,8 +18,12 @@
             {{/countdownLoop}}
         </div>
         <div class="notes-entry-cell notes-entry-title">
-            {{#if isEditable}}<input id="title-{{id}}" title="title" type="text" class="input-field input-field-full" value="{{title}}"
-                                     placeholder="Title of your note"/>{{else}}{{title}}{{/if}}
+            {{#if isEditable}}
+                <input id="title-{{id}}" title="title" type="text" class="input-field input-field-full" value="{{title}}"
+                       placeholder="Title of your note"/>
+            {{else}}
+                <span>{{title}}</span>
+            {{/if}}
         </div>
         <div class="notes-entry-cell notes-entry-content {{#unless isEditable}} visibility-switcher{{/unless}}">
             {{#if isEditable}}<textarea id="description-{{id}}" title="description" rows="6" cols="50" class="input-field input-field-full"
@@ -52,6 +56,9 @@
             {{#if isEditable}}
                 <button data-note-id="{{id}}" name="action-save" class="img-button img-button-save action-save" title="Save"
                         type="button"></button>{{/if}}
+        </div>
+        <div class="notes-entry-cell notes-entry-footer">
+            <span>created: {{formatDate createdDate "long"}}</span>
         </div>
     </div>
 {{#if isEditable}}
