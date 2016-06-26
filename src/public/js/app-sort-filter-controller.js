@@ -5,6 +5,9 @@
     var notesController = namespace.notesController;
     var sortFilterRepository = namespace.sortFilterRepository;
 
+    const DATA_KEY_SORT_NAME = 'sortName';
+    const DATA_KEY_FILTER_NAME = 'filterName';
+
     //Sort Direction Enum
     const SortDirection = {
         ASC: 'asc',
@@ -14,7 +17,7 @@
     /**
      * Performe Event if sortButton is clicked
      * - update sortConfiguration
-     * - trigger updateButtons (gui)
+     * - trigger updateSortButtons (gui)
      * - trigger new Search
      * @param event
      */
@@ -22,7 +25,7 @@
         //update sortConfiguration
         var sortConfiguration = sortFilterRepository.getSort();
         var target = event.target;
-        var sortAttribute = target.getAttribute('data-sort-name');
+        var sortAttribute = privateReadDataFromButtonElement(target, DATA_KEY_SORT_NAME);
 
         if (sortConfiguration.attribute !== sortAttribute) {
             //first Click on Button (activate)
@@ -47,27 +50,29 @@
         notesController.reloadNotes();
     };
 
-
+    /**
+     * Performe Event if sortButton is clicked
+     * - update sortConfiguration
+     * - trigger updateFilterButtons (gui)
+     * - trigger new Search
+     * @param event
+     */
     var privatePerformFilterButtonClick = function (event) {
+        //update filterConfiguration
         var filterConfiguration = sortFilterRepository.getFilter();
         var target = event.target;
-
-        var filterAttribute = target.getAttribute('data-filter-name');
+        var filterAttribute = privateReadDataFromButtonElement(target, DATA_KEY_FILTER_NAME);
 
         // If the current sort attribute is defined
         if (filterConfiguration.attribute === filterAttribute) {
             delete filterConfiguration.attribute;
-            target.className = 'filter-button filter-inactive';
         } else {
             filterConfiguration.attribute = filterAttribute;
-            target.className = 'filter-button filter-active';
         }
-
-        // all others: reset
-        $('.filter-button').not(target).attr('class', 'filter-button filter-inactive');
-
-        // save state
         sortFilterRepository.setFilter(filterConfiguration);
+
+        //triger updateFilterButtons
+        privateUpdateFilterButtonStates(filterConfiguration);
 
         // trigger new search
         notesController.reloadNotes();
@@ -92,7 +97,7 @@
      */
     var privateUpdateSortButtonStates = function (sortConfiguration) {
         $('.sort-button').each(function (index, element) {
-            privateUpdateSortButtonClass(element, ($(element).data('sortName') == sortConfiguration.attribute), sortConfiguration.direction);
+            privateUpdateSortButtonClass(element, (privateReadDataFromButtonElement(target, DATA_KEY_SORT_NAME) == sortConfiguration.attribute), sortConfiguration.direction);
         });
     };
 
@@ -102,7 +107,7 @@
      */
     var privateUpdateFilterButtonStates = function (filterConfiguration) {
         $('.filter-button').each(function (index, element) {
-            privateUpdateFilterButtonClass(element, $(element).data('filterName') == filterConfiguration.attribute);
+            privateUpdateFilterButtonClass(element, privateReadDataFromButtonElement(target, DATA_KEY_FILTER_NAME) == filterConfiguration.attribute);
         });
     };
 
@@ -116,7 +121,7 @@
         var classString = 'sort-button sort-' + (active ? 'active' : 'inactive');
         if (sortDirection !== null && sortDirection !== undefined && active) {
             classString = classString + ' sort-' + sortDirection;
-        }else{
+        } else {
             classString = classString + ' sort-' + SortDirection.ASC;
         }
         buttonElement.className = classString;
@@ -129,6 +134,11 @@
      */
     var privateUpdateFilterButtonClass = function (buttonElement, active) {
         buttonElement.className = 'filter-button filter-' + (active ? 'active' : 'inactive');
+    };
+
+
+    var privateReadDataFromButtonElement = function (buttonElement, key) {
+        return $(buttonElement).data(key);
     };
 
     /**
