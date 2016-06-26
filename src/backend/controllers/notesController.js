@@ -29,9 +29,6 @@ function publicGetNotes(req, res) {
             res.statusCode = 500;
             return res.send('An internal server error occured. Please contact sys admin or consult the log file');
         }
-        notes.forEach(function (note) {
-            privateEnhanceNoteObject(note);
-        });
         res.json(notes);
     });
 }
@@ -57,13 +54,13 @@ function publicGetNote(req, res) {
             res.statusCode = 404;
             return res.send('Note with id "' + res.params.id + '" not found');
         }
-        return res.json(privateEnhanceNoteObject(note));
+        return res.json(note);
     });
 }
 
 function publicCreateModel(req, res) {
     var note = new Note("", "", 3, false, null);
-    return res.json(privateEnhanceNoteObject(note));
+    return res.json(note);
 }
 
 /**
@@ -89,7 +86,7 @@ function publicCreateNote(req, res) {
         }
 
         // return the new note
-        return res.json(privateEnhanceNoteObject(newNote));
+        return res.json(newNote);
     });
 }
 
@@ -144,7 +141,7 @@ function publicUpdateNote(req, res) {
             }
 
             // return updated note
-            return res.json(privateEnhanceNoteObject(updatedNote));
+            return res.json(updatedNote);
         });
     });
 }
@@ -178,25 +175,6 @@ function publicDeleteNote(req, res) {
 
         return res.send('{ "deleted": "true" }');
     });
-}
-
-/**
- * Function for get the value types back to date and number.
- * @param note
- * @returns with type enhanced Note
- */
-function privateEnhanceNoteObject(note) {
-    //note.dueDate = privateParseDateString(note.dueDate);
-    //note.createdDate = privateParseDateString(note.createdDate);
-    //note.finishedDate = privateParseDateString(note.finishedDate);
-    return note;
-}
-
-function privateParseDateString(dateString) {
-    if (dateString !== undefined && dateString !== null && dateString) {
-        return new Date(dateString.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"));
-    }
-    return null;
 }
 
 module.exports = {

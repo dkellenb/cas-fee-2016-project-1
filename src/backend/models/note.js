@@ -10,10 +10,10 @@ class Note {
         this.title = "" + title;
         this.content = "" + content;
         this.importance = importance > 0 && importance <= 5 ? importance : 3;
-        this.finishedDate = finishedDate ? moment(finishedDate).toDate() : null;
+        this.finishedDate = finishedDate ? moment.utc(finishedDate).toDate() : null;
         this.createdDate = moment().toDate();
         this.isFinished = this.finishedDate !== null;
-        this.dueDate = dueDate ? moment(dueDate).toDate() : null;
+        this.dueDate = dueDate ? moment.utc(dueDate).toDate() : null;
     }
 }
 
